@@ -21,5 +21,5 @@ To test the code, do `npm test`
 
 ## Documentation
 
-* Project Document
-* Extenal Libraries Used
+* [Project Document](./docs/PROJECT DOCUMENT.md)
+* [Extenal Libraries Used](./docs/EXTERNAL LIBS USED.md)
