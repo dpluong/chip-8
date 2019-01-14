@@ -60,7 +60,7 @@ The plan shall be seperated into weeks, with the seperator being the weekly meet
 For the first release, there are 3 weeks, and thus 3 parts.
 
 Week 1 (Jan, 21 2019):
-- Project Presentation
+- Project Presentation (Done by 1100 AM, due to possibility the presentation is before the wekly meeting)
 Week 2 (Jan, 28 2019):
 - Have the frontend complete
 - Around 50% of the emulator complete
