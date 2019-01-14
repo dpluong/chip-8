@@ -14,6 +14,7 @@ All code and files relating to the project shall be hosted on a Git resposity st
 ## Software Languages/Tools
 The project will be coded using Javascript, with an HTML/CSS frontend.
 To facilitate testing and easier use of external libraries, Node/NPM shall also be used.
+There is no required editor, and members are free to use any editor of their choice.
 
 ## Software Methodology
 Incremental development will be used for planning the project.
@@ -52,10 +53,10 @@ Release 4:
 - Second CHIP 8 Game
 
 ## Detailed Release 1 Plan & Schedule
-Everyone will be working on the emulator for the first release.
+Everyone will be working on the emulator for the first release. All group members can work on any part of the emulator as they choose.
 
-The pakn shall be seperated into weeks, with the seperator being the weekly meetings.
-For the first release, there are 3 weeks, and thus 3 sections.
+The plan shall be seperated into weeks, with the seperator being the weekly meetings.
+For the first release, there are 3 weeks, and thus 3 parts.
 
 Week 1 (Jan, 21 2019):
 - No required features need to be completed, due to a presentation that is scheduled for this week.
