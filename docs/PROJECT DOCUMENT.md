@@ -29,7 +29,7 @@ The roles each member has will be set only for one release at a time, and may ch
 
 ## Testing Frameworks
 Mocha will be used as the testing framework for this project.
-In addition, a ESLint shall be used to ensure the code style is consistent. The code style shall be kept in sync with the code style used by AirBnb, which a major tech company.
+In addition, ESLint shall be used to ensure the code style is consistent. The code style shall be kept in sync with the code style used by AirBnb, which a major tech company.
 
 ## QA Methods
 All features needs to have a test attached to it on Mocha.
@@ -53,7 +53,8 @@ Release 4:
 - Second CHIP 8 Game
 
 ## Detailed Release 1 Plan & Schedule
-Everyone will be working on the emulator for the first release. All group members can work on any part of the emulator as they choose.
+Everyone will be working on the emulator for the first release. For now, all group members can work on any part of the emulator as they choose.
+As the stregnths of the group members are seen during the first release, members may be assigned to specific roles for future release.
 
 The plan shall be seperated into weeks, with the seperator being the weekly meetings.
 For the first release, there are 3 weeks, and thus 3 parts.
