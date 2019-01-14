@@ -27,7 +27,8 @@ The detailed plan and workflow for the next release shall be posted below the "R
 The roles each member has will be set only for one release at a time, and may change after each release.
 
 ## Testing Frameworks
-Mocha will be used as the testing framework for this project. 
+Mocha will be used as the testing framework for this project.
+In addition, a ESLint shall be used to ensure the code style is consistent. The code style shall be kept in sync with the code style used by AirBnb, which a major tech company.
 
 ## QA Methods
 All features needs to have a test attached to it on Mocha.
