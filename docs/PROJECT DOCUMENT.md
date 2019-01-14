@@ -40,7 +40,7 @@ All code shall be reviewed and approved by at least the majority of the group be
 Any external libraries or code that is used shall be posted in the [EXTERNAL LIB LICENSES](./docs/EXTERNAL LIB LICENSES.md), along with their licenses. No external library or code shall be used that does not have a reasonable open source license, without the permission of all group members and the instructor.
 
 ## Release Overview
-All team mebers shall only work on the features planned for the next release.
+All team members shall only work on the features planned for the next release.
 
 Release 1:
 - Emulator
@@ -59,7 +59,7 @@ The plan shall be seperated into weeks, with the seperator being the weekly meet
 For the first release, there are 3 weeks, and thus 3 parts.
 
 Week 1 (Jan, 21 2019):
-- No required features need to be completed, due to a presentation that is scheduled for this week.
+- Project Presentation
 Week 2 (Jan, 28 2019):
 - Have the frontend complete
 - Around 50% of the emulator complete
