@@ -32,10 +32,10 @@ There is no required editor, and members will use any editor of their choice.
 ## Software Methodology & Timeframe
 The project will be managed using an incremental development process, with 4 releases.
 Each release date is as follows:
-* Feb 6, 2019
-* Feb 27, 2019
-* Mar 13, 2019
-* Apr 8, 2019
+- Feb 6, 2019
+- Feb 27, 2019
+- Mar 13, 2019
+- Apr 8, 2019
 A general guide towards the expected state of the product for each release is located under "Release Overview".
 The detailed plan and workflow for the next release shall be posted below the "Release Overview” and will be updated with the plan for the next release as the previous release is completed.
 The roles each member has will be set only for one release at a time and may change after each release.
@@ -57,10 +57,10 @@ This shows the general overview and use cases for the products that will be rele
 Note that generally only the next release will have the major features & use cases listed.
 
 Release 1 (Feb 6, 2019):
-- Emulator
-    - A full CHIP8 emulator, capable of running any application
-    - A frontend to allow input of code and keyboard, with a display
-    - Users will be able to run any CHIP8 and interact with it using the emulator
+- Emulator, major features and use cases include:
+- A full CHIP8 emulator, capable of running any application
+- A frontend to allow input of code and keyboard, with a display
+- Users will be able to run any CHIP8 and interact with it using the emulator
 
 Release 2 (Feb 27, 2019):
 - CHIP8 Tool (Exact Tool Undecided)
@@ -109,8 +109,8 @@ The expected items that will need to be created for the emulator:
 - Frontend CHIP8 Keyboard Input
 - Frontend CHIP8 Code Input
 - CHIP8 Code Parser
-- CHIP8 Virtual Machine
+- Open framework for future visualizer work
+- CHIP8 Virtual Machine, including...
     - Chip8 CPU (Stack, Registers)
     - Chip8 Memory
     - Chip8 Video Card
-- Open framework for future visualizer work
