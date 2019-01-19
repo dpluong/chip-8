@@ -65,22 +65,24 @@ This shows the general overview and use cases for the products that will be rele
 
 Note that generally only the next release will have the major features & use cases listed.
 
-Release 1 (Feb 6, 2019):
+Note that the product completion date is 2-3 days before the delivery date, to account for delays and bugfixes.
+
+Release 1 (Product Delivery Feb 6, 2019) (Planned Product Completion by Feb 4, 2019):
 
 - Emulator, major features and use cases include:
 - A full CHIP8 emulator, capable of running any application
 - A frontend to allow input of code and keyboard, with a display
 - Users will be able to run any CHIP8 and interact with it using the emulator
 
-Release 2 (Feb 27, 2019):
+Release 2 (Product Delivery Feb 27, 2019) (Planned Product Completion by Mar 25, 2019):
 
 - CHIP8 Tool (Exact Tool Undecided)
 
-Release 3 (Mar 13, 2019):
+Release 3 (Product Delivery Mar 13, 2019) (Planned Product Completion by Mar 11, 2019):
 
 - One CHIP 8 Game
 
-Release 4 (Apr 8, 2019):
+Release 4 (Product Delivery Apr 8, 2019) (Planned Product Completion by Apr 5, 2019):
 
 - Visualizer
 - Second CHIP 8 Game
