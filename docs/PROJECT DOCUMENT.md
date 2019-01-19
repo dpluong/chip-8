@@ -138,3 +138,4 @@ The expected items that will need to be created for the emulator:
     - Chip8 CPU (Stack, Registers)
     - Chip8 Memory
     - Chip8 Video Card
+- Test code for all of the above items
