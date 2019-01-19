@@ -8,7 +8,7 @@ The product being produced is a CHIP8 emulator, visualizer, a CHIP8 helper tool,
 
 The purpose of this project is to help understand how to create applications in a team setting and will be used to show competence in the topics taught by CMPT 276.
 
-The final release of the product is expected on April 8, 2019, with intermediate releases required as described in "Software Methodology".
+The final release of the product is expected on April 8, 2019, with intermediate releases required as described in "Software Methodology & Timeframe".
 
 ## In-person Meeting Times
 The members of the team shall meet at least weekly for a period of at most 90 minutes every Monday after class. Meetings will by held in **room 3262** if possible.
@@ -27,9 +27,9 @@ All code and files relating to the project are hosted on a Git repository stored
 ## Software Languages/Tools
 The project will be coded using JavaScript, with an HTML/CSS frontend.
 To facilitate testing and easier use of external libraries, Node.JS and the NPM package manager will also be used.
-There is no required editor, and members are free to use any editor of their choice.
+There is no required editor, and members will use any editor of their choice.
 
-## Software Methodology
+## Software Methodology & Timeframe
 The project will be managed using an incremental development process, with 4 releases.
 Each release date is as follows:
 * Feb 6, 2019
@@ -55,37 +55,58 @@ Any external libraries or code that is used shall be posted in the [EXTERNAL LIB
 ## Release Overview
 All team members should only work on the features planned for the next release, without the approval from all team members.
 
-Release 1:
+Release 1 (Feb 6, 2019):
 - Emulator
-Release 2:
+
+Release 2 (Feb 27, 2019):
 - CHIP8 Tool (Exact Tool Undecided)
-Release 3:
+
+Release 3 (Mar 13, 2019):
 - One CHIP 8 Game
-Release 4:
+
+Release 4 (Apr 8, 2019):
 - Visualizer
 - Second CHIP 8 Game
 
 ## Detailed Release 1 Plan & Schedule
-Everyone will be working on the emulator for the first release. For now, all group members can work on any part of the emulator as they choose.
-As the strengths of the group members are seen during the first release, members may be assigned to specific roles for future release.
+Everyone will be working on the emulator for the first release. For now, all group members can work on any part of the emulator as they choose, as long other group members are aware of their selected role.
+As the strengths of the group members are seen during the first release, members may be assigned to specific roles for future releases.
 
 The plan shall be separated into weeks, with the separator being the weekly meetings.
-For the first release, there are 3 weeks, and thus 3 parts.
+For the first release, there are 3 weeks.
 
 FINISH BY Week 1 (Jan 21, 2019):
 - Project Document
+
 Week 1 Meeting Agenda:
 - Work on Project Presentation
+
 Project Presentation (Jan 23, 2019):
 - Presentation should be finished by 11AM
+
 FINISH BY Week 2 (Jan 28, 2019):
 - Around 25% of the emulator complete (Not expected to function at this stage)
+
 Week 2 Meeting Agenda:
 - Work on emulator (try for basic frontend and 50% of emulator complete)
+
 FINISH BY Week 3 (Feb 4, 2019):
 - Completed emulator frontend
 - Completed emulator backend
+
 Week 3 Meeting Agenda:
 - Testing emulator and fixing bugs
+
 Release 1 Due Date (Feb 6, 2019):
 - Emulator production-ready and sent to the instructor
+
+The expected items that will need to be created for the emulator:
+- Frontend Display
+- Frontend CHIP8 Keyboard Input
+- Frontend CHIP8 Code Input
+- CHIP8 Code Parser
+- CHIP8 Virtual Machine
+    - Chip8 CPU (Stack, Registers)
+    - Chip8 Memory
+    - Chip8 Video Card
+- Open framework for future visualizer work
