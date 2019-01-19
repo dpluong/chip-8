@@ -56,19 +56,23 @@ Any external libraries or code that is used shall be posted in the [EXTERNAL LIB
 This shows the general overview and use cases for the products that will be released for the 4 releases.
 Note that generally only the next release will have the major features & use cases listed.
 
-Release 1 (Feb 6, 2019):
+Release 1 (Feb 6
+, 2019):
 - Emulator, major features and use cases include:
 - A full CHIP8 emulator, capable of running any application
 - A frontend to allow input of code and keyboard, with a display
 - Users will be able to run any CHIP8 and interact with it using the emulator
 
 Release 2 (Feb 27, 2019):
+
 - CHIP8 Tool (Exact Tool Undecided)
 
 Release 3 (Mar 13, 2019):
+
 - One CHIP 8 Game
 
 Release 4 (Apr 8, 2019):
+
 - Visualizer
 - Second CHIP 8 Game
 
@@ -80,31 +84,40 @@ The plan shall be separated into weeks, with the separator being the weekly meet
 For the first release, there are 3 weeks.
 
 FINISH BY Week 1 (Jan 21, 2019):
+
 - Project Document
 
 Week 1 Meeting Agenda:
+
 - Work on Project Presentation
 
 Project Presentation (Jan 23, 2019):
+
 - Presentation should be finished by 11AM
 
 FINISH BY Week 2 (Jan 28, 2019):
+
 - Around 25% of the emulator complete (Not expected to function at this stage)
 
 Week 2 Meeting Agenda:
+
 - Work on emulator (try for basic frontend and 50% of emulator complete)
 
 FINISH BY Week 3 (Feb 4, 2019):
+
 - Completed emulator frontend
 - Completed emulator backend
 
 Week 3 Meeting Agenda:
+
 - Testing emulator and fixing bugs
 
 Release 1 Due Date (Feb 6, 2019):
+
 - Emulator production-ready and sent to the instructor
 
 The expected items that will need to be created for the emulator:
+
 - Frontend Display
 - Frontend CHIP8 Keyboard Input
 - Frontend CHIP8 Code Input
