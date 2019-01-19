@@ -65,8 +65,8 @@ This shows the general overview and use cases for the products that will be rele
 
 Note that generally only the next release will have the major features & use cases listed.
 
-Release 1 (Feb 6
-, 2019):
+Release 1 (Feb 6, 2019):
+
 - Emulator, major features and use cases include:
 - A full CHIP8 emulator, capable of running any application
 - A frontend to allow input of code and keyboard, with a display
