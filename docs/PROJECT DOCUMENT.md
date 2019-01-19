@@ -53,10 +53,14 @@ All code shall be reviewed and approved by at least 50% of the group before it c
 Any external libraries or code that is used shall be posted in the [EXTERNAL LIB LICENSES](./docs/EXTERNAL LIB LICENSES.md), along with their licenses. No external library or code shall be used that does not have a reasonable open source license, without the permission of all group members and the instructor.
 
 ## Release Overview
-All team members should only work on the features planned for the next release, without the approval from all team members.
+This shows the general overview and use cases for the products that will be released for the 4 releases.
+Note that generally only the next release will have the major features & use cases listed.
 
 Release 1 (Feb 6, 2019):
 - Emulator
+    - A full CHIP8 emulator, capable of running any application
+    - A frontend to allow input of code and keyboard, with a display
+    - Users will be able to run any CHIP8 and interact with it using the emulator
 
 Release 2 (Feb 27, 2019):
 - CHIP8 Tool (Exact Tool Undecided)
