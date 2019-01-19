@@ -26,27 +26,35 @@ All code and files relating to the project are hosted on a Git repository stored
 
 ## Software Languages/Tools
 The project will be coded using JavaScript, with an HTML/CSS frontend.
+
 To facilitate testing and easier use of external libraries, Node.JS and the NPM package manager will also be used.
+
 There is no required editor, and members will use any editor of their choice.
 
 ## Software Methodology & Timeframe
 The project will be managed using an incremental development process, with 4 releases.
+
 Each release date is as follows:
 - Feb 6, 2019
 - Feb 27, 2019
 - Mar 13, 2019
 - Apr 8, 2019
 A general guide towards the expected state of the product for each release is located under "Release Overview".
+
 The detailed plan and workflow for the next release shall be posted below the "Release Overview” and will be updated with the plan for the next release as the previous release is completed.
+
 The roles each member has will be set only for one release at a time and may change after each release.
 
 ## Testing Frameworks
 Mocha will be used as the testing framework for this project.
+
 In addition, ESLint shall be used to ensure the code style is consistent. The code style shall be kept in sync with the code style used by Airbnb.
 
 ## QA Methods
 All features need to have a test attached to it on Mocha.
+
 In addition, if any bugs are found, a test needs to be created that tests that the bug is fixed.
+
 All code shall be reviewed and approved by at least 50% of the group before it can be merged into the main master branch.
 
 ## Implementation Language & External Libraries
@@ -54,6 +62,7 @@ Any external libraries or code that is used shall be posted in the [EXTERNAL LIB
 
 ## Release Overview
 This shows the general overview and use cases for the products that will be released for the 4 releases.
+
 Note that generally only the next release will have the major features & use cases listed.
 
 Release 1 (Feb 6
@@ -78,9 +87,11 @@ Release 4 (Apr 8, 2019):
 
 ## Detailed Release 1 Plan & Schedule
 Everyone will be working on the emulator for the first release. For now, all group members can work on any part of the emulator as they choose, as long other group members are aware of their selected role.
+
 As the strengths of the group members are seen during the first release, members may be assigned to specific roles for future releases.
 
 The plan shall be separated into weeks, with the separator being the weekly meetings.
+
 For the first release, there are 3 weeks.
 
 FINISH BY Week 1 (Jan 21, 2019):
