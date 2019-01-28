@@ -27,7 +27,7 @@ class Frontend {
     }
   }
 
-  /** 
+  /**
    * Changes the pixel states for a row
    * @param {number} rowIndex The index of the row to edit
    * @param {boolean[]} pixelStates An array of booleans showing
@@ -45,7 +45,7 @@ class Frontend {
    * Requests a callback when user inputs code
    * @param {initCodeCallback} callback The callback to call when code inputted
   */
-  waitForInput(callback) {
+  waitForCodeInput(callback) {
     this.codeInputCallback = callback;
   }
 }
