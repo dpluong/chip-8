@@ -1,10 +1,11 @@
 class Frontend {
   constructor() {
     this.currentDisplay = [];
+    this.codeInputCallback = () => {};
   }
   
-  /** Gets the current buttons being pressed by the user 
-   * @returns 
+  /** Gets the current buttons being pressed by the user
+   * @returns an object showing which buttons are being pressed
   */
   getCurrentInputs() {
     return {
@@ -24,6 +25,28 @@ class Frontend {
       e: false,
       f: false,
     }
+  }
+
+  /** 
+   * Changes the pixel states for a row
+   * @param {number} rowIndex The index of the row to edit
+   * @param {boolean[]} pixelStates An array of booleans showing
+  */
+  editDisplayRow(rowIndex, pixelStates) {
+  }
+
+  /**
+   * The callback for code input
+   *
+   * @callback initCodeCallback
+   * @param {number[]} data - The code to run in 8 bit numbers
+   */
+  /**
+   * Requests a callback when user inputs code
+   * @param {initCodeCallback} callback The callback to call when code inputted
+  */
+  waitForInput(callback) {
+    this.codeInputCallback = callback;
   }
 }
 
