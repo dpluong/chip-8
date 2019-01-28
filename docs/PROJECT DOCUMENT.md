@@ -41,6 +41,7 @@ Any external libraries or code that is used shall be posted in the [EXTERNAL LIB
 
 ## Release Overview
 All team members shall only work on the features planned for the next release.
+http://mattmik.com/files/chip8/mastering/chip8.html will be used as the referance material for 
 
 Release 1:
 - Emulator

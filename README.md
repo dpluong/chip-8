@@ -7,8 +7,9 @@ A Chip-8 emulator, visualizer, OTHER TOOL, and two Chip-8 games. Made in Javascr
 ## Install
 
 1. Clone the resp
-2. `npm install`
-3. `npm run build`
+2. Install Node & NPM
+3. `npm install`
+4. `npm run build`
 
 
 ---
