@@ -47,16 +47,14 @@ class Frontend {
    * @param {initCodeCallback} callback The callback to call when code inputted
   */
   statwaitForCodeInput(callback) {
-    const fileListener = () => {
-      if (!this.codeInputDOM.files.length) return;
+    this.codeInputDOM.addEventListener('change', () => {
+      if (!this.codeInputDOM.files.length) return; // If no file then silently ignore
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        callback(new Int8Array(fileReader.result));
-        this.codeInputDOM.removeEventListener('change', fileListener);
+        callback(new Int8Array(fileReader.result)); // send in Int8Array as CHIP-8 is 8-bit program
       };
       fileReader.readAsArrayBuffer(this.codeInputDOM.files[0]);
-    };
-    this.codeInputDOM.addEventListener('change', fileListener);
+    });
   }
 }
 
