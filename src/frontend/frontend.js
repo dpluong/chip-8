@@ -1,7 +1,7 @@
 class Frontend {
   constructor() {
     this.currentDisplay = [];
-    this.codeInputCallback = () => {};
+    this.codeInputDOM = document.querySelector('input#codeInput');
   }
   
   /** Gets the current buttons being pressed by the user
@@ -45,8 +45,17 @@ class Frontend {
    * Requests a callback when user inputs code
    * @param {initCodeCallback} callback The callback to call when code inputted
   */
-  waitForCodeInput(callback) {
-    this.codeInputCallback = callback;
+  statwaitForCodeInput(callback) {
+    const fileListener = () => {
+      if (!this.codeInputDOM.files.length) return;
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        callback(new Int8Array(fileReader.result));
+        this.codeInputDOM.removeEventListener('change', fileListener);
+      };
+      fileReader.readAsArrayBuffer(this.codeInputDOM.files[0]);
+    };
+    this.codeInputDOM.addEventListener('change', fileListener);
   }
 }
 
