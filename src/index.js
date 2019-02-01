@@ -2,6 +2,8 @@ class Frontend {
   constructor() {
     this.currentDisplay = [];
     this.codeInputDOM = document.querySelector('input#codeInput');
+    this.displayDOM = document.querySelector('canvas#display');
+    this.displayPixelState = new Array(32).fill(new Array(64).fill(false));
   }
 
   /** Gets the current buttons being pressed by the user
@@ -18,6 +20,7 @@ class Frontend {
       7: false,
       8: false,
       9: false,
+      0: false,
       a: false,
       b: false,
       c: false,
@@ -32,7 +35,28 @@ class Frontend {
    * @param {number} rowIndex The index of the row to edit
    * @param {boolean[]} pixelStates An array of booleans showing
    */
-  editDisplayRow(rowIndex, pixelStates) {}
+  editDisplayRow(rowIndex, pixelStates) {
+    // guard against bad input
+    if (pixelStates.length !== 64 || pixelStates.some(ele => typeof ele !== 'boolean')) throw new Error('Bad row data');
+    if (rowIndex < 0 || rowIndex > 31) throw new Error('Bad row index');
+    this.displayPixelState[rowIndex] = pixelStates;
+    this.renderDisplay();
+  }
+
+  /**
+   * Renders the display using the data stored in this.display
+   */
+  renderDisplay() {
+    const context = this.displayDOM.getContext('2d');
+    context.clearRect(0, 0, this.displayDOM.width, this.displayDOM.height);
+    for (let y = 0; y < this.displayPixelState.length; y += 1) {
+      for (let x = 0; x < this.displayPixelState[y].length; x += 1) {
+        if (!this.displayPixelState[y][x]) {
+          context.fillRect(x * 8, y * 8, 8, 8);
+        }
+      }
+    }
+  }
 
   /**
    * The callback for code input
@@ -44,18 +68,18 @@ class Frontend {
    * Requests a callback when user inputs code
    * @param {initCodeCallback} callback The callback to call when code inputted
    */
-  startwaitForCodeInput(callback) {
-    const fileListener = () => {
-      if (!this.codeInputDOM.files.length) return;
+  statwaitForCodeInput(callback) {
+    this.codeInputDOM.addEventListener('change', () => {
+      if (!this.codeInputDOM.files.length) return; // If no file then silently ignore
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
-        callback(new Int8Array(fileReader.result));
-        this.codeInputDOM.removeEventListener('change', fileListener);
+        callback(new Int8Array(fileReader.result)); // send in Int8Array as CHIP-8 is 8-bit program
       };
       fileReader.readAsArrayBuffer(this.codeInputDOM.files[0]);
-    };
-    this.codeInputDOM.addEventListener('change', fileListener);
+    });
   }
 }
 
+
 const frontend = new Frontend();
+frontend.renderDisplay();

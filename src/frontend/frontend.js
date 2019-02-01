@@ -2,8 +2,10 @@ class Frontend {
   constructor() {
     this.currentDisplay = [];
     this.codeInputDOM = document.querySelector('input#codeInput');
+    this.displayDOM = document.querySelector('canvas#display');
+    this.displayPixelState = new Array(32).fill(new Array(64).fill(false));
   }
-  
+
   /** Gets the current buttons being pressed by the user
    * @returns an object showing which buttons are being pressed
   */
@@ -34,6 +36,23 @@ class Frontend {
    * @param {boolean[]} pixelStates An array of booleans showing
   */
   editDisplayRow(rowIndex, pixelStates) {
+    // guard against bad input
+    if (pixelStates.length !== 64 || pixelStates.some(ele => typeof ele !== 'boolean')) throw new Error('Bad row data');
+    if (rowIndex < 0 || rowIndex > 31) throw new Error('Bad row index');
+    this.display[rowIndex] = pixelStates;
+    this.renderDisplay();
+  }
+
+  /**
+   * Renders the display using the data stored in this.display
+   */
+  renderDisplay() {
+    const context = this.displayDOM.getContext('2d');
+    for (let y = 0; y < this.display.length; y += 1) {
+      for (let x = 0; x < this.display[x].length; x += 1) {
+        context.fillRect(x * 8, y * 8, 8, 8);
+      }
+    }
   }
 
   /**
