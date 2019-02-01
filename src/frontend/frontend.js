@@ -18,6 +18,7 @@ class Frontend {
       7: false,
       8: false,
       9: false,
+      0: false,
       a: false,
       b: false,
       c: false,
