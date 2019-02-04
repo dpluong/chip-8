@@ -180,8 +180,9 @@ class Chip8Cpu {
     for (let y2 = 0; y < this.height; y2 += 1) {
       sprite = this.memory(i + y2);
       for (let x2 = 0; x2 < 8; x2 += 1) {
-        if ((sprite & (0x80 >> x)) != 0) {
-          if ((this.screen[index] ^= 1) == 0);
+        if ((sprite & (0x80 >> x2)) !== 0) {
+          this.screen[index] ^= 1;
+          if (this.screen[index] === 0);
           this.register[16] = 1;
           this.screen[index] ^= 1;
         }
@@ -232,7 +233,7 @@ class Chip8Cpu {
 
       case 0x3000:
       {
-        if (this.register[x] == nn) {
+        if (this.register[x] === nn) {
           this.pc += 2;
         }
         break;
@@ -240,7 +241,7 @@ class Chip8Cpu {
 
       case 0x4000:
       {
-        if (this.register[x] != nn) {
+        if (this.register[x] !== nn) {
           this.pc += 2;
         }
         break;
@@ -248,7 +249,7 @@ class Chip8Cpu {
 
       case 0x5000:
       {
-        if (this.register[x] == this.register[y]) {
+        if (this.register[x] === this.register[y]) {
           this.pc += 2;
         }
         break;
@@ -273,7 +274,7 @@ class Chip8Cpu {
 
       case 0x9000:
       {
-        if (this.register[x] != this.register[y]) {
+        if (this.register[x] !== this.register[y]) {
           this.pc += 2;
         }
         break;
