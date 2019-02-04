@@ -67,12 +67,17 @@ Note that generally only the next release will have the major features & use cas
 
 Note that the product completion date is 2-3 days before the delivery date, to account for delays and bugfixes.
 
+All team members shall only work on the features planned for the next release.
+
+http://mattmik.com/files/chip8/mastering/chip8.html will be used as the referance material for CHIP8.
+
 Release 1 (Product Delivery Feb 6, 2019) (Planned Product Completion by Feb 4, 2019):
 
 - Emulator, major features and use cases include:
 - A full CHIP8 emulator, capable of running any application
 - A frontend to allow input of code and keyboard, with a display
 - Users will be able to run any CHIP8 and interact with it using the emulator
+
 
 Release 2 (Product Delivery Feb 27, 2019) (Planned Product Completion by Mar 25, 2019):
 
