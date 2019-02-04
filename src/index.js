@@ -3,7 +3,6 @@ class Frontend {
     this.currentDisplay = [];
     this.codeInputDOM = document.querySelector('input#codeInput');
     this.displayDOM = document.querySelector('canvas#display');
-    this.displayPixelState = new Array(32).fill(new Array(64).fill(false));
 
     this.keyStates = {
       1: false,
@@ -44,32 +43,20 @@ class Frontend {
   }
 
   /**
-   * Changes the pixel states for a row
-   * @param {number} rowIndex The index of the row to edit
-   * @param {boolean[]} pixelStates An array of booleans showing
-   */
-  editDisplayRow(rowIndex, pixelStates) {
-    // guard against bad input
-    if (pixelStates.length !== 64 || pixelStates.some(ele => typeof ele !== 'boolean')) throw new Error('Bad row data');
-    if (rowIndex < 0 || rowIndex > 31) throw new Error('Bad row index');
-
-    this.displayPixelState[rowIndex] = pixelStates;
-    this.renderDisplay();
-  }
-
-  /**
    * Renders the display using the data stored in this.displayPixelState
+   * @param {Uint8Array} displayMemory - The memory of the display
    */
-  renderDisplay() {
+  renderDisplay(displayMemory) {
+    if (displayMemory.length !== 64 * 32) throw new Error('Invalid display length');
     const context = this.displayDOM.getContext('2d'); // gets the canvas draw functions
     context.clearRect(0, 0, this.displayDOM.width, this.displayDOM.height); // clear the screen
-    for (let y = 0; y < this.displayPixelState.length; y += 1) { // for each row...
-      for (let x = 0; x < this.displayPixelState[y].length; x += 1) { // for each pixel in the row
-        if (!this.displayPixelState[y][x]) { // if its turned off (so its black)...
-          context.fillRect(x * 8, y * 8, 8, 8); // then draw a black pixel
-        }
+    displayMemory.forEach((val, i) => {
+      if (val === 0) {
+        const x = i % 64;
+        const y = Math.floor(i / 64);
+        context.fillRect(x * 8, y * 8, 8, 8);
       }
-    }
+    });
   }
 
   /**
@@ -96,7 +83,7 @@ class Frontend {
 
 
 const frontend = new Frontend();
-frontend.renderDisplay();
+frontend.renderDisplay(new Uint8Array(64 * 32));
 
 // Chip 8 emulator
 
@@ -156,7 +143,16 @@ class Chip8Cpu {
     ];
   }
 
-  loadProgram() {
+  /**
+   * Loads and runs a new program
+   * @param {UInt8Array} program The program to run
+   */
+  loadProgram(program) {
+    for (let i = 0; i < program.length; i += 1) {
+      this.memory[0x200 + i] = program[i];
+    }
+    this.pc = 0x200;
+    this.runNextInstruction();
   }
 
   drawSprite(x, y, i) {
@@ -177,8 +173,8 @@ class Chip8Cpu {
 
     const index = x + y * this.width;
 
-    for (let y2 = 0; y < this.height; y2 += 1) {
-      sprite = this.memory(i + y2);
+    for (let y2 = 0; y2 < this.height; y2 += 1) {
+      sprite = this.memory[i + y2];
       for (let x2 = 0; x2 < 8; x2 += 1) {
         if ((sprite & (0x80 >> x2)) !== 0) {
           this.screen[index] ^= 1;
@@ -188,6 +184,7 @@ class Chip8Cpu {
         }
       }
     }
+    frontend.renderDisplay(this.screen);
   }
 
   runNextInstruction() {
