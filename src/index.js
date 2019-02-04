@@ -191,11 +191,11 @@ class Chip8Cpu {
     const opcode = this.memory[this.programCounter] << 8 | this.memory[this.programCounter + 1];
     this.programCounter = this.programCounter + 2;
 
-    const x = opcode & 0x0F00 >> 8;
-    const y = opcode & 0x00F0 >> 4;
-    const nnn = opcode & 0x0FFF;
-    const nn = opcode & 0x00FF;
-    const n = opcode & 0x000F;
+    const secondNibble = (opcode & 0x0F00) >> 8;
+    const thirdNibble = (opcode & 0x00F0) >> 4;
+    const lastNibble = opcode & 0x000F;
+    const lastThreeNibbles = opcode & 0x0FFF;
+    const lastTwoNibbles = opcode & 0x00FF;
 
     switch (opcode & 0xF000) {
       case 0x00E0:
@@ -215,7 +215,7 @@ class Chip8Cpu {
 
       case 0x1000:
       {
-        this.programCounter = nnn;
+        this.programCounter = lastThreeNibbles;
         break;
       }
 
@@ -223,14 +223,14 @@ class Chip8Cpu {
       {
         this.pointer += 1;
         this.stack.push(this.programCounter);
-        this.programCounter = nnn;
+        this.programCounter = lastThreeNibbles;
 
         break;
       }
 
       case 0x3000:
       {
-        if (this.register[x] === nn) {
+        if (this.register[secondNibble] === lastTwoNibbles) {
           this.programCounter += 2;
         }
         break;
@@ -238,7 +238,7 @@ class Chip8Cpu {
 
       case 0x4000:
       {
-        if (this.register[x] !== nn) {
+        if (this.register[secondNibble] !== lastTwoNibbles) {
           this.programCounter += 2;
         }
         break;
@@ -246,7 +246,7 @@ class Chip8Cpu {
 
       case 0x5000:
       {
-        if (this.register[x] === this.register[y]) {
+        if (this.register[secondNibble] === this.register[thirdNibble]) {
           this.programCounter += 2;
         }
         break;
@@ -254,13 +254,13 @@ class Chip8Cpu {
 
       case 0x6000:
       {
-        this.register[x] = nn;
+        this.register[secondNibble] = lastTwoNibbles;
         break;
       }
 
       case 0x7000:
       {
-        this.register[x] += nn;
+        this.register[secondNibble] += lastTwoNibbles;
         break;
       }
 
@@ -271,7 +271,7 @@ class Chip8Cpu {
 
       case 0x9000:
       {
-        if (this.register[x] !== this.register[y]) {
+        if (this.register[secondNibble] !== this.register[thirdNibble]) {
           this.programCounter += 2;
         }
         break;
@@ -279,13 +279,13 @@ class Chip8Cpu {
 
       case 0xA000:
       {
-        this.I = nnn;
+        this.I = lastThreeNibbles;
         break;
       }
 
       case 0xB000:
       {
-        this.programCounter = nnn + this.register[0];
+        this.programCounter = lastThreeNibbles + this.register[0];
         break;
       }
 
