@@ -99,7 +99,7 @@ class Chip8Cpu {
     // Set pointer to 0
     this.pointer = 0;
     // Set program counter to 0
-    this.pc = 0;
+    this.programCounter = 0;
     // Allocate 16 registers (V0->VF)
     this.register = new Uint8Array(16);
     // Set VI to 0
@@ -151,7 +151,7 @@ class Chip8Cpu {
     for (let i = 0; i < program.length; i += 1) {
       this.memory[0x200 + i] = program[i];
     }
-    this.pc = 0x200;
+    this.programCounter = 0x200;
     this.runNextInstruction();
   }
 
@@ -188,16 +188,16 @@ class Chip8Cpu {
   }
 
   runNextInstruction() {
-    const oc = this.memory[this.pc] << 8 | this.memory[this.pc + 1];
-    this.pc = this.pc + 2;
+    const opcode = this.memory[this.programCounter] << 8 | this.memory[this.programCounter + 1];
+    this.programCounter = this.programCounter + 2;
 
-    const x = oc & 0x0F00 >> 8;
-    const y = oc & 0x00F0 >> 4;
-    const nnn = oc & 0x0FFF;
-    const nn = oc & 0x00FF;
-    const n = oc & 0x000F;
+    const x = opcode & 0x0F00 >> 8;
+    const y = opcode & 0x00F0 >> 4;
+    const nnn = opcode & 0x0FFF;
+    const nn = opcode & 0x00FF;
+    const n = opcode & 0x000F;
 
-    switch (oc & 0xF000) {
+    switch (opcode & 0xF000) {
       case 0x00E0:
       {
         for (let i = 0; i < this.screen.length; i += 1) {
@@ -209,21 +209,21 @@ class Chip8Cpu {
       case 0x00EE:
       {
         this.pointer -= 1;
-        this.pc = this.stack[this.pointer];
+        this.programCounter = this.stack[this.pointer];
         break;
       }
 
       case 0x1000:
       {
-        this.pc = nnn;
+        this.programCounter = nnn;
         break;
       }
 
       case 0x2000:
       {
         this.pointer += 1;
-        this.stack.push(this.pc);
-        this.pc = nnn;
+        this.stack.push(this.programCounter);
+        this.programCounter = nnn;
 
         break;
       }
@@ -231,7 +231,7 @@ class Chip8Cpu {
       case 0x3000:
       {
         if (this.register[x] === nn) {
-          this.pc += 2;
+          this.programCounter += 2;
         }
         break;
       }
@@ -239,7 +239,7 @@ class Chip8Cpu {
       case 0x4000:
       {
         if (this.register[x] !== nn) {
-          this.pc += 2;
+          this.programCounter += 2;
         }
         break;
       }
@@ -247,7 +247,7 @@ class Chip8Cpu {
       case 0x5000:
       {
         if (this.register[x] === this.register[y]) {
-          this.pc += 2;
+          this.programCounter += 2;
         }
         break;
       }
@@ -272,7 +272,7 @@ class Chip8Cpu {
       case 0x9000:
       {
         if (this.register[x] !== this.register[y]) {
-          this.pc += 2;
+          this.programCounter += 2;
         }
         break;
       }
@@ -285,7 +285,7 @@ class Chip8Cpu {
 
       case 0xB000:
       {
-        this.pc = nnn + this.register[0];
+        this.programCounter = nnn + this.register[0];
         break;
       }
 
