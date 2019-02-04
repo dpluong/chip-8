@@ -4,13 +4,8 @@ class Frontend {
     this.codeInputDOM = document.querySelector('input#codeInput');
     this.displayDOM = document.querySelector('canvas#display');
     this.displayPixelState = new Array(32).fill(new Array(64).fill(false));
-  }
 
-  /** Gets the current buttons being pressed by the user
-   * @returns an object showing which buttons are being pressed
-   */
-  getCurrentInputs() {
-    return {
+    this.keyStates = {
       1: false,
       2: false,
       3: false,
@@ -27,7 +22,24 @@ class Frontend {
       d: false,
       e: false,
       f: false,
-    }
+    };
+
+    Object.keys(this.keyStates).forEach((key) => {
+      const keyButton = document.querySelector(`button#key-${key}`);
+      keyButton.addEventListener('mousedown', () => {
+        this.keyStates[key] = true;
+      });
+      keyButton.addEventListener('mouseup', () => {
+        this.keyStates[key] = false;
+      });
+    });
+  }
+
+  /** Gets the current buttons being pressed by the user
+   * @returns an object showing which buttons are being pressed
+   */
+  getCurrentInputs() {
+    return this.keyStates;
   }
 
   /**
@@ -39,12 +51,13 @@ class Frontend {
     // guard against bad input
     if (pixelStates.length !== 64 || pixelStates.some(ele => typeof ele !== 'boolean')) throw new Error('Bad row data');
     if (rowIndex < 0 || rowIndex > 31) throw new Error('Bad row index');
+
     this.displayPixelState[rowIndex] = pixelStates;
     this.renderDisplay();
   }
 
   /**
-   * Renders the display using the data stored in this.display
+   * Renders the display using the data stored in this.displayPixelState
    */
   renderDisplay() {
     const context = this.displayDOM.getContext('2d');
