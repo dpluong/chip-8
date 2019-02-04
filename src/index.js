@@ -35,7 +35,8 @@ class Frontend {
     });
   }
 
-  /** Gets the current buttons being pressed by the user
+  /**
+   * Gets the current buttons being pressed by the user
    * @returns an object showing which buttons are being pressed
    */
   getCurrentInputs() {
