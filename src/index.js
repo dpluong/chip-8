@@ -61,12 +61,12 @@ class Frontend {
    * Renders the display using the data stored in this.displayPixelState
    */
   renderDisplay() {
-    const context = this.displayDOM.getContext('2d');
-    context.clearRect(0, 0, this.displayDOM.width, this.displayDOM.height);
-    for (let y = 0; y < this.displayPixelState.length; y += 1) {
-      for (let x = 0; x < this.displayPixelState[y].length; x += 1) {
-        if (!this.displayPixelState[y][x]) {
-          context.fillRect(x * 8, y * 8, 8, 8);
+    const context = this.displayDOM.getContext('2d'); // gets the canvas draw functions
+    context.clearRect(0, 0, this.displayDOM.width, this.displayDOM.height); // clear the screen
+    for (let y = 0; y < this.displayPixelState.length; y += 1) { // for each row...
+      for (let x = 0; x < this.displayPixelState[y].length; x += 1) { // for each pixel in the row
+        if (!this.displayPixelState[y][x]) { // if its turned off (so its black)...
+          context.fillRect(x * 8, y * 8, 8, 8); // then draw a black pixel
         }
       }
     }
