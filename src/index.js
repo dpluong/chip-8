@@ -86,17 +86,20 @@ class Frontend {
   }
 }
 
-
-const frontend = new Frontend();
-frontend.renderDisplay(new Uint8Array(64 * 32));
-
 class Chip8Cpu {
-  constructor() {
+  /**
+   * Initializes a new CHIP-8 Emulator
+   * @param {Frontend} frontend The frontend class
+   */
+  constructor(frontend) {
+    /** The frontend instance */
+    this.frontend = frontend;
+
     /** The memory of the CHIP 8 emulator. Allocated for 4K of memory */
     this.memory = new Uint8Array(4096);
 
-    /** The stack of the CHIP 8 emulator. 24 bytes are allocated. */
-    this.stack = new Uint8Array(24);
+    /** The stack of the CHIP 8 emulator. 12 spaces are allocated. */
+    this.stack = new Uint16Array(12);
 
     /** The stack pointer; indicates the current position of the stack */
     this.pointer = 0;
@@ -181,7 +184,7 @@ class Chip8Cpu {
         }
       }
     }
-    frontend.renderDisplay(this.screen);
+    this.frontend.renderDisplay(this.screen);
   }
 
   /**
@@ -189,7 +192,7 @@ class Chip8Cpu {
    */
   clearDisplay() {
     this.screen = new Uint8Array(WIDTH * HEIGHT);
-    frontend.renderDisplay(this.screen);
+    this.frontend.renderDisplay(this.screen);
   }
 
   /**
@@ -214,9 +217,9 @@ class Chip8Cpu {
    * @param {number} location The location of the subroutine
    */
   executeSubRoutine(location) {
-    this.pointer += 1;
     if (this.pointer >= this.stack.length) throw new RangeError('Stack overflow');
-    this.stack[this.pointer] = this.programCounter + 2;
+    this.stack[this.pointer] = this.programCounter;
+    this.pointer += 1;
     this.programCounter = location;
   }
 
@@ -282,7 +285,7 @@ class Chip8Cpu {
     const lastThreeNibbles = opcode & 0x0FFF;
     const lastTwoNibbles = opcode & 0x00FF;
 
-    if (opcode === 0x0E00) {
+    if (opcode === 0x00E0) {
       this.clearDisplay();
     } else if (opcode === 0x00EE) {
       this.returnFromSubroutine();
@@ -292,12 +295,12 @@ class Chip8Cpu {
     } else if (firstNibble === 0x1) {
       this.unconditionalJumpTo(lastThreeNibbles);
     } else if (firstNibble === 0x2) {
-      this.executeSubRoutine();
+      this.executeSubRoutine(lastThreeNibbles);
     } else if (firstNibble === 0x3) {
       this.skipInstructionIfEqual(this.registers[secondNibble], lastTwoNibbles);
     } else if (firstNibble === 0x4) {
       this.skipInstructionIfNotEqual(this.registers[secondNibble], lastTwoNibbles);
-    } else if (firstNibble === 0x5) {
+    } else if (firstNibble === 0x5 && lastNibble === 0x0) {
       this.skipInstructionIfEqual(this.registers[secondNibble], this.registers[thirdNibble]);
     } else if (firstNibble === 0x6) {
       this.setRegisterTo(secondNibble, lastTwoNibbles);
@@ -371,6 +374,13 @@ class Chip8Cpu {
     }
   }
 }
-
-const backend = new Chip8Cpu();
-frontend.statwaitForCodeInput(code => backend.loadProgram(code));
+// If we are running in node (testing) then expose the classes
+if (exports != null) {
+  exports.frontend = Frontend;
+  exports.backend = Chip8Cpu;
+} else { // otherwise start up the emulator/frontend
+  const frontend = new Frontend();
+  frontend.renderDisplay(new Uint8Array(64 * 32));
+  const backend = new Chip8Cpu(frontend);
+  frontend.statwaitForCodeInput(code => backend.loadProgram(code));
+}
