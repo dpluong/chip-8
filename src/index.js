@@ -431,6 +431,11 @@ class Chip8Cpu {
         // RI = decimalNumber first digit
         // R(I + 1) = decimalNumber second digit
         // R(I + 2) = decimalNumber third digit
+        var num = this.registers[secondNibble];
+        var decimalNumber = parseInt(num);
+        this.memory[this.iRegister + 2] = num % 10;
+        this.memory[this.iRegister + 1] = (num / 10) % 10;
+        this.memory[this.iRegister] = (num / 10) % 10;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x55) {
         // For i = 0; i <= secondNibble; i += 1:
         // M(RI + i) = R(i)
