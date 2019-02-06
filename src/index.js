@@ -426,10 +426,20 @@ class Chip8Cpu {
         // For i = 0; i <= secondNibble; i += 1:
         // M(RI + i) = R(i)
         // Then, RI = I + secondNibble + 1
+        for (let i = 0; i <= secondNibble; i+= 1) {
+          this.memory[this.iRegister + i] = this.registers[i];
+        }
+        this.iRegister += secondNibble + 1;
+        this.programCounter += 2;  
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
         // For i = 0; i <= secondNibble; i += 1:
         // R(i) = M(RI + i)
         // Then, RI = I + secondNibble + 1
+        for (let i = 0; i <= secondNibble; i+= 1) {
+          this.iRegister = this.memory[this.iRegister + i];
+        }
+        this.iRegister += secondNibble + 1;
+        this.programCounter += 2;
       } else {
         throw new ReferenceError('Unrecognized opcode');
       }
