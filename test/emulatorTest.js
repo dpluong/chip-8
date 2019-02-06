@@ -435,6 +435,31 @@ describe('Emulator', () => {
       expect(mockFrontend.currentDisplay[0b00010001000]).to.equal(1);
     });
 
+    it('sets register F to 0 if no on pixels are turned to off', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB1;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.registers[0xF] = 0x33;
+      emulator.runNextInstruction();
+      expect(emulator.registers[0xF]).to.equal(0);
+    });
+
+    it('sets register F to 1 if some on pixels are turned to off', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB1;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.registers[0xF] = 0x33;
+      emulator.screen.fill(1);
+      emulator.runNextInstruction();
+      expect(emulator.registers[0xF]).to.equal(1);
+    });
+
     it('respects the N bytes parameter', () => {
       emulator.memory[0x200] = 0xDA;
       emulator.memory[0x201] = 0xB1;

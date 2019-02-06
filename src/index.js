@@ -64,7 +64,7 @@ class Frontend {
    */
   // eslint-disable-next-line class-methods-use-this
   handleError(e) {
-    document.body = `An error occurred trying to run the program! ${e.message}`;
+    document.body.textContent = `An error occurred trying to run the program! ${e.message}`;
   }
 }
 
@@ -104,6 +104,9 @@ class Chip8Cpu {
     /** The sound timer; initalizes at 0 */
     this.sound = 0;
 
+    /** If not null, indicates the register where the next key press should go into */
+    this.nextKeypressRegister = null;
+
     /** Set a flag when updating the screen */
 
     const chip8FontData = [
@@ -124,7 +127,7 @@ class Chip8Cpu {
       0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
       0xF0, 0x80, 0xF0, 0x80, 0x80, // F
     ];
-    for (let i = 0; i < chip8FontData; i += 1) {
+    for (let i = 0; i < chip8FontData.length; i += 1) {
       this.memory[i] = chip8FontData[i];
     }
   }
@@ -138,19 +141,27 @@ class Chip8Cpu {
       this.memory[0x200 + i] = program[i];
     }
     this.programCounter = 0x200;
-    this.runNextInstruction();
+    this.runNextInstruction(true);
   }
 
-  drawSprite(x, y, i, height) {
-    let sprite;
+  /**
+   * Draws a sprite on the screen.
+   * Sets register F to if any on pixels got changed to off
+   * @param {number} x The x location of the top-left of the sprite
+   * @param {number} y The y location of the top-left of the sprite
+   * @param {number} addressStart The beginning of the sprite data
+   * @param {number} height The height of the sprite
+   */
+  drawSprite(x, y, addressStart, height) {
     this.registers[0xF] = 0;
-    for (let y2 = 0; y2 < height; y2 += 1) {
-      sprite = this.memory[i + y2];
+    for (let spriteLine = 0; spriteLine < height; spriteLine += 1) {
+      const sprite = this.memory[addressStart + spriteLine];
       for (let x2 = 0; x2 < 8; x2 += 1) {
         if ((sprite & (0x80 >> x2)) !== 0) {
-          if (this.screen[x + x2 + ((y + y2) * WIDTH)] === 1);
-          this.registers[0xF] = 1;
-          this.screen[x + x2 + ((y + y2) * WIDTH)] ^= 1;
+          if (this.screen[x + x2 + ((y + spriteLine) * WIDTH)] === 1) {
+            this.registers[0xF] = 1;
+          }
+          this.screen[x + x2 + ((y + spriteLine) * WIDTH)] ^= 1;
         }
       }
     }
@@ -243,159 +254,155 @@ class Chip8Cpu {
 
   /**
    * Runs the next instruction according to the program counter
+   * @param {boolean} isLastInstructionOfFrame If this is the last instruction for this frame
    */
-  runNextInstruction() {
+  runNextInstruction(isLastInstructionOfFrame = false) {
     try {
-      const opcode = (this.memory[this.programCounter] << 8) | this.memory[this.programCounter + 1];
-      this.programCounter += 2;
-
-      const firstNibble = (opcode & 0xF000) >> 12;
-      const secondNibble = (opcode & 0x0F00) >> 8;
-      const thirdNibble = (opcode & 0x00F0) >> 4;
-      const lastNibble = opcode & 0x000F;
-      const lastThreeNibbles = opcode & 0x0FFF;
-      const lastTwoNibbles = opcode & 0x00FF;
-
-      if (opcode === 0x00E0) {
-        this.clearDisplay();
-      } else if (opcode === 0x00EE) {
-        this.returnFromSubroutine();
-      } else if (firstNibble === 0x0) {
-        // execute machine lang. subroutine at M(lastThreeNibbles)
-        throw new Error('Unimplemented opcode');
-      } else if (firstNibble === 0x1) {
-        this.unconditionalJumpTo(lastThreeNibbles);
-      } else if (firstNibble === 0x2) {
-        this.executeSubRoutine(lastThreeNibbles);
-      } else if (firstNibble === 0x3) {
-        this.skipInstructionIfEqual(this.registers[secondNibble], lastTwoNibbles);
-      } else if (firstNibble === 0x4) {
-        this.skipInstructionIfNotEqual(this.registers[secondNibble], lastTwoNibbles);
-      } else if (firstNibble === 0x5 && lastNibble === 0x0) {
-        this.skipInstructionIfEqual(this.registers[secondNibble], this.registers[thirdNibble]);
-      } else if (firstNibble === 0x6) {
-        this.setRegisterTo(secondNibble, lastTwoNibbles);
-      } else if (firstNibble === 0x7) {
-        this.addToRegister(secondNibble, lastTwoNibbles);
-      } else if (firstNibble === 0x8 && lastNibble === 0x0) {
-        this.setRegisterTo(secondNibble, this.registers[thirdNibble]);
-      } else if (firstNibble === 0x8 && lastNibble === 0x1) {
-        const newValue = this.registers[secondNibble] | this.registers[thirdNibble];
-        this.setRegisterTo(secondNibble, newValue);
-      } else if (firstNibble === 0x8 && lastNibble === 0x2) {
-        const newValue = this.registers[secondNibble] & this.registers[thirdNibble];
-        this.setRegisterTo(secondNibble, newValue);
-      } else if (firstNibble === 0x8 && lastNibble === 0x3) {
-        const newValue = this.registers[secondNibble] ^ this.registers[thirdNibble];
-        this.setRegisterTo(secondNibble, newValue);
-      } else if (firstNibble === 0x8 && lastNibble === 0x4) {
-        const carryOccurred = (this.registers[thirdNibble] + this.registers[secondNibble]) > 0xFF;
-        this.registers[0xF] = carryOccurred ? 1 : 0;
-        this.registers[secondNibble] += this.registers[thirdNibble];
-      } else if (firstNibble === 0x8 && lastNibble === 0x5) {
-        const borrowOccurred = this.registers[thirdNibble] > this.registers[secondNibble];
-        this.registers[0xF] = borrowOccurred ? 1 : 0;
-        this.registers[secondNibble] -= this.registers[thirdNibble];
-      } else if (firstNibble === 0x8 && lastNibble === 0x6) {
-        this.registers[0xF] = this.registers[thirdNibble] & 0x1;
-        this.registers[secondNibble] = this.registers[thirdNibble] >> 1;
-      } else if (firstNibble === 0x8 && lastNibble === 0x7) {
-        const borrowOccurred = this.registers[secondNibble] > this.registers[thirdNibble];
-        this.registers[0xF] = borrowOccurred ? 1 : 0;
-        this.registers[secondNibble] = this.registers[thirdNibble] - this.registers[secondNibble];
-      } else if (firstNibble === 0x8 && lastNibble === 0xE) {
-        this.registers[0xF] = (this.registers[thirdNibble] & 0x80) >> 7;
-        this.registers[secondNibble] = this.registers[thirdNibble] << 1;
-      } else if (firstNibble === 0x9) {
-        this.skipInstructionIfNotEqual(this.registers[secondNibble], this.registers[thirdNibble]);
-      } else if (firstNibble === 0xA) {
-        this.setIRegister(lastThreeNibbles);
-      } else if (firstNibble === 0xB) {
-        this.unconditionalJumpTo(lastThreeNibbles + this.registers[0]);
-      } else if (firstNibble === 0xC) {
-        const newRandomValue = Math.floor(Math.random() * (0xFF + 0.999999)) & lastTwoNibbles;
-        this.registers[secondNibble] = newRandomValue;
-      } else if (firstNibble === 0xD) {
-        // Draw a sprite located at RI and lastNibble bytes long at:
-        // X = R(secondNibble), Y = R(thirdNibble)
-        // VF = setPixelsChangedToUnSet ? 0x01 : 0x00
-        this.drawSprite(this.registers[secondNibble], this.registers[thirdNibble], this.iRegister, lastNibble);
-      } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
-        const keyToCheck = this.registers[secondNibble];
-        if (this.frontend.keyStates[keyToCheck]) {
-          this.programCounter += 2;
+      if (this.nextKeypressRegister != null) {
+        const currentKeyPressed = this.frontend.keyStates.findIndex(key => key !== 0);
+        if (currentKeyPressed !== -1) {
+          this.registers[this.nextKeypressRegister] = currentKeyPressed;
+          this.frontend.keyStates[currentKeyPressed] = 0;
+          this.nextKeypressRegister = null;
         }
-      } else if (firstNibble === 0xE && lastTwoNibbles === 0xA1) {
-        const keyToCheck = this.registers[secondNibble];
-        if (!this.frontend.keyStates[keyToCheck]) {
-          this.programCounter += 2;
-        }
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x07) {
-        this.registers[secondNibble] = this.delay;
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x0A) {
-        // R(secondNibble) = value of the next key pressed
-        let isPressed = false;
-        for (let i = 0; i < 16; i += 1) {
-          if (this.frontend.keyStates[i] === true) {
-            this.registers[secondNibble] = i;
-            isPressed = true;
-          }
-        }
-        if (isPressed === true) { return; }
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
-        this.delay = this.registers[secondNibble];
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x18) {
-        this.sound = this.registers[secondNibble];
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x1E) {
-        this.iRegister += this.registers[secondNibble];
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
-        // RI = M(sprite of the letter R(secondNibble))
-        this.iRegister = this.registers[secondNibble] * 5;
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x33) {
-        // Let decimalNumber = Decimal representation of value in R(secondNibble)
-        // RI = decimalNumber first digit
-        // R(I + 1) = decimalNumber second digit
-        // R(I + 2) = decimalNumber third digit
-        const num = this.registers[secondNibble];
-        const decimalNumber = parseInt(num);
-        this.memory[this.iRegister + 2] = num % 10;
-        this.memory[this.iRegister + 1] = (num / 10) % 10;
-        this.memory[this.iRegister] = (num / 10) % 10;
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x55) {
-        // For i = 0; i <= secondNibble; i += 1:
-        // M(RI + i) = R(i)
-        // Then, RI = I + secondNibble + 1
-        for (let i = 0; i <= secondNibble; i += 1) {
-          this.memory[this.iRegister + i] = this.registers[i];
-        }
-        this.iRegister += secondNibble + 1;
-      } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
-        // For i = 0; i <= secondNibble; i += 1:
-        // R(i) = M(RI + i)
-        // Then, RI = I + secondNibble + 1
-        for (let i = 0; i <= secondNibble; i += 1) {
-          this.iRegister = this.memory[this.iRegister + i];
-        }
-        this.iRegister += secondNibble + 1;
       } else {
-        throw new ReferenceError('Unrecognized opcode');
+        const firstByte = this.memory[this.programCounter];
+        const lastByte = this.memory[this.programCounter + 1];
+        const opcode = (firstByte << 8) | lastByte;
+        this.programCounter += 2;
+
+        const firstNibble = (opcode & 0xF000) >> 12;
+        const secondNibble = (opcode & 0x0F00) >> 8;
+        const thirdNibble = (opcode & 0x00F0) >> 4;
+        const lastNibble = opcode & 0x000F;
+        const lastThreeNibbles = opcode & 0x0FFF;
+        const lastTwoNibbles = opcode & 0x00FF;
+
+        if (opcode === 0x00E0) {
+          this.clearDisplay();
+        } else if (opcode === 0x00EE) {
+          this.returnFromSubroutine();
+        } else if (firstNibble === 0x0) {
+          // execute machine lang. subroutine at M(lastThreeNibbles)
+          // throw new Error('Unimplemented opcode');
+        } else if (firstNibble === 0x1) {
+          this.unconditionalJumpTo(lastThreeNibbles);
+        } else if (firstNibble === 0x2) {
+          this.executeSubRoutine(lastThreeNibbles);
+        } else if (firstNibble === 0x3) {
+          this.skipInstructionIfEqual(this.registers[secondNibble], lastTwoNibbles);
+        } else if (firstNibble === 0x4) {
+          this.skipInstructionIfNotEqual(this.registers[secondNibble], lastTwoNibbles);
+        } else if (firstNibble === 0x5 && lastNibble === 0x0) {
+          this.skipInstructionIfEqual(this.registers[secondNibble], this.registers[thirdNibble]);
+        } else if (firstNibble === 0x6) {
+          this.setRegisterTo(secondNibble, lastTwoNibbles);
+        } else if (firstNibble === 0x7) {
+          this.addToRegister(secondNibble, lastTwoNibbles);
+        } else if (firstNibble === 0x8 && lastNibble === 0x0) {
+          this.setRegisterTo(secondNibble, this.registers[thirdNibble]);
+        } else if (firstNibble === 0x8 && lastNibble === 0x1) {
+          const newValue = this.registers[secondNibble] | this.registers[thirdNibble];
+          this.setRegisterTo(secondNibble, newValue);
+        } else if (firstNibble === 0x8 && lastNibble === 0x2) {
+          const newValue = this.registers[secondNibble] & this.registers[thirdNibble];
+          this.setRegisterTo(secondNibble, newValue);
+        } else if (firstNibble === 0x8 && lastNibble === 0x3) {
+          const newValue = this.registers[secondNibble] ^ this.registers[thirdNibble];
+          this.setRegisterTo(secondNibble, newValue);
+        } else if (firstNibble === 0x8 && lastNibble === 0x4) {
+          const carryOccurred = (this.registers[thirdNibble] + this.registers[secondNibble]) > 0xFF;
+          this.registers[0xF] = carryOccurred ? 1 : 0;
+          this.registers[secondNibble] += this.registers[thirdNibble];
+        } else if (firstNibble === 0x8 && lastNibble === 0x5) {
+          const borrowOccurred = this.registers[thirdNibble] > this.registers[secondNibble];
+          this.registers[0xF] = borrowOccurred ? 1 : 0;
+          this.registers[secondNibble] -= this.registers[thirdNibble];
+        } else if (firstNibble === 0x8 && lastNibble === 0x6) {
+          this.registers[0xF] = this.registers[thirdNibble] & 0x1;
+          this.registers[secondNibble] = this.registers[thirdNibble] >> 1;
+        } else if (firstNibble === 0x8 && lastNibble === 0x7) {
+          const borrowOccurred = this.registers[secondNibble] > this.registers[thirdNibble];
+          this.registers[0xF] = borrowOccurred ? 1 : 0;
+          this.registers[secondNibble] = this.registers[thirdNibble] - this.registers[secondNibble];
+        } else if (firstNibble === 0x8 && lastNibble === 0xE) {
+          this.registers[0xF] = (this.registers[thirdNibble] & 0x80) >> 7;
+          this.registers[secondNibble] = this.registers[thirdNibble] << 1;
+        } else if (firstNibble === 0x9) {
+          this.skipInstructionIfNotEqual(this.registers[secondNibble], this.registers[thirdNibble]);
+        } else if (firstNibble === 0xA) {
+          this.setIRegister(lastThreeNibbles);
+        } else if (firstNibble === 0xB) {
+          this.unconditionalJumpTo(lastThreeNibbles + this.registers[0]);
+        } else if (firstNibble === 0xC) {
+          const newRandomValue = Math.floor(Math.random() * (0xFF + 0.999999)) & lastTwoNibbles;
+          this.registers[secondNibble] = newRandomValue;
+        } else if (firstNibble === 0xD) {
+          this.drawSprite(this.registers[secondNibble], this.registers[thirdNibble], this.iRegister, lastNibble);
+        } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
+          const keyToCheck = this.registers[secondNibble];
+          if (this.frontend.keyStates[keyToCheck]) {
+            this.programCounter += 2;
+          }
+        } else if (firstNibble === 0xE && lastTwoNibbles === 0xA1) {
+          const keyToCheck = this.registers[secondNibble];
+          if (!this.frontend.keyStates[keyToCheck]) {
+            this.programCounter += 2;
+          }
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x07) {
+          this.registers[secondNibble] = this.delay;
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x0A) {
+          const currentKeyPressed = this.frontend.keyStates.findIndex(key => key !== 0);
+          if (currentKeyPressed !== -1) {
+            this.registers[secondNibble] = currentKeyPressed;
+          } else {
+            this.nextKeypressRegister = secondNibble;
+          }
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
+          this.delay = this.registers[secondNibble];
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x18) {
+          this.sound = this.registers[secondNibble];
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x1E) {
+          this.iRegister += this.registers[secondNibble];
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
+          // RI = M(sprite of the letter R(secondNibble))
+          this.iRegister = (this.registers[secondNibble] % 0xF) * 5;
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x33) {
+          const decimalNumber = this.registers[secondNibble];
+          this.memory[this.iRegister] = Math.floor(decimalNumber / 100);
+          this.memory[this.iRegister + 1] = Math.floor((decimalNumber / 10)) % 10;
+          this.memory[this.iRegister + 2] = decimalNumber % 10;
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x55) {
+          for (let i = 0; i <= secondNibble; i += 1) {
+            this.memory[this.iRegister + i] = this.registers[i];
+          }
+          this.iRegister += secondNibble + 1;
+        } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
+          for (let i = 0; i <= secondNibble; i += 1) {
+            this.registers[i] = this.memory[this.iRegister + i];
+          }
+          this.iRegister += secondNibble + 1;
+        } else {
+          throw new ReferenceError('Unrecognized opcode');
+        }
       }
 
-      if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+      if (typeof window !== 'undefined' && window.requestAnimationFrame && isLastInstructionOfFrame) {
+        if (this.delay > 0) {
+          this.delay -= 1;
+        }
+        if (this.sound > 0) {
+          this.sound -= 1;
+        }
         window.requestAnimationFrame(() => {
-          if (this.delay > 0) {
-            this.delay -= 1;
-          }
-          if (this.sound > 0) {
-            this.sound -= 1;
-          }
           for (let i = 0; i < 10; i += 1) { // 60Hz * 10 = 600Hz
-            this.runNextInstruction();
+            this.runNextInstruction(i === 9);
           }
         }); // requestAnimationFrame is approx 60Hz
       }
     } catch (e) {
       this.frontend.handleError(e);
+      throw e;
     }
   }
 }
