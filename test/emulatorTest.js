@@ -592,6 +592,17 @@ describe('Emulator', () => {
     });
   });
 
+  describe('Opcode 0xFX1E', () => {
+    it('adds value of register X to register I', () => {
+      emulator.memory[0x200] = 0xFF;
+      emulator.memory[0x201] = 0x1E;
+      emulator.registers[0xF] = 0x3;
+      emulator.iRegister = 0x36;
+      emulator.runNextInstruction();
+      expect(emulator.iRegister).to.equal(0x39);
+    });
+  });
+
   describe('Opcode 0xFX29', () => {
     it('sets the I register to the location of the char specified in register X', () => {
       emulator.memory[0x200] = 0xF8;
