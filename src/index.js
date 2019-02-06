@@ -141,25 +141,10 @@ class Chip8Cpu {
     this.runNextInstruction();
   }
 
-  drawSprite(x, y, i) {
+  drawSprite(x, y, i, height) {
     let sprite;
-    this.registers[16] = 0;
-
-    if (x > WIDTH) {
-      x -= WIDTH;
-    } else if (x < 0) {
-      x += WIDTH;
-    }
-
-    if (y > HEIGHT) {
-      y -= HEIGHT;
-    } else if (y < 0) {
-      x += HEIGHT;
-    }
-
-    const index = x + y * WIDTH;
-
-    for (let y2 = 0; y2 < HEIGHT; y2 += 1) {
+    this.registers[0xF] = 0;
+    for (let y2 = 0; y2 < height; y2 += 1) {
       sprite = this.memory[i + y2];
       for (let x2 = 0; x2 < 8; x2 += 1) {
         if ((sprite & (0x80 >> x2)) !== 0) {
@@ -334,7 +319,7 @@ class Chip8Cpu {
         // Draw a sprite located at RI and lastNibble bytes long at:
         // X = R(secondNibble), Y = R(thirdNibble)
         // VF = setPixelsChangedToUnSet ? 0x01 : 0x00
-        this.drawSprite(this.registers[secondNibble], this.registers[thirdNibble], this.iRegister);
+        this.drawSprite(this.registers[secondNibble], this.registers[thirdNibble], this.iRegister, lastNibble);
       } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
         const keyToCheck = this.registers[secondNibble];
         if (this.frontend.keyStates[keyToCheck]) {
