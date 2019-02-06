@@ -137,7 +137,7 @@ Release 1 Due Date (Feb 6, 2019):
 
 - Emulator production-ready and sent to the instructor
 
-The expected items that will need to be created for the emulator:
+The items that were planned initally to be created for the emulator:
 
 - Frontend Display
 - Frontend CHIP8 Keyboard Input
@@ -150,19 +150,31 @@ The expected items that will need to be created for the emulator:
     - Chip8 Video Card
 - Test code for all of the above items
 
-## Detailed Release 2 Plan & Schedule
-Everyone will be working on the tool for the first release. As having no roles was the most effective strategy for our team, for Release 2 there will continue to be no defined roles.
+The following items were completed for the emulator:
 
-The plan shall be separated into weeks, with the separator being the weekly meetings.
+- Frontend Display
+- Frontend CHIP8 Keyboard Input
+- Frontend CHIP8 Code Input
+- CHIP8 Virtual Machine, including...
+    - Chip8 CPU (Stack, Registers)
+    - Chip8 Memory
+- Test code for emulator opcodes
+
+Code Parser and Video Card were duplicates of other features and were removed from the final feature list.
+
+## Detailed Release 2 Plan & Schedule
+Everyone will be working on the tool for the second release. As having no roles was the most effective strategy for our team, for Release 2 there will continue to be no defined roles.
+
+The plan shall be separated into weeks, with the separator being the weekly meetings on Mondays.
 
 For the second release, there are 3 weeks.
 
-FINISH BY Week 1 (Feb 13, 2019)
+FINISH BY Week 1 (Feb 11, 2019)
 -	Finish 50% of the tool including:
 -	The Input stream
 -	The Token stream
 
-FINISH BY Week 2 (Feb 20, 2019)
+FINISH BY Week 2 (Feb 18, 2019) (Meeting day for this week may be changed due to Reading Break & other commitments):
 -	Finish the rest of the tool including:
 -	The AST
 -	The parser
