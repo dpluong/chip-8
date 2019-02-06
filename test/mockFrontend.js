@@ -6,6 +6,11 @@ class MockFrontend {
   renderDisplay(displayMemory) {
     this.currentDisplay = displayMemory;
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  handleError(e) {
+    throw e;
+  }
 }
 
 module.exports = MockFrontend;

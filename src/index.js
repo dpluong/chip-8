@@ -84,6 +84,15 @@ class Frontend {
       fileReader.readAsArrayBuffer(this.codeInputDOM.files[0]);
     });
   }
+
+  /**
+   * Handles an error emitted by the Chip 8 engine
+   * @param {Error} e The error that occurred
+   */
+  // eslint-disable-next-line class-methods-use-this
+  handleError(e) {
+    document.body = `An error occurred trying to run the program! ${e.message}`;
+  }
 }
 
 class Chip8Cpu {
@@ -275,107 +284,132 @@ class Chip8Cpu {
    * Runs the next instruction according to the program counter
    */
   runNextInstruction() {
-    const opcode = (this.memory[this.programCounter] << 8) | this.memory[this.programCounter + 1];
-    this.programCounter = this.programCounter + 2;
+    try {
+      const opcode = (this.memory[this.programCounter] << 8) | this.memory[this.programCounter + 1];
+      this.programCounter = this.programCounter + 2;
 
-    const firstNibble = (opcode & 0xF000) >> 12;
-    const secondNibble = (opcode & 0x0F00) >> 8;
-    const thirdNibble = (opcode & 0x00F0) >> 4;
-    const lastNibble = opcode & 0x000F;
-    const lastThreeNibbles = opcode & 0x0FFF;
-    const lastTwoNibbles = opcode & 0x00FF;
+      const firstNibble = (opcode & 0xF000) >> 12;
+      const secondNibble = (opcode & 0x0F00) >> 8;
+      const thirdNibble = (opcode & 0x00F0) >> 4;
+      const lastNibble = opcode & 0x000F;
+      const lastThreeNibbles = opcode & 0x0FFF;
+      const lastTwoNibbles = opcode & 0x00FF;
 
-    if (opcode === 0x00E0) {
-      this.clearDisplay();
-    } else if (opcode === 0x00EE) {
-      this.returnFromSubroutine();
-    } else if (firstNibble === 0x0) {
-      // execute machine lang. subroutine at M(lastThreeNibbles)
-      throw new Error('Unimplemented opcode');
-    } else if (firstNibble === 0x1) {
-      this.unconditionalJumpTo(lastThreeNibbles);
-    } else if (firstNibble === 0x2) {
-      this.executeSubRoutine(lastThreeNibbles);
-    } else if (firstNibble === 0x3) {
-      this.skipInstructionIfEqual(this.registers[secondNibble], lastTwoNibbles);
-    } else if (firstNibble === 0x4) {
-      this.skipInstructionIfNotEqual(this.registers[secondNibble], lastTwoNibbles);
-    } else if (firstNibble === 0x5 && lastNibble === 0x0) {
-      this.skipInstructionIfEqual(this.registers[secondNibble], this.registers[thirdNibble]);
-    } else if (firstNibble === 0x6) {
-      this.setRegisterTo(secondNibble, lastTwoNibbles);
-    } else if (firstNibble === 0x7) {
-      this.addToRegister(secondNibble, lastTwoNibbles);
-    } else if (firstNibble === 0x8 && lastNibble === 0x0) {
-      // R(secondNibble) = R(thirdNibble)
-    } else if (firstNibble === 0x8 && lastNibble === 0x1) {
-      // R(secondNibble) = R(secondNibble) | R(thirdNibble)
-    } else if (firstNibble === 0x8 && lastNibble === 0x2) {
-      // R(secondNibble) = R(secondNibble) & R(thirdNibble)
-    } else if (firstNibble === 0x8 && lastNibble === 0x3) {
-      // R(secondNibble) = R(secondNibble) ^ R(thirdNibble)
-    } else if (firstNibble === 0x8 && lastNibble === 0x3) {
-      // R(secondNibble) = R(secondNibble) ^ R(thirdNibble)
-    } else if (firstNibble === 0x8 && lastNibble === 0x4) {
-      // R(secondNibble) += R(thirdNibble), RF = carryOccurred ? 0x1 : 0x0
-    } else if (firstNibble === 0x8 && lastNibble === 0x5) {
-      // R(secondNibble) -= R(thirdNibble), RF = borrowOccurred ? 0x1 : 0x0
-    } else if (firstNibble === 0x8 && lastNibble === 0x6) {
-      // R(secondNibble) = R(thirdNibble) >> 1, RF = R(thirdNibble) & 0x1
-    } else if (firstNibble === 0x8 && lastNibble === 0x7) {
-      // R(secondNibble) = R(thirdNibble) - R(secondNibble) , RF = borrowOccurred ? 0x1 : 0x0
-    } else if (firstNibble === 0x8 && lastNibble === 0x7) {
-      // R(secondNibble) = R(thirdNibble) - R(secondNibble) , RF = borrowOccurred ? 0x1 : 0x0
-    } else if (firstNibble === 0x8 && lastNibble === 0xE) {
-      // R(secondNibble) = R(thirdNibble) << 1 , RF = R(thirdNibble) & 0x80
-    } else if (firstNibble === 0x9) {
-      this.skipInstructionIfNotEqual(this.registers[secondNibble], this.registers[thirdNibble]);
-    } else if (firstNibble === 0xA) {
-      this.setIRegister(lastThreeNibbles);
-    } else if (firstNibble === 0xB) {
-      this.unconditionalJumpTo(lastThreeNibbles + this.registers[0]);
-    } else if (firstNibble === 0xC) {
-      // R(secondNibble) = Math.floor(Math.random() * (0xFF + 0.999999)) & lastTwoNibbles
-    } else if (firstNibble === 0xD) {
-      // Draw a sprite located at RI and lastNibble bytes long at:
-      // X = R(secondNibble), Y = R(thirdNibble)
-      // VF = setPixelsChangedToUnSet ? 0x01 : 0x00
-    } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
-      // If the R(secondNibble) key is pressed skip the next instruction
-    } else if (firstNibble === 0xE && lastTwoNibbles === 0xA1) {
-      // If the R(secondNibble) key is NOT pressed skip the next instruction
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x07) {
-      // R(secondNibble) = delay timer current value
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x0A) {
-      // R(secondNibble) = value of the next key pressed
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
-      // delay timer = R(secondNibble)
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x18) {
-      // sound timer = R(secondNibble)
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x1E) {
-      // RI += R(secondNibble)
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
-      // RI = M(sprite of the letter R(secondNibble))
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x33) {
-      // Let decimalNumber = Decimal representation of value in R(secondNibble)
-      // RI = decimalNumber first digit
-      // R(I + 1) = decimalNumber second digit
-      // R(I + 2) = decimalNumber third digit
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x55) {
-      // For i = 0; i <= secondNibble; i += 1:
-      // M(RI + i) = R(i)
-      // Then, RI = I + secondNibble + 1
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
-      // For i = 0; i <= secondNibble; i += 1:
-      // R(i) = M(RI + i)
-      // Then, RI = I + secondNibble + 1
-    } else {
-      throw new ReferenceError('Unrecognized opcode');
+      if (opcode === 0x00E0) {
+        this.clearDisplay();
+      } else if (opcode === 0x00EE) {
+        this.returnFromSubroutine();
+      } else if (firstNibble === 0x0) {
+        // execute machine lang. subroutine at M(lastThreeNibbles)
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x1) {
+        this.unconditionalJumpTo(lastThreeNibbles);
+      } else if (firstNibble === 0x2) {
+        this.executeSubRoutine(lastThreeNibbles);
+      } else if (firstNibble === 0x3) {
+        this.skipInstructionIfEqual(this.registers[secondNibble], lastTwoNibbles);
+      } else if (firstNibble === 0x4) {
+        this.skipInstructionIfNotEqual(this.registers[secondNibble], lastTwoNibbles);
+      } else if (firstNibble === 0x5 && lastNibble === 0x0) {
+        this.skipInstructionIfEqual(this.registers[secondNibble], this.registers[thirdNibble]);
+      } else if (firstNibble === 0x6) {
+        this.setRegisterTo(secondNibble, lastTwoNibbles);
+      } else if (firstNibble === 0x7) {
+        this.addToRegister(secondNibble, lastTwoNibbles);
+      } else if (firstNibble === 0x8 && lastNibble === 0x0) {
+        // R(secondNibble) = R(thirdNibble)
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x1) {
+        // R(secondNibble) = R(secondNibble) | R(thirdNibble)
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x2) {
+        // R(secondNibble) = R(secondNibble) & R(thirdNibble)
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x3) {
+        // R(secondNibble) = R(secondNibble) ^ R(thirdNibble)
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x4) {
+        // R(secondNibble) += R(thirdNibble), RF = carryOccurred ? 0x1 : 0x0
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x5) {
+        // R(secondNibble) -= R(thirdNibble), RF = borrowOccurred ? 0x1 : 0x0
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x6) {
+        // R(secondNibble) = R(thirdNibble) >> 1, RF = R(thirdNibble) & 0x1
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x7) {
+        // R(secondNibble) = R(thirdNibble) - R(secondNibble) , RF = borrowOccurred ? 0x1 : 0x0
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0x7) {
+        // R(secondNibble) = R(thirdNibble) - R(secondNibble) , RF = borrowOccurred ? 0x1 : 0x0
+        throw new Error('Unimplemented opcode');
+      } else if (firstNibble === 0x8 && lastNibble === 0xE) {
+        // R(secondNibble) = R(thirdNibble) << 1 , RF = R(thirdNibble) & 0x80
+      } else if (firstNibble === 0x9) {
+        this.skipInstructionIfNotEqual(this.registers[secondNibble], this.registers[thirdNibble]);
+      } else if (firstNibble === 0xA) {
+        this.setIRegister(lastThreeNibbles);
+      } else if (firstNibble === 0xB) {
+        this.unconditionalJumpTo(lastThreeNibbles + this.registers[0]);
+      } else if (firstNibble === 0xC) {
+        // R(secondNibble) = Math.floor(Math.random() * (0xFF + 0.999999)) & lastTwoNibbles
+      } else if (firstNibble === 0xD) {
+        // Draw a sprite located at RI and lastNibble bytes long at:
+        // X = R(secondNibble), Y = R(thirdNibble)
+        // VF = setPixelsChangedToUnSet ? 0x01 : 0x00
+      } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
+        // If the R(secondNibble) key is pressed skip the next instruction
+      } else if (firstNibble === 0xE && lastTwoNibbles === 0xA1) {
+        // If the R(secondNibble) key is NOT pressed skip the next instruction
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x07) {
+        // R(secondNibble) = delay timer current value
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x0A) {
+        // R(secondNibble) = value of the next key pressed
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
+        // delay timer = R(secondNibble)
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x18) {
+        // sound timer = R(secondNibble)
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x1E) {
+        // RI += R(secondNibble)
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
+        // RI = M(sprite of the letter R(secondNibble))
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x33) {
+        // Let decimalNumber = Decimal representation of value in R(secondNibble)
+        // RI = decimalNumber first digit
+        // R(I + 1) = decimalNumber second digit
+        // R(I + 2) = decimalNumber third digit
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x55) {
+        // For i = 0; i <= secondNibble; i += 1:
+        // M(RI + i) = R(i)
+        // Then, RI = I + secondNibble + 1
+      } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
+        // For i = 0; i <= secondNibble; i += 1:
+        // R(i) = M(RI + i)
+        // Then, RI = I + secondNibble + 1
+      } else {
+        throw new ReferenceError('Unrecognized opcode');
+      }
+
+      if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+        window.requestAnimationFrame(() => {
+          if (this.delay > 0) {
+            this.delay -= 1;
+          }
+          if (this.sound > 0) {
+            this.sound -= 1;
+          }
+          for (let i = 0; i < 10; i += 1) { // 60Hz * 10 = 600Hz
+            this.runNextInstruction();
+          }
+        }); // requestAnimationFrame is approx 60Hz
+      }
+    } catch (e) {
+      this.frontend.handleError(e);
     }
   }
 }
 // If we are running in node (testing) then expose the classes
-if (exports != null) {
+if (typeof exports !== 'undefined') {
   exports.frontend = Frontend;
   exports.backend = Chip8Cpu;
 } else { // otherwise start up the emulator/frontend
