@@ -130,9 +130,9 @@ class Chip8Cpu {
 
     /** The sound timer; initalizes at 0 */
     this.sound = 0;
-    
+
     /** Set a flag when updating the screen */
-    
+
 
     /** The default font data */
     this.chip8_font = [
@@ -190,7 +190,7 @@ class Chip8Cpu {
       for (let x2 = 0; x2 < 8; x2 += 1) {
         if ((sprite & (0x80 >> x2)) !== 0) {
           if (this.screen[x + x2 + ((y + y2) * WIDTH)] === 1);
-            this.registers[0xF] = 1;
+          this.registers[0xF] = 1;
           this.screen[x + x2 + ((y + y2) * WIDTH)] ^= 1;
         }
       }
@@ -288,7 +288,7 @@ class Chip8Cpu {
   runNextInstruction() {
     try {
       const opcode = (this.memory[this.programCounter] << 8) | this.memory[this.programCounter + 1];
-      this.programCounter = this.programCounter + 2;
+      this.programCounter += 2;
 
       const firstNibble = (opcode & 0xF000) >> 12;
       const secondNibble = (opcode & 0x0F00) >> 8;
@@ -319,58 +319,38 @@ class Chip8Cpu {
       } else if (firstNibble === 0x7) {
         this.addToRegister(secondNibble, lastTwoNibbles);
       } else if (firstNibble === 0x8 && lastNibble === 0x0) {
-        // R(secondNibble) = R(thirdNibble)
         this.setRegisterTo(secondNibble, this.registers[thirdNibble]);
-        this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
       } else if (firstNibble === 0x8 && lastNibble === 0x1) {
-        // R(secondNibble) = R(secondNibble) | R(thirdNibble)
-        this.setRegisterTo(secondNibble, (this.registers[secondNibble] | this.registers[thirdNibble]));
-        this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
+        const newValue = this.registers[secondNibble] | this.registers[thirdNibble];
+        this.setRegisterTo(secondNibble, newValue);
       } else if (firstNibble === 0x8 && lastNibble === 0x2) {
-        // R(secondNibble) = R(secondNibble) & R(thirdNibble)
-        this.setRegisterTo(secondNibble, (this.registers[secondNibble] & this.registers[thirdNibble]));
-        this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
+        const newValue = this.registers[secondNibble] & this.registers[thirdNibble];
+        this.setRegisterTo(secondNibble, newValue);
       } else if (firstNibble === 0x8 && lastNibble === 0x3) {
-        // R(secondNibble) = R(secondNibble) ^ R(thirdNibble)
-        this.setRegisterTo(secondNibble, (this.registers[secondNibble] ^ this.registers[thirdNibble]));
-        this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
+        const newValue = this.registers[secondNibble] ^ this.registers[thirdNibble];
+        this.setRegisterTo(secondNibble, newValue);
       } else if (firstNibble === 0x8 && lastNibble === 0x4) {
-        // R(secondNibble) += R(thirdNibble), RF = carryOccurred ? 0x1 : 0x0
-        if ((this.registers[thirdNibble] + this.registers[secondNibble]) > 0xFF)
-          this.registers[0xF] = 1;
-        else
-          this.registers[0xF] = 0;
+        const carryOccurred = (this.registers[thirdNibble] + this.registers[secondNibble]) > 0xFF;
+        this.registers[0xF] = carryOccurred ? 1 : 0;
         this.registers[secondNibble] += this.registers[thirdNibble];
-        this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
       } else if (firstNibble === 0x8 && lastNibble === 0x5) {
         // R(secondNibble) -= R(thirdNibble), RF = borrowOccurred ? 0x1 : 0x0
-        if (this.registers[thirdNibble] > this.registers[secondNibble])
-          this.registers[0xF] = 0;
-        else
-          this.registers[0xF] = 1;
+        if (this.registers[thirdNibble] > this.registers[secondNibble]) { this.registers[0xF] = 0; } else { this.registers[0xF] = 1; }
         this.registers[secondNibble] -= this.registers[thirdNibble];
         this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
+        // throw new Error('Unimplemented opcode');
       } else if (firstNibble === 0x8 && lastNibble === 0x6) {
         // R(secondNibble) = R(thirdNibble) >> 1, RF = R(thirdNibble) & 0x1
         this.registers[0xF] = this.registers[thirdNibble] & 0x1;
         this.registers[secondNibble] = this.registers[thirdNibble] >> 1;
         this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
+        // throw new Error('Unimplemented opcode');
       } else if (firstNibble === 0x8 && lastNibble === 0x7) {
         // R(secondNibble) = R(thirdNibble) - R(secondNibble) , RF = borrowOccurred ? 0x1 : 0x0
-        if (this.registers[secondNibble] > this.registers[thirdNibble])
-          this.registers[0xF] = 0;
-        else
-          this.registers[0xF] = 1;
+        if (this.registers[secondNibble] > this.registers[thirdNibble]) { this.registers[0xF] = 0; } else { this.registers[0xF] = 1; }
         this.registers[secondNibble] = this.registers[thirdNibble] - this.registers[secondNibble];
         this.programCounter += 2;
-        //throw new Error('Unimplemented opcode');
+        // throw new Error('Unimplemented opcode');
       } else if (firstNibble === 0x8 && lastNibble === 0xE) {
         // R(secondNibble) = R(thirdNibble) << 1 , RF = R(thirdNibble) & 0x80
         this.registers[0xF] = this.registers[thirdNibble] & 0x80;
@@ -394,31 +374,24 @@ class Chip8Cpu {
         this.programCounter += 2;
       } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
         // If the R(secondNibble) key is pressed skip the next instruction
-        if (this.keyStates[secondNibble] === true)
-          this.programCounter += 4;
-        else
-          this.programCounter += 2;
+        if (this.keyStates[secondNibble] === true) { this.programCounter += 4; } else { this.programCounter += 2; }
       } else if (firstNibble === 0xE && lastTwoNibbles === 0xA1) {
         // If the R(secondNibble) key is NOT pressed skip the next instruction
-        if (this.keyStates[secondNibble] === false)
-          this.programCounter += 4;
-        else
-          this.programCounter += 2;
+        if (this.keyStates[secondNibble] === false) { this.programCounter += 4; } else { this.programCounter += 2; }
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x07) {
         // R(secondNibble) = delay timer current value
         this.registers[secondNibble] = this.delay;
         this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x0A) {
         // R(secondNibble) = value of the next key pressed
-        var isPressed = false;
+        let isPressed = false;
         for (let i = 0; i < 16; i += 1) {
           if (this.keyStates[i] === true) {
             this.registers[secondNibble] = i;
             isPressed = true;
           }
         }
-        if (isPressed === true)
-          return;
+        if (isPressed === true) { return; }
         this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
         // delay timer = R(secondNibble)
@@ -441,8 +414,8 @@ class Chip8Cpu {
         // RI = decimalNumber first digit
         // R(I + 1) = decimalNumber second digit
         // R(I + 2) = decimalNumber third digit
-        var num = this.registers[secondNibble];
-        var decimalNumber = parseInt(num);
+        const num = this.registers[secondNibble];
+        const decimalNumber = parseInt(num);
         this.memory[this.iRegister + 2] = num % 10;
         this.memory[this.iRegister + 1] = (num / 10) % 10;
         this.memory[this.iRegister] = (num / 10) % 10;
@@ -454,7 +427,7 @@ class Chip8Cpu {
           this.memory[this.iRegister + i] = this.registers[i];
         }
         this.iRegister += secondNibble + 1;
-        this.programCounter += 2;  
+        this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
         // For i = 0; i <= secondNibble; i += 1:
         // R(i) = M(RI + i)
