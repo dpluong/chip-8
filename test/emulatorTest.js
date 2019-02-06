@@ -198,7 +198,7 @@ describe('Emulator', () => {
       emulator.registers[0xC] = 0xAA;
       emulator.registers[0x5] = 0xCB;
       emulator.runNextInstruction();
-      expect(emulator.registers[0xC]).to.equal(0x7A);
+      expect(emulator.registers[0xC]).to.equal(0x8A);
     });
   });
 
@@ -282,7 +282,7 @@ describe('Emulator', () => {
       emulator.registers[0x1] = 0x14;
       emulator.registers[0x4] = 0x58;
       emulator.runNextInstruction();
-      expect(emulator.registers[0x1]).to.equal(0x2B);
+      expect(emulator.registers[0x1]).to.equal(0x2C);
     });
 
     it('sets F register to 0x0 if least sig binary digit was 0', () => {

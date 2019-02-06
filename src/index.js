@@ -345,7 +345,7 @@ class Chip8Cpu {
         this.registers[0xF] = borrowOccurred ? 1 : 0;
         this.registers[secondNibble] = this.registers[thirdNibble] - this.registers[secondNibble];
       } else if (firstNibble === 0x8 && lastNibble === 0xE) {
-        this.registers[0xF] = this.registers[thirdNibble] & 0x80;
+        this.registers[0xF] = (this.registers[thirdNibble] & 0x80) >> 7;
         this.registers[secondNibble] = this.registers[thirdNibble] << 1;
       } else if (firstNibble === 0x9) {
         this.skipInstructionIfNotEqual(this.registers[secondNibble], this.registers[thirdNibble]);
@@ -383,7 +383,6 @@ class Chip8Cpu {
           }
         }
         if (isPressed === true) { return; }
-        this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
         this.delay = this.registers[secondNibble];
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x18) {
@@ -393,7 +392,6 @@ class Chip8Cpu {
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
         // RI = M(sprite of the letter R(secondNibble))
         this.iRegister = this.registers[secondNibble] * 5;
-        this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x33) {
         // Let decimalNumber = Decimal representation of value in R(secondNibble)
         // RI = decimalNumber first digit
@@ -412,7 +410,6 @@ class Chip8Cpu {
           this.memory[this.iRegister + i] = this.registers[i];
         }
         this.iRegister += secondNibble + 1;
-        this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
         // For i = 0; i <= secondNibble; i += 1:
         // R(i) = M(RI + i)
@@ -421,7 +418,6 @@ class Chip8Cpu {
           this.iRegister = this.memory[this.iRegister + i];
         }
         this.iRegister += secondNibble + 1;
-        this.programCounter += 2;
       } else {
         throw new ReferenceError('Unrecognized opcode');
       }
