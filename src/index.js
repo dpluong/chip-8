@@ -132,7 +132,7 @@ class Chip8Cpu {
     this.sound = 0;
     
     /** Set a flag when updating the screen */
-    this.drawFlag = false;
+    
 
     /** The default font data */
     this.chip8_font = [
@@ -196,7 +196,6 @@ class Chip8Cpu {
       }
     }
     this.frontend.renderDisplay(this.screen);
-    this.drawFlag = true;
   }
 
   /**
@@ -425,6 +424,8 @@ class Chip8Cpu {
         this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
         // RI = M(sprite of the letter R(secondNibble))
+        this.iRegister = this.registers[secondNibble] * 5;
+        this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x33) {
         // Let decimalNumber = Decimal representation of value in R(secondNibble)
         // RI = decimalNumber first digit
