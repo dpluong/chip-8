@@ -387,13 +387,31 @@ describe('Emulator', () => {
     });
   });
 
-  describe('Opcode 0xCNNN', () => {
-    it('jumps to the specified spot + offset in register 0', () => {
-      emulator.memory[0x200] = 0xC6;
-      emulator.memory[0x201] = 0x13;
-      emulator.registers[0x0] = 0x16;
-      emulator.runNextInstruction();
-      expect(emulator.programCounter).to.equal(0x629);
+  describe('Opcode 0xCXNN', () => {
+    it('changes the X register to a random number', () => {
+      let registerChanged = false;
+      for (let i = 0; i < 48; i += 2) {
+        emulator.memory[0x200 + i] = 0xC4;
+        emulator.memory[0x201 + i] = 0xFF;
+      }
+      for (let i = 0; i < 20; i += 1) {
+        emulator.runNextInstruction();
+        if (emulator.registers[0x4] !== 0x0) {
+          registerChanged = true;
+        }
+      }
+      expect(registerChanged).to.equal(true);
+    });
+
+    it('restricts the random values based off the mask', () => {
+      for (let i = 0; i < 48; i += 2) {
+        emulator.memory[0x200 + i] = 0xC6;
+        emulator.memory[0x201 + i] = 0x0F;
+      }
+      for (let i = 0; i < 20; i += 1) {
+        emulator.runNextInstruction();
+        expect(emulator.registers[0x6]).to.be.lessThan(0x10);
+      }
     });
   });
 });
