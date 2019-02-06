@@ -50,6 +50,7 @@ class Frontend {
   statwaitForCodeInput(callback) {
     this.codeInputDOM.addEventListener('change', () => {
       if (!this.codeInputDOM.files.length) return; // If no file then silently ignore
+      this.codeInputDOM.disabled = true;
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
         callback(new Uint8Array(fileReader.result)); // send in Int8Array as CHIP-8 is 8-bit program

@@ -74,14 +74,17 @@ http://mattmik.com/files/chip8/mastering/chip8.html will be used as the referanc
 Release 1 (Product Delivery Feb 6, 2019) (Planned Product Completion by Feb 4, 2019):
 
 - Emulator, major features and use cases include:
-- A full CHIP8 emulator, capable of running any application
+- A full CHIP8 emulator, capable of running any application **(Created under [Mattmik technical reference](http://mattmik.com/files/chip8/mastering/chip8.html)**
 - A frontend to allow input of code and keyboard, with a display
 - Users will be able to run any CHIP8 and interact with it using the emulator
 
 
 Release 2 (Product Delivery Feb 27, 2019) (Planned Product Completion by Mar 25, 2019):
 
-- CHIP8 Tool (Exact Tool Undecided)
+- CHIP8 Tool (CHIP8 Assembly Language)
+- A language of a higher level than the raw machine code
+- A compiler that converts this language to CHIP8 machine code
+- Users will be able to write human-readable code and compile it into CHIP8 machine code, ready for ues on any emulator
 
 Release 3 (Product Delivery Mar 13, 2019) (Planned Product Completion by Mar 11, 2019):
 
@@ -146,3 +149,26 @@ The expected items that will need to be created for the emulator:
     - Chip8 Memory
     - Chip8 Video Card
 - Test code for all of the above items
+
+## Detailed Release 2 Plan & Schedule
+Everyone will be working on the tool for the first release. As having no roles was the most effective strategy for our team, for Release 2 there will continue to be no defined roles.
+
+The plan shall be separated into weeks, with the separator being the weekly meetings.
+
+For the second release, there are 3 weeks.
+
+FINISH BY Week 1 (Feb 13, 2019)
+-	Finish 50% of the tool including:
+-	The Input stream
+-	The Token stream
+
+FINISH BY Week 2 (Feb 20, 2019)
+-	Finish the rest of the tool including:
+-	The AST
+-	The parser
+
+FINISH BY Week 3 (Feb 25, 2019)
+-	Test the compiler and fix bugs
+
+Release 2 Due Date (Feb 27, 2019):
+-	Higher level language and assembler production-ready and sent to the instructor
