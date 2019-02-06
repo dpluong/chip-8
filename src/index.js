@@ -410,6 +410,16 @@ class Chip8Cpu {
         this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x0A) {
         // R(secondNibble) = value of the next key pressed
+        var isPressed = false;
+        for (let i = 0; i < 16; i += 1) {
+          if (this.keyStates[i] === true) {
+            this.registers[secondNibble] = i;
+            isPressed = true;
+          }
+        }
+        if (isPressed === true)
+          return;
+        this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
         // delay timer = R(secondNibble)
         this.delay = this.registers[secondNibble];
@@ -440,7 +450,7 @@ class Chip8Cpu {
         // For i = 0; i <= secondNibble; i += 1:
         // M(RI + i) = R(i)
         // Then, RI = I + secondNibble + 1
-        for (let i = 0; i <= secondNibble; i+= 1) {
+        for (let i = 0; i <= secondNibble; i += 1) {
           this.memory[this.iRegister + i] = this.registers[i];
         }
         this.iRegister += secondNibble + 1;
@@ -449,7 +459,7 @@ class Chip8Cpu {
         // For i = 0; i <= secondNibble; i += 1:
         // R(i) = M(RI + i)
         // Then, RI = I + secondNibble + 1
-        for (let i = 0; i <= secondNibble; i+= 1) {
+        for (let i = 0; i <= secondNibble; i += 1) {
           this.iRegister = this.memory[this.iRegister + i];
         }
         this.iRegister += secondNibble + 1;
