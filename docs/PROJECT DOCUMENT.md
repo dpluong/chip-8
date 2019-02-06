@@ -41,7 +41,7 @@ Each release date is as follows:
 - Apr 8, 2019
 A general guide towards the expected state of the product for each release is located under "Release Overview".
 
-The detailed plan and workflow for the next release shall be posted below the "Release Overview‚Äù and will be updated with the plan for the next release as the previous release is completed.
+The detailed plan and workflow for the next release shall be posted below the "Release Overviewî and will be updated with the plan for the next release as the previous release is completed.
 
 The roles each member has will be set only for one release at a time and may change after each release.
 
@@ -170,14 +170,17 @@ The plan shall be separated into weeks, with the separator being the weekly meet
 For the second release, there are 3 weeks.
 
 FINISH BY Week 1 (Feb 11, 2019)
--	Finish 50% of the tool including:
--	The Input stream
--	The Token stream
+- Finish 50% of the tool including:
+- The Parser :
+    - The Input stream
+    - The Token stream
+    - The AST
+- The Interpreter 
 
 FINISH BY Week 2 (Feb 18, 2019) (Meeting day for this week may be changed due to Reading Break & other commitments):
 -	Finish the rest of the tool including:
--	The AST
--	The parser
+-	The Optimizer 
+-	The Code generator 
 
 FINISH BY Week 3 (Feb 25, 2019)
 -	Test the compiler and fix bugs
