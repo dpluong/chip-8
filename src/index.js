@@ -7,44 +7,17 @@ class Frontend {
     this.codeInputDOM = document.querySelector('input#codeInput');
     this.displayDOM = document.querySelector('canvas#display');
 
-    this.keyStates = {
-      1: false,
-      2: false,
-      3: false,
-      4: false,
-      5: false,
-      6: false,
-      7: false,
-      8: false,
-      9: false,
-      0: false,
-      a: false,
-      b: false,
-      c: false,
-      d: false,
-      e: false,
-      f: false,
-    };
+    this.keyStates = new Uint8Array(16);
 
-    this.onKeyPress = () => {};
-    Object.keys(this.keyStates).forEach((key) => {
-      const keyButton = document.querySelector(`button#key-${key}`);
+    Object.keys(this.keyStates).forEach((_key, i) => {
+      const keyButton = document.querySelector(`button#key-${i.toString(16)}`);
       keyButton.addEventListener('mousedown', () => {
-        this.onKeyPress(key);
-        this.keyStates[key] = true;
+        this.keyStates[i] = 0x1;
       });
       keyButton.addEventListener('mouseup', () => {
-        this.keyStates[key] = false;
+        this.keyStates[i] = 0x0;
       });
     });
-  }
-
-  /**
-   * Gets the current buttons being pressed by the user
-   * @returns an object showing which buttons are being pressed
-   */
-  getCurrentInputs() {
-    return this.keyStates;
   }
 
   /**

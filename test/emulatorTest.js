@@ -414,4 +414,122 @@ describe('Emulator', () => {
       }
     });
   });
+
+  describe('Opcode 0xDXYN', () => {
+    it('draws a sprite to the correct XY values', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB1;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.runNextInstruction();
+      expect(mockFrontend.currentDisplay.length).to.equal(64 * 32);
+      expect(mockFrontend.currentDisplay[0b00010000001]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010000010]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00010000011]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010000100]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010000101]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00010000110]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00010000111]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010001000]).to.equal(1);
+    });
+
+    it('respects the N bytes parameter', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB1;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.memory[0x203] = 0xFF;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.runNextInstruction();
+      expect(mockFrontend.currentDisplay[0b00011000001]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000010]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000011]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000100]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000101]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000110]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000111]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011001000]).to.equal(0);
+    });
+
+    it('can draw on multiple lines', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB2;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.memory[0x203] = 0b11111101;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.runNextInstruction();
+      expect(mockFrontend.currentDisplay[0b00011000001]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000010]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000011]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000100]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000101]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000110]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000111]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011001000]).to.equal(1);
+    });
+  });
+
+  describe('Opcode 0xDXYN', () => {
+    it('draws a sprite to the correct XY values', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB1;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.runNextInstruction();
+      expect(mockFrontend.currentDisplay.length).to.equal(64 * 32);
+      expect(mockFrontend.currentDisplay[0b00010000001]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010000010]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00010000011]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010000100]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010000101]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00010000110]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00010000111]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00010001000]).to.equal(1);
+    });
+
+    it('respects the N bytes parameter', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB1;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.memory[0x203] = 0b11111101;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.runNextInstruction();
+      expect(mockFrontend.currentDisplay[0b00011000001]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000010]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000011]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000100]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000101]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000110]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011000111]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011001000]).to.equal(0);
+    });
+
+    it('can draw on multiple lines', () => {
+      emulator.memory[0x200] = 0xDA;
+      emulator.memory[0x201] = 0xB2;
+      emulator.memory[0x202] = 0b01001101;
+      emulator.memory[0x203] = 0b11111101;
+      emulator.iRegister = 0x202;
+      emulator.registers[0xA] = 0x1;
+      emulator.registers[0xB] = 0x2;
+      emulator.runNextInstruction();
+      expect(mockFrontend.currentDisplay[0b00011000001]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000010]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000011]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000100]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000101]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000110]).to.equal(1);
+      expect(mockFrontend.currentDisplay[0b00011000111]).to.equal(0);
+      expect(mockFrontend.currentDisplay[0b00011001000]).to.equal(1);
+    });
+  });
 });
