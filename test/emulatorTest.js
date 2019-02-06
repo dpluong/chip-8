@@ -592,14 +592,99 @@ describe('Emulator', () => {
     });
   });
 
-  describe('Opcode 0xFX1E', () => {
-    it('adds the value of register X to register I', () => {
-      emulator.memory[0x200] = 0xF7;
-      emulator.memory[0x201] = 0x1E;
-      emulator.registers[0x7] = 0xAA;
-      emulator.iRegister = 0x13;
+  describe('Opcode 0xFX29', () => {
+    it('sets the I register to the location of the char specified in register X', () => {
+      emulator.memory[0x200] = 0xF8;
+      emulator.memory[0x201] = 0x29;
+      emulator.registers[0x8] = 0xC;
       emulator.runNextInstruction();
-      expect(emulator.iRegister).to.equal(0xBD);
+      expect(emulator.memory[emulator.iRegister]).to.equal(0xF0);
+      expect(emulator.memory[emulator.iRegister + 1]).to.equal(0x80);
+      expect(emulator.memory[emulator.iRegister + 2]).to.equal(0x80);
+      expect(emulator.memory[emulator.iRegister + 3]).to.equal(0x80);
+      expect(emulator.memory[emulator.iRegister + 4]).to.equal(0xF0);
+    });
+  });
+
+  describe('Opcode 0xFX33', () => {
+    it('sets the I, I + 1, I + 2 memory values to the decimal reprentation of reigster X', () => {
+      emulator.memory[0x200] = 0xF2;
+      emulator.memory[0x201] = 0x33;
+      emulator.registers[0x2] = 0xAD;
+      emulator.iRegister = 0x432;
+      emulator.runNextInstruction();
+      expect(emulator.memory[0x432]).to.equal(0x1);
+      expect(emulator.memory[0x433]).to.equal(0x7);
+      expect(emulator.memory[0x434]).to.equal(0x3);
+    });
+  });
+
+  describe('Opcode 0xFX55', () => {
+    it('stores register 0 to X inclusive only into memory adresses I + n', () => {
+      emulator.memory[0x200] = 0xF3;
+      emulator.memory[0x201] = 0x55;
+      emulator.registers[0x0] = 0x33;
+      emulator.registers[0x1] = 0x22;
+      emulator.registers[0x2] = 0x43;
+      emulator.registers[0x3] = 0x12;
+      emulator.registers[0x4] = 0x65;
+      emulator.iRegister = 0x543;
+      emulator.runNextInstruction();
+      expect(emulator.memory[0x543]).to.equal(0x33);
+      expect(emulator.memory[0x544]).to.equal(0x22);
+      expect(emulator.memory[0x545]).to.equal(0x43);
+      expect(emulator.memory[0x546]).to.equal(0x12);
+      expect(emulator.memory[0x547]).to.equal(0x0);
+    });
+
+    it('changes register I to I + X + 1', () => {
+      emulator.memory[0x200] = 0xF3;
+      emulator.memory[0x201] = 0x55;
+      emulator.registers[0x0] = 0x33;
+      emulator.registers[0x1] = 0x22;
+      emulator.registers[0x2] = 0x43;
+      emulator.registers[0x3] = 0x12;
+      emulator.registers[0x4] = 0x65;
+      emulator.iRegister = 0x543;
+      emulator.runNextInstruction();
+      expect(emulator.iRegister).to.equal(0x547);
+    });
+  });
+
+  describe('Opcode 0xFX65', () => {
+    it('sets register 0 to X inclusive only to values set in memory adresses I + n', () => {
+      emulator.memory[0x200] = 0xF2;
+      emulator.memory[0x201] = 0x65;
+      emulator.memory[0x366] = 0x16;
+      emulator.memory[0x367] = 0x32;
+      emulator.memory[0x368] = 0x10;
+      emulator.memory[0x369] = 0xCC;
+      emulator.registers[0x0] = 0x53;
+      emulator.registers[0x1] = 0x88;
+      emulator.registers[0x2] = 0x77;
+      emulator.registers[0x3] = 0x99;
+      emulator.iRegister = 0x366;
+      emulator.runNextInstruction();
+      expect(emulator.registers[0x0]).to.equal(0x16);
+      expect(emulator.registers[0x1]).to.equal(0x32);
+      expect(emulator.registers[0x2]).to.equal(0x10);
+      expect(emulator.registers[0x3]).to.equal(0x99);
+    });
+
+    it('changes register I to I + X + 1', () => {
+      emulator.memory[0x200] = 0xF2;
+      emulator.memory[0x201] = 0x65;
+      emulator.memory[0x366] = 0x16;
+      emulator.memory[0x367] = 0x32;
+      emulator.memory[0x368] = 0x10;
+      emulator.memory[0x369] = 0xCC;
+      emulator.registers[0x0] = 0x53;
+      emulator.registers[0x1] = 0x88;
+      emulator.registers[0x2] = 0x77;
+      emulator.registers[0x3] = 0x99;
+      emulator.iRegister = 0x366;
+      emulator.runNextInstruction();
+      expect(emulator.iRegister).to.equal(0x369);
     });
   });
 });

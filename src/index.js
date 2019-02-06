@@ -106,9 +106,7 @@ class Chip8Cpu {
 
     /** Set a flag when updating the screen */
 
-
-    /** The default font data */
-    this.chip8_font = [
+    const chip8FontData = [
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
       0x20, 0x60, 0x20, 0x20, 0x70, // 1
       0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
@@ -126,6 +124,9 @@ class Chip8Cpu {
       0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
       0xF0, 0x80, 0xF0, 0x80, 0x80, // F
     ];
+    for (let i = 0; i < chip8FontData; i += 1) {
+      this.memory[i] = chip8FontData[i];
+    }
   }
 
   /**
