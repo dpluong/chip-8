@@ -395,8 +395,16 @@ class Chip8Cpu {
         this.programCounter += 2;
       } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
         // If the R(secondNibble) key is pressed skip the next instruction
+        if (this.keyStates[secondNibble] === true)
+          this.programCounter += 4;
+        else
+          this.programCounter += 2;
       } else if (firstNibble === 0xE && lastTwoNibbles === 0xA1) {
         // If the R(secondNibble) key is NOT pressed skip the next instruction
+        if (this.keyStates[secondNibble] === false)
+          this.programCounter += 4;
+        else
+          this.programCounter += 2;
       } else if (firstNibble === 0xF && lastTwoNibbles === 0x07) {
         // R(secondNibble) = delay timer current value
         this.registers[secondNibble] = this.delay;
