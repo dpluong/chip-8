@@ -350,7 +350,7 @@ class Chip8Cpu {
         // R(secondNibble) = value of the next key pressed
         let isPressed = false;
         for (let i = 0; i < 16; i += 1) {
-          if (this.keyStates[i] === true) {
+          if (this.frontend.keyStates[i] === true) {
             this.registers[secondNibble] = i;
             isPressed = true;
           }

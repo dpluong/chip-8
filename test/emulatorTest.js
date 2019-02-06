@@ -474,62 +474,132 @@ describe('Emulator', () => {
     });
   });
 
-  describe('Opcode 0xDXYN', () => {
-    it('draws a sprite to the correct XY values', () => {
-      emulator.memory[0x200] = 0xDA;
-      emulator.memory[0x201] = 0xB1;
-      emulator.memory[0x202] = 0b01001101;
-      emulator.iRegister = 0x202;
-      emulator.registers[0xA] = 0x1;
-      emulator.registers[0xB] = 0x2;
+  describe('Opcode 0xEX9E', () => {
+    it('skips the next instruction if key located in register X is pressed', () => {
+      emulator.memory[0x200] = 0xE7;
+      emulator.memory[0x201] = 0x9E;
+      emulator.registers[0x7] = 0x4;
+      mockFrontend.keyStates[0x4] = 1;
       emulator.runNextInstruction();
-      expect(mockFrontend.currentDisplay.length).to.equal(64 * 32);
-      expect(mockFrontend.currentDisplay[0b00010000001]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00010000010]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00010000011]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00010000100]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00010000101]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00010000110]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00010000111]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00010001000]).to.equal(1);
+      expect(emulator.programCounter).to.equal(0x204);
     });
 
-    it('respects the N bytes parameter', () => {
-      emulator.memory[0x200] = 0xDA;
-      emulator.memory[0x201] = 0xB1;
-      emulator.memory[0x202] = 0b01001101;
-      emulator.memory[0x203] = 0b11111101;
-      emulator.iRegister = 0x202;
-      emulator.registers[0xA] = 0x1;
-      emulator.registers[0xB] = 0x2;
+    it('does not skip the next instruction if key located in register X is not pressed', () => {
+      emulator.memory[0x200] = 0xE7;
+      emulator.memory[0x201] = 0x9E;
+      emulator.registers[0x7] = 0x4;
+      mockFrontend.keyStates[0x4] = 0;
       emulator.runNextInstruction();
-      expect(mockFrontend.currentDisplay[0b00011000001]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011000010]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011000011]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011000100]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011000101]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011000110]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011000111]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011001000]).to.equal(0);
+      expect(emulator.programCounter).to.equal(0x202);
+    });
+  });
+
+  describe('Opcode 0xEXA1', () => {
+    it('skips the next instruction if key located in register X is not pressed', () => {
+      emulator.memory[0x200] = 0xE3;
+      emulator.memory[0x201] = 0xA1;
+      emulator.registers[0x3] = 0xF;
+      mockFrontend.keyStates[0xF] = 0;
+      emulator.runNextInstruction();
+      expect(emulator.programCounter).to.equal(0x204);
     });
 
-    it('can draw on multiple lines', () => {
-      emulator.memory[0x200] = 0xDA;
-      emulator.memory[0x201] = 0xB2;
-      emulator.memory[0x202] = 0b01001101;
-      emulator.memory[0x203] = 0b11111101;
-      emulator.iRegister = 0x202;
-      emulator.registers[0xA] = 0x1;
-      emulator.registers[0xB] = 0x2;
+    it('does not skip the next instruction if key located in register X is pressed', () => {
+      emulator.memory[0x200] = 0xE3;
+      emulator.memory[0x201] = 0xA1;
+      emulator.registers[0x3] = 0xF;
+      mockFrontend.keyStates[0xF] = 1;
       emulator.runNextInstruction();
-      expect(mockFrontend.currentDisplay[0b00011000001]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00011000010]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00011000011]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00011000100]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00011000101]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00011000110]).to.equal(1);
-      expect(mockFrontend.currentDisplay[0b00011000111]).to.equal(0);
-      expect(mockFrontend.currentDisplay[0b00011001000]).to.equal(1);
+      expect(emulator.programCounter).to.equal(0x202);
+    });
+  });
+
+  describe('Opcode 0xFX07', () => {
+    it('sets register X to current value of the delay timer', () => {
+      emulator.memory[0x200] = 0xF6;
+      emulator.memory[0x201] = 0x07;
+      emulator.registers[0x6] = 0x12;
+      emulator.delay = 0xA2;
+      emulator.runNextInstruction();
+      expect(emulator.registers[0x6]).to.equal(0xA2);
+    });
+  });
+
+  describe('Opcode 0xFX0A', () => {
+    it('sets register X to key pressed if key already pressed', () => {
+      emulator.memory[0x200] = 0xF7;
+      emulator.memory[0x201] = 0x0A;
+      emulator.registers[0x7] = 0x66;
+      mockFrontend.keyStates[0xA] = 1;
+      emulator.runNextInstruction();
+      expect(emulator.registers[0x7]).to.equal(0xA);
+    });
+
+    it('stops execution while wating for a key to be pressed', () => {
+      emulator.memory[0x200] = 0xF7;
+      emulator.memory[0x201] = 0x0A;
+      emulator.memory[0x202] = 0x67;
+      emulator.memory[0x203] = 0xFF;
+      emulator.registers[0x7] = 0x66;
+      emulator.runNextInstruction();
+      emulator.runNextInstruction();
+      expect(emulator.registers[0x7]).to.equal(0x66);
+    });
+
+    it('sets register X to key pressed when key eventually pressed', () => {
+      emulator.memory[0x200] = 0xF7;
+      emulator.memory[0x201] = 0x0A;
+      emulator.memory[0x202] = 0x67;
+      emulator.memory[0x203] = 0xFF;
+      emulator.registers[0x7] = 0x66;
+      emulator.runNextInstruction();
+      mockFrontend.keyStates[0xC] = 1;
+      emulator.runNextInstruction();
+      expect(emulator.registers[0x7]).to.equal(0xC);
+    });
+
+    it('allows execution to continue after key pressed', () => {
+      emulator.memory[0x200] = 0xF7;
+      emulator.memory[0x201] = 0x0A;
+      emulator.memory[0x202] = 0x67;
+      emulator.memory[0x203] = 0xFF;
+      emulator.registers[0x7] = 0x66;
+      emulator.runNextInstruction();
+      mockFrontend.keyStates[0xC] = 1;
+      emulator.runNextInstruction();
+      emulator.runNextInstruction();
+      expect(emulator.registers[0x7]).to.equal(0xFF);
+    });
+  });
+
+  describe('Opcode 0xFX15', () => {
+    it('sets delay timer to value in register X', () => {
+      emulator.memory[0x200] = 0xF0;
+      emulator.memory[0x201] = 0x15;
+      emulator.registers[0x0] = 0xC3;
+      emulator.runNextInstruction();
+      expect(emulator.delay).to.equal(0xC3);
+    });
+  });
+
+  describe('Opcode 0xFX18', () => {
+    it('sets sound timer to value in register X', () => {
+      emulator.memory[0x200] = 0xFA;
+      emulator.memory[0x201] = 0x18;
+      emulator.registers[0xA] = 0xBB;
+      emulator.runNextInstruction();
+      expect(emulator.sound).to.equal(0xBB);
+    });
+  });
+
+  describe('Opcode 0xFX1E', () => {
+    it('adds the value of register X to register I', () => {
+      emulator.memory[0x200] = 0xF7;
+      emulator.memory[0x201] = 0x1E;
+      emulator.registers[0x7] = 0xAA;
+      emulator.iRegister = 0x13;
+      emulator.runNextInstruction();
+      expect(emulator.iRegister).to.equal(0xBD);
     });
   });
 });
