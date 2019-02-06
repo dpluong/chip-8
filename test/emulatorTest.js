@@ -420,7 +420,27 @@ describe('Emulator', () => {
 
   describe('Opcode 0xCNNN', () => {
     it('jumps to the specified spot + offset in register 0', () => {
-      emulator.memory[0x200] = 0xB6;
+      emulator.memory[0x200] = 0xC6;
+      emulator.memory[0x201] = 0x13;
+      emulator.registers[0x0] = 0x16;
+      emulator.runNextInstruction();
+      expect(emulator.programCounter).to.equal(0x629);
+    });
+  });
+
+  describe('Opcode 0xCNNN', () => {
+    it('jumps to the specified spot + offset in register 0', () => {
+      emulator.memory[0x200] = 0xC6;
+      emulator.memory[0x201] = 0x13;
+      emulator.registers[0x0] = 0x16;
+      emulator.runNextInstruction();
+      expect(emulator.programCounter).to.equal(0x629);
+    });
+  });
+
+  describe('Opcode 0xCNNN', () => {
+    it('jumps to the specified spot + offset in register 0', () => {
+      emulator.memory[0x200] = 0xC6;
       emulator.memory[0x201] = 0x13;
       emulator.registers[0x0] = 0x16;
       emulator.runNextInstruction();
