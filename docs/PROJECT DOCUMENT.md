@@ -41,7 +41,7 @@ Each release date is as follows:
 - Apr 8, 2019
 A general guide towards the expected state of the product for each release is located under "Release Overview".
 
-The detailed plan and workflow for the next release shall be posted below the "Release Overview‚Äù and will be updated with the plan for the next release as the previous release is completed.
+The detailed plan and workflow for the next release shall be posted below the "Release Overviewî and will be updated with the plan for the next release as the previous release is completed.
 
 The roles each member has will be set only for one release at a time and may change after each release.
 
@@ -67,16 +67,24 @@ Note that generally only the next release will have the major features & use cas
 
 Note that the product completion date is 2-3 days before the delivery date, to account for delays and bugfixes.
 
+All team members shall only work on the features planned for the next release.
+
+http://mattmik.com/files/chip8/mastering/chip8.html will be used as the referance material for CHIP8.
+
 Release 1 (Product Delivery Feb 6, 2019) (Planned Product Completion by Feb 4, 2019):
 
 - Emulator, major features and use cases include:
-- A full CHIP8 emulator, capable of running any application
+- A full CHIP8 emulator, capable of running any application **(Created under [Mattmik technical reference](http://mattmik.com/files/chip8/mastering/chip8.html)**
 - A frontend to allow input of code and keyboard, with a display
 - Users will be able to run any CHIP8 and interact with it using the emulator
 
+
 Release 2 (Product Delivery Feb 27, 2019) (Planned Product Completion by Mar 25, 2019):
 
-- CHIP8 Tool (Exact Tool Undecided)
+- CHIP8 Tool (CHIP8 Assembly Language)
+- A language of a higher level than the raw machine code
+- A compiler that converts this language to CHIP8 machine code
+- Users will be able to write human-readable code and compile it into CHIP8 machine code, ready for ues on any emulator
 
 Release 3 (Product Delivery Mar 13, 2019) (Planned Product Completion by Mar 11, 2019):
 
@@ -129,7 +137,7 @@ Release 1 Due Date (Feb 6, 2019):
 
 - Emulator production-ready and sent to the instructor
 
-The expected items that will need to be created for the emulator:
+The items that were planned initally to be created for the emulator:
 
 - Frontend Display
 - Frontend CHIP8 Keyboard Input
@@ -141,3 +149,41 @@ The expected items that will need to be created for the emulator:
     - Chip8 Memory
     - Chip8 Video Card
 - Test code for all of the above items
+
+The following items were completed for the emulator:
+
+- Frontend Display
+- Frontend CHIP8 Keyboard Input
+- Frontend CHIP8 Code Input
+- CHIP8 Virtual Machine, including...
+    - Chip8 CPU (Stack, Registers)
+    - Chip8 Memory
+- Test code for emulator opcodes
+
+Code Parser and Video Card were duplicates of other features and were removed from the final feature list.
+
+## Detailed Release 2 Plan & Schedule
+Everyone will be working on the tool for the second release. As having no roles was the most effective strategy for our team, for Release 2 there will continue to be no defined roles.
+
+The plan shall be separated into weeks, with the separator being the weekly meetings on Mondays.
+
+For the second release, there are 3 weeks.
+
+FINISH BY Week 1 (Feb 11, 2019)
+- Finish 50% of the tool including:
+- The Parser :
+    - The Input stream
+    - The Token stream
+    - The AST
+- The Interpreter 
+
+FINISH BY Week 2 (Feb 18, 2019) (Meeting day for this week may be changed due to Reading Break & other commitments):
+-	Finish the rest of the tool including:
+-	The Optimizer 
+-	The Code generator 
+
+FINISH BY Week 3 (Feb 25, 2019)
+-	Test the compiler and fix bugs
+
+Release 2 Due Date (Feb 27, 2019):
+-	Higher level language and assembler production-ready and sent to the instructor
