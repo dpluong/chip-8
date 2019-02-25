@@ -69,6 +69,76 @@ class Frontend {
   }
 }
 
+class Visualizer {
+  /**
+   * Initalizes a new Visualizer
+   * @param {Chip8Cpu} chip8Cpu The CPU to visualize
+   */
+  constructor(chip8Cpu) {
+    this.chip8Cpu = chip8Cpu;
+    this.visualizerActive = false;
+    this.toggleVisualizerDOM = document.querySelector('button#visualizerToggle');
+    this.visualizerContainerDOM = document.querySelector('div#visualizerContainer');
+    this.registerTableBodyDOM = document.querySelector('tbody#visualizerRegisterTableBody');
+    this.registerValuesDOM = [];
+
+    this.toggleVisualizerDOM.addEventListener('click', () => {
+      if (this.visualizerActive) {
+        this.disableVisualizer();
+      } else {
+        this.enableVisualizer();
+      }
+    });
+  }
+
+  enableVisualizer() {
+    this.visualizerActive = true;
+    this.toggleVisualizerDOM.textContent = 'Disable Visualizer';
+    this.visualizerContainerDOM.style.display = '';
+
+    this.chip8Cpu.onUpdateState = () => this.updateVisualizerTables();
+
+    this.registerTableBodyDOM.innerHTML = '';
+    this.chip8Cpu.registers.forEach((regVal, index) => {
+      const row = document.createElement('tr');
+      const registerCell = document.createElement('td');
+      const valueCell = document.createElement('td');
+      registerCell.textContent = `Register ${index}`;
+      valueCell.textContent = regVal;
+      row.appendChild(registerCell);
+      row.appendChild(valueCell);
+      this.registerValuesDOM.push(valueCell);
+      this.registerTableBodyDOM.appendChild(row);
+    });
+    const row = document.createElement('tr');
+    const registerCell = document.createElement('td');
+    const valueCell = document.createElement('td');
+    registerCell.textContent = 'Register I';
+    valueCell.textContent = this.chip8Cpu.iRegister;
+    row.appendChild(registerCell);
+    row.appendChild(valueCell);
+    this.registerValuesDOM.push(valueCell);
+    this.registerTableBodyDOM.appendChild(row);
+  }
+
+  disableVisualizer() {
+    this.visualizerActive = false;
+    this.toggleVisualizerDOM.textContent = 'Enable Visualizer';
+    this.visualizerContainerDOM.style.display = 'none';
+  }
+
+  updateVisualizerTables() {
+    this.chip8Cpu.registers.forEach((regVal, index) => {
+      if (this.registerValuesDOM[index].textContent !== regVal.toString()) {
+        this.registerValuesDOM[index].textContent = regVal;
+      }
+    });
+    if (this.registerValuesDOM[this.registerValuesDOM.length - 1].textContent !== this.chip8Cpu.iRegister.toString()) {
+      this.registerValuesDOM[this.registerValuesDOM.length - 1].textContent = this.chip8Cpu.iRegister;
+    }
+  }
+}
+
 class Chip8Cpu {
   /**
    * Initializes a new CHIP-8 Emulator
@@ -108,7 +178,8 @@ class Chip8Cpu {
     /** If not null, indicates the register where the next key press should go into */
     this.nextKeypressRegister = null;
 
-    /** Set a flag when updating the screen */
+    /** Callback when emulator state is updated */
+    this.onUpdateState = () => {};
 
     const chip8FontData = [
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -388,6 +459,8 @@ class Chip8Cpu {
         }
       }
 
+
+      this.onUpdateState();
       if (typeof window !== 'undefined' && window.requestAnimationFrame && isLastInstructionOfFrame) {
         if (this.delay > 0) {
           this.delay -= 1;
@@ -411,9 +484,11 @@ class Chip8Cpu {
 if (typeof exports !== 'undefined') {
   exports.frontend = Frontend;
   exports.backend = Chip8Cpu;
+  exports.visualizer = Visualizer;
 } else { // otherwise start up the emulator/frontend
   const frontend = new Frontend();
   frontend.renderDisplay(new Uint8Array(64 * 32));
   const backend = new Chip8Cpu(frontend);
+  const visualizer = new Visualizer(backend);
   frontend.statwaitForCodeInput(code => backend.loadProgram(code));
 }
