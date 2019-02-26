@@ -388,7 +388,7 @@ class Chip8Cpu {
           this.registers[secondNibble] += this.registers[thirdNibble];
         } else if (firstNibble === 0x8 && lastNibble === 0x5) {
           const borrowOccurred = this.registers[thirdNibble] > this.registers[secondNibble];
-          this.registers[0xF] = borrowOccurred ? 1 : 0;
+          this.registers[0xF] = borrowOccurred ? 0 : 1;
           this.registers[secondNibble] -= this.registers[thirdNibble];
         } else if (firstNibble === 0x8 && lastNibble === 0x6) {
           this.registers[0xF] = this.registers[thirdNibble] & 0x1;
