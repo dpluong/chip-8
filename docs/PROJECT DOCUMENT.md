@@ -12,7 +12,7 @@ The final release of the product is expected on April 8, 2019, with intermediate
 
 # What's New?
 Change log (Feb 27, 2019)
-- Updated what actually happened for Release 2
+- Added what actually happened for Release 2
 - Added schedule for Release 3
 - Updated overall schedule such that visualizer/tool will take all of Release 2/3
 
@@ -210,7 +210,7 @@ FINISHED BY Week 1 (Feb 11, 2019)
     - The AST
 
 FINISHED BY Week 2 (Feb 18, 2019):
--	No work completed to snow causing meetings to be impossible
+-	No work completed to snow
 
 FINISH BY Week 3 (Feb 25, 2019)
 -	Visualizer without code viewer complete
@@ -222,7 +222,7 @@ Release 2 Due Date (Feb 27, 2019):
 -   Deliver the incomplete assembler that is being worked on
 
 ## Detailed Release 3 Plan & Schedule
-Due to all the snow and reading break, the delivery of the assembler is deferred to the 3rd release.
+Due to unexpected snowstorms, the delivery of the assembler is deferred to the 3rd release.
 
 To compensate for this, a visualizer has been delivered instead, but with no code viewer.
 
