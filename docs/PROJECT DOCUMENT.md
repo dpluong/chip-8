@@ -88,6 +88,9 @@ Release 1 (Product Delivery Feb 6, 2019) (Planned Product Completion by Feb 4, 2
 Release 2/3:
 
 Release 2: (Product Delivery Feb 27, 2019) (Planned Product Completion by Mar 25, 2019):
+- Visualizer (Partial)
+- Allows user to debug CHIP 8 programs
+- Users will be able to see the registers, memory... of the CHIP 8 program
 
 Release 3: (Product Delivery Mar 13, 2019) (Planned Product Completion by Mar 11, 2019):
 
@@ -95,14 +98,13 @@ Release 3: (Product Delivery Mar 13, 2019) (Planned Product Completion by Mar 11
 - A language of a higher level than the raw machine code
 - A compiler that converts this language to CHIP8 machine code
 - Users will be able to write human-readable code and compile it into CHIP8 machine code, ready for ues on any emulator
-- Visualizer
-- Allows user to debug CHIP 8 programs
+- Code Viewer for Visualizer
+- Allows user to fully understand and debug CHIP 8 programs
 - Can disassemble opcodes into a human readable form
-- Users will be able to see the registers, memory... of the CHIP 8 program and a disassembed code viewer
+- Users will be able to see the full code of the program they are running
 
 Release 4 (Product Delivery Apr 8, 2019) (Planned Product Completion by Apr 5, 2019):
 
-- Visualizer
 - Chip 8 Games
 
 ## Detailed Release 1 Plan & Schedule
