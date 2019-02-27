@@ -10,6 +10,11 @@ The purpose of this project is to help understand how to create applications in 
 
 The final release of the product is expected on April 8, 2019, with intermediate releases required as described in "Software Methodology & Timeframe".
 
+# What's New?
+Change log (Feb 27, 2019)
+- Added schedule for Release 3
+- Updated overall schedule such that visualizer/tool will take all of Release 2/3
+
 ## In-person Meeting Times
 The members of the team shall meet at least weekly for a period of at most 90 minutes every Monday after class. Meetings will by held in **room 3262** if possible.
 
@@ -41,7 +46,7 @@ Each release date is as follows:
 - Apr 8, 2019
 A general guide towards the expected state of the product for each release is located under "Release Overview".
 
-The detailed plan and workflow for the next release shall be posted below the "Release Overview” and will be updated with the plan for the next release as the previous release is completed.
+The detailed plan and workflow for the next release shall be posted below the "Release Overviewï¿½ and will be updated with the plan for the next release as the previous release is completed.
 
 The roles each member has will be set only for one release at a time and may change after each release.
 
