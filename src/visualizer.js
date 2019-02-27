@@ -31,8 +31,8 @@ class Visualizer {
         this.toggleEmulatorRunningDOM.textContent = 'Play';
       } else {
         this.chip8Cpu.clockSpeed = oldClockSpeed;
-        this.chip8Cpu.runNextInstruction(true);
         this.toggleEmulatorRunningDOM.textContent = 'Pause';
+        this.chip8Cpu.runNextInstruction(true);
       }
     });
     this.nextInstructionDOM.addEventListener('click', () => {

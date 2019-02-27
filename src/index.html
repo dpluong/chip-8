@@ -45,18 +45,25 @@
       <div id="visualizer" class="col-xl">
           <button id="visualizerToggle">Enable Visualizer</button>
           <div id="visualizerContainer" style="display:none">
+            <div class="row">
+              <div class="col-xl">
+                <thead>
+                  <th>Register</th>
+                  <th>Current Value</th>
+                </thead>
+                <tbody id="visualizerRegisterTableBody">
+                
+                </tbody>
+                </table>
+                <button id="toggleEmulatorRunning">Pause</button>
+                <button id="goBackwards"><<</button>
+                <button id="goForwards">>></button>
+              </div>
+              <div class="col-xl">
+                <p>Please pause emulator to show memory</p>
+              </div>
+            </div>
             <table>
-              <thead>
-                <th>Register</th>
-                <th>Current Value</th>
-              </thead>
-              <tbody id="visualizerRegisterTableBody">
-  
-              </tbody>
-            </table>
-            <button id="toggleEmulatorRunning">Pause</button>
-            <button id="goBackwards"><<</button>
-            <button id="goForwards">>></button>
           </div>
       </div>
     </div>
