@@ -31,11 +31,15 @@ class Visualizer {
         this.chip8Cpu.clockSpeed = 0;
         this.toggleEmulatorRunningDOM.textContent = 'Play';
         this.memorySelectDOM.style.display = '';
+        this.nextInstructionDOM.disabled = false;
+        this.previousInstructionDOM.disabled = this.saveStates.length === 0;
         this.updateMemoryList();
       } else {
         this.chip8Cpu.clockSpeed = oldClockSpeed;
         this.toggleEmulatorRunningDOM.textContent = 'Pause';
         this.memorySelectDOM.style.display = 'none';
+        this.nextInstructionDOM.disabled = true;
+        this.previousInstructionDOM.disabled = true;
         this.chip8Cpu.runNextInstruction(true);
       }
     });
@@ -80,12 +84,11 @@ class Visualizer {
         if (this.saveStates.length > 2500) {
           this.saveStates.shift();
         }
-        if (this.previousInstructionDOM.disabled) {
+        if (this.previousInstructionDOM.disabled && this.chip8Cpu.clockSpeed === 0) {
           this.previousInstructionDOM.disabled = false;
         }
       }
     };
-
   }
 
   addRowToRegisterTable(index, val) {
