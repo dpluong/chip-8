@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Chip 8 Assembler</h2>
+<textarea id="myTextarea" rows="30" cols="100"></textarea>
+
+
+<button type="button" onclick="myFunction()">
+Translate</button>
+
+
+
+<script src="asm.js"></script>
+<script>
+function myFunction() {
+  var code = document.getElementById("myTextarea").value;
+
+  var assembler = new Assembler(code);
+  assembler.tokenize();
+  assembler.parseProgram();
+  assembler.generate();
+  document.write(assembler.codeString);
+
+}
+</script>
+
+</body>
+</html>
+
+
