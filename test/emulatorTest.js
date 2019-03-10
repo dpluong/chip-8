@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const Chip8Cpu = require('../src/index').backend;
+const Chip8Cpu = require('../src/chip8cpu');
 const MockFrontend = require('./mockFrontend');
 
 describe('Emulator', () => {
@@ -254,24 +254,24 @@ describe('Emulator', () => {
       expect(emulator.registers[0x3]).to.equal(0x40);
     });
 
-    it('sets VF to 0 when no borrowing happens', () => {
+    it('sets VF to 1 when no borrowing happens', () => {
       emulator.memory[0x200] = 0x83;
       emulator.memory[0x201] = 0x55;
       emulator.registers[0x3] = 0x50;
       emulator.registers[0x5] = 0x10;
       emulator.registers[0xF] = 0x69;
       emulator.runNextInstruction();
-      expect(emulator.registers[0xF]).to.equal(0x0);
+      expect(emulator.registers[0xF]).to.equal(0x1);
     });
 
-    it('sets VF to 1 when a carry happens', () => {
+    it('sets VF to 0 when a carry happens', () => {
       emulator.memory[0x200] = 0x83;
       emulator.memory[0x201] = 0x55;
       emulator.registers[0x3] = 0x50;
       emulator.registers[0x5] = 0x51;
       emulator.registers[0xF] = 0x69;
       emulator.runNextInstruction();
-      expect(emulator.registers[0xF]).to.equal(0x1);
+      expect(emulator.registers[0xF]).to.equal(0x0);
     });
   });
 

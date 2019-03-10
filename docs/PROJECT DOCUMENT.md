@@ -10,6 +10,12 @@ The purpose of this project is to help understand how to create applications in 
 
 The final release of the product is expected on April 8, 2019, with intermediate releases required as described in "Software Methodology & Timeframe".
 
+# What's New?
+Change log (Feb 27, 2019)
+- Added what actually happened for Release 2
+- Added schedule for Release 3
+- Updated overall schedule such that visualizer/tool will take all of Release 2/3
+
 ## In-person Meeting Times
 The members of the team shall meet at least weekly for a period of at most 90 minutes every Monday after class. Meetings will by held in **room 3262** if possible.
 
@@ -41,7 +47,7 @@ Each release date is as follows:
 - Apr 8, 2019
 A general guide towards the expected state of the product for each release is located under "Release Overview".
 
-The detailed plan and workflow for the next release shall be posted below the "Release Overview” and will be updated with the plan for the next release as the previous release is completed.
+The detailed plan and workflow for the next release shall be posted below the "Release Overviewï¿½ and will be updated with the plan for the next release as the previous release is completed.
 
 The roles each member has will be set only for one release at a time and may change after each release.
 
@@ -79,21 +85,27 @@ Release 1 (Product Delivery Feb 6, 2019) (Planned Product Completion by Feb 4, 2
 - Users will be able to run any CHIP8 and interact with it using the emulator
 
 
-Release 2 (Product Delivery Feb 27, 2019) (Planned Product Completion by Mar 25, 2019):
+Release 2/3:
+
+Release 2: (Product Delivery Feb 27, 2019) (Planned Product Completion by Mar 25, 2019):
+- Visualizer (Partial)
+- Allows user to debug CHIP 8 programs
+- Users will be able to see the registers, memory... of the CHIP 8 program
+
+Release 3: (Product Delivery Mar 13, 2019) (Planned Product Completion by Mar 11, 2019):
 
 - CHIP8 Tool (CHIP8 Assembly Language)
 - A language of a higher level than the raw machine code
 - A compiler that converts this language to CHIP8 machine code
 - Users will be able to write human-readable code and compile it into CHIP8 machine code, ready for ues on any emulator
-
-Release 3 (Product Delivery Mar 13, 2019) (Planned Product Completion by Mar 11, 2019):
-
-- One CHIP 8 Game
+- Code Viewer for Visualizer
+- Allows user to fully understand and debug CHIP 8 programs
+- Can disassemble opcodes into a human readable form
+- Users will be able to see the full code of the program they are running
 
 Release 4 (Product Delivery Apr 8, 2019) (Planned Product Completion by Apr 5, 2019):
 
-- Visualizer
-- Second CHIP 8 Game
+- Chip 8 Games
 
 ## Detailed Release 1 Plan & Schedule
 Everyone will be working on the emulator for the first release. For now, all group members can work on any part of the emulator as they choose, as long other group members are aware of their selected role.
@@ -169,6 +181,8 @@ The plan shall be separated into weeks, with the separator being the weekly meet
 
 For the second release, there are 3 weeks.
 
+This was the planned schedule initally:
+
 FINISH BY Week 1 (Feb 11, 2019)
 - Finish 50% of the tool including:
 - The Parser :
@@ -186,4 +200,48 @@ FINISH BY Week 3 (Feb 25, 2019)
 -	Test the compiler and fix bugs
 
 Release 2 Due Date (Feb 27, 2019):
+-	Higher level language and assembler production-ready and sent to the instructor
+
+This is what actually happened:
+
+FINISHED BY Week 1 (Feb 11, 2019)
+- Finish 50% of the tool including:
+- The Parser :
+    - The Input stream
+    - The Token stream
+    - The AST
+
+FINISHED BY Week 2 (Feb 18, 2019):
+-	No work completed to snow
+
+FINISH BY Week 3 (Feb 25, 2019)
+-	Visualizer without code viewer complete
+-   Partial assembler completed, but untested and without all opcodes completed
+
+Release 2 Due Date (Feb 27, 2019):
+-	Deliver the specification for the assembler language
+-   Deliver the partial visualizer without code viewer
+-   Deliver the incomplete assembler that is being worked on
+
+## Detailed Release 3 Plan & Schedule
+Due to unexpected snowstorms, the delivery of the assembler is deferred to the 3rd release.
+
+To compensate for this, a visualizer has been delivered instead, but with no code viewer.
+
+As the assembler language is required for the visualizer code viewer, this will be delievered in Release 3.
+
+PERSON A, PERSON B, ..., and PERSON C will be working on the visualizer.
+
+PERSON A, PERSON B, ..., and PERSON C will be working on the assembler.
+
+FINISH BY Week 1 (Mar 4, 2019)
+- If possible, assembler complete, but with no testing
+- Otherwise, at least 50-70% of opcodes should be assemblable by the assembler
+
+FINISH BY Week 2 (Mar 11, 2019):
+- Disassembler for visualizer done
+- Tests for the assembler complete
+- Assembler complete for sure by this date
+
+Release 3 Due Date (Mar 13, 2019):
 -	Higher level language and assembler production-ready and sent to the instructor

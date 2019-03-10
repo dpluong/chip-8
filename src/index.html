@@ -1,54 +1,77 @@
 <head>
   <title>Chip8 Emulator</title>
 </head>
-    <style>
-        .button {
-    background-color: black;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    }
-    </style>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="index.css">
 <body>
-  <canvas id="display" width="512" height="256"></canvas>
-  <table>
-    <tr>
-      <td><button id="key-1" class="button">1</button></td>
-      <td><button id="key-2"class="button">2</button></td>
-      <td><button id="key-3"class="button">3</button></td>
-      <td><button id="key-C"class="button">C</button></td>
-    </tr>
-    <tr>
-      <td><button id="key-4" class="button">4</button></td>
-      <td><button id="key-5" class="button">5</button></td>
-      <td><button id="key-6" class="button">6</button></td>
-      <td><button id="key-D" class="button">D</button></td>
-    </tr>
-    <tr>
-      <td><button id="key-7" class="button">7</button></td>
-      <td><button id="key-8" class="button">8</button></td>
-      <td><button id="key-9" class="button">9</button></td>
-      <td><button id="key-E" class="button">E</button></td>
-    </tr>
-    <tr>
-      <td><button id="key-A" class="button">A</button></td>
-      <td><button id="key-0" class="button">0</button></td>
-      <td><button id="key-B" class="button">B</button></td>
-      <td><button id="key-F" class="button">F</button></td>
-    </tr>
-  </table>
-  <label>
-    Load a new program:
-    <input type="file" id="codeInput"></input>
-  </label>
-  <p>To change programs or reset the emulator, refresh the page.</p>
-  <p>Note that the emulator meets the technical reference located at <a href="http://mattmik.com/files/chip8/mastering/chip8.html">http://mattmik.com/files/chip8/mastering/chip8.html</a></p>
-<p>Programs created under other technical references including <a href="http://devernay.free.fr/hacks/chip8/C8TECH10.HTM">http://devernay.free.fr/hacks/chip8/C8TECH10.HTM</a> may be incompatible!</p>
-  <script src="index.js"> </script>
+  <div class="container-fluid">
+    <div class="row">
+      <div id="emulator" class="col-xl">
+        <canvas id="display" width="512" height="256"></canvas>
+        <table>
+          <tr>
+            <td><button id="key-1" class="button">1</button></td>
+            <td><button id="key-2"class="button">2</button></td>
+            <td><button id="key-3"class="button">3</button></td>
+            <td><button id="key-C"class="button">C</button></td>
+          </tr>
+          <tr>
+            <td><button id="key-4" class="button">4</button></td>
+            <td><button id="key-5" class="button">5</button></td>
+            <td><button id="key-6" class="button">6</button></td>
+            <td><button id="key-D" class="button">D</button></td>
+          </tr>
+          <tr>
+            <td><button id="key-7" class="button">7</button></td>
+            <td><button id="key-8" class="button">8</button></td>
+            <td><button id="key-9" class="button">9</button></td>
+            <td><button id="key-E" class="button">E</button></td>
+          </tr>
+          <tr>
+            <td><button id="key-A" class="button">A</button></td>
+            <td><button id="key-0" class="button">0</button></td>
+            <td><button id="key-B" class="button">B</button></td>
+            <td><button id="key-F" class="button">F</button></td>
+          </tr>
+        </table>
+        <label>
+          Load a new program:
+          <input type="file" id="codeInput"></input>
+        </label>
+        <p>To change programs or reset the emulator, refresh the page.</p>
+        <p>Note that the emulator meets the technical reference located at <a href="http://mattmik.com/files/chip8/mastering/chip8.html">http://mattmik.com/files/chip8/mastering/chip8.html</a></p>
+        <p>Programs created under other technical references including <a href="http://devernay.free.fr/hacks/chip8/C8TECH10.HTM">http://devernay.free.fr/hacks/chip8/C8TECH10.HTM</a> may be incompatible!</p>
+      </div>
+      <div id="visualizer" class="col-xl">
+          <button id="visualizerToggle">Enable Visualizer</button>
+          <div id="visualizerContainer" style="display:none">
+            <div class="row">
+              <div class="col-xl">
+                <table>
+                  <thead>
+                    <th>Register</th>
+                    <th>Current Value</th>
+                  </thead>
+                  <tbody id="visualizerRegisterTableBody">
+                  
+                  </tbody>
+                </table>
+                <button id="toggleEmulatorRunning">Pause</button>
+                <button id="goBackwards" disabled><<</button>
+                <button id="goForwards" disabled>>></button>
+              </div>
+              <div class="col-xl">
+                <p>Please pause emulator to show memory</p>
+                <select multiple style="display:none;width:100%;height:500px" id="memorySelect"></select>
+              </div>
+            </div>
+            <table>
+          </div>
+      </div>
+    </div>
+  </div>
+  <script src="chip8cpu.js"></script>
+  <script src="frontend.js"></script>
+  <script src="visualizer.js"></script>
+  <script src="index.js"></script>
 </body>
