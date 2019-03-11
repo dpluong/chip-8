@@ -633,6 +633,7 @@ class Assembler {
         }
       }
     }
+    return this.codeString;
   }
 
   /*
@@ -641,7 +642,7 @@ class Assembler {
   translate() {
     this.tokenize();
     this.parseProgram();
-    this.generate();
+    return this.generate();
   }
 }
 

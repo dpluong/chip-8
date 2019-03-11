@@ -4,6 +4,9 @@ const Assembler = require('../src/asm');
 it('Assembler', () => {
   DESCRBE('Assembly to Opcodes', () => {
     it('translates clear() to 0x00E0', () => {
+      const assembler = new Assembler('clear()');
+      const result = assembler.generate();
+      expect(result).be.equal(0x00E0);
     });
 
     it('Opcode 0x00EE', () => {
