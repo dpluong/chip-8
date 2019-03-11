@@ -345,19 +345,25 @@ class Assembler {
         if (nextTok === 'assign') {
           this.checkCurrent = current;
           return tok;
-        } if (nextTok === 'operation') {
+        }
+        if (nextTok === 'operation') {
           return this.parseOperation(current);
-        } if (nextTok === 'newLine') {
+        }
+        if (nextTok === 'newLine') {
           this.checkCurrent = current;
           return tok;
-        } if (nextTok === 'to') {
+        }
+        if (nextTok === 'to') {
           return this.parseTo(current);
-        } if (nextTok === false) {
+        }
+        if (nextTok === false) {
           this.checkCurrent = current;
           return tok;
-        } throw new ReferenceError('Unrecognized language');
+        }
       } else if (tok.type === 'if') {
         return this.parseIf(current);
+      } else {
+        throw new ReferenceError('Unrecognized language');
       }
     } catch (e) {
       this.HandleError(e);
@@ -392,7 +398,7 @@ class Assembler {
         };
         this.ast.body.push(nodeAssign);
       }
-      ++current;
+      current += 1;
     }
   }
 
@@ -400,7 +406,7 @@ class Assembler {
     Translate chip 8 assembly language into chip 8 opcodes
     */
   generate() {
-    for (let i = 0; i < this.ast.body.length; i++) {
+    for (let i = 0; i < this.ast.body.length; i += 1) {
       const node = this.ast.body[i];
       if (node.type === 'newLine') { this.codeString += '\n'; }
       if (node.name === 'clear') {
@@ -414,6 +420,7 @@ class Assembler {
       } else if (node.name === 'jump') {
         if (node.parameters[0].type === 'number' && node.parameters[0].value.length === 3
                     && node.parameters[1] === undefined) { this.codeString += `1${node.parameters[0].value}`; } else if ((node.parameters[0].type === 'number' || node.parameters[2].type === 'number')
+                    // eslint-disable-next-line max-len
                     && (node.parameters[0].value.length === 3 || node.parameters[2].value.length === 3)
                     && node.parameters[1].type === 'operation') {
           this.codeString += `b${node.parameters[0].value}`;
