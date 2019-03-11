@@ -40,14 +40,14 @@ describe('Visualizer', () => {
     describe('Opcode 0x1NNN', () => {
       it('disassembles as jump(nnn)', async () => {
         const result = visualizer.parseOpcodeIntoAssembly(0x10, 0x65);
-        expect(result).to.to.equal('jump(065)');
+        expect(result).to.to.equal('jump(65)');
       });
     });
 
     describe('Opcode 0x2NNN', () => {
       it('disassembles as call(nnn)', async () => {
         const result = visualizer.parseOpcodeIntoAssembly(0x20, 0x8A);
-        expect(result).to.to.equal('call(08A)');
+        expect(result).to.to.equal('call(8a)');
       });
     });
 
@@ -68,10 +68,6 @@ describe('Visualizer', () => {
     });
 
     describe('Opcode 0x5XY0', () => {
-      it('disassembles as "if vx not nn skip"', async () => {
-        const result = visualizer.parseOpcodeIntoAssembly(0x43, 0x16);
-        expect(result).to.to.equal('if v3 not 16 skip');
-      });
     });
 
 

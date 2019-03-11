@@ -79,7 +79,7 @@ class Visualizer {
   }
 
   numToHex(num, minLength) {
-    let hex = num.toString(16).toUpperCase();
+    let hex = num.toString(16).toLowerCase();
     while (hex.length < minLength) {
       hex = `0${hex}`;
     }
@@ -158,13 +158,13 @@ class Visualizer {
     } else if (firstNibble === 0x0) {
       return null;
     } else if (firstNibble === 0x1) {
-      return `jump(${this.numToHex(lastThreeNibbles, 3)})`;
+      return `jump(${lastThreeNibbles})`;
     } else if (firstNibble === 0x2) {
-      return `call(${this.numToHex(lastThreeNibbles, 3)})`;
+      return `call(${lastThreeNibbles})`;
     } else if (firstNibble === 0x3) {
-      return `if v${this.numToHex(secondNibble, 1)} equal ${this.numToHex(lastTwoNibbles, 2)} skip`;
+      return `if v${this.numToHex(secondNibble, 1)} equal ${lastTwoNibbles} skip`;
     } else if (firstNibble === 0x4) {
-      return `if v${this.numToHex(secondNibble, 1)} not ${this.numToHex(lastTwoNibbles, 2)} skip`;
+      return `if v${this.numToHex(secondNibble, 1)} not ${lastTwoNibbles} skip`;
     } else if (firstNibble === 0x5 && lastNibble === 0x0) {
       return `if v${this.numToHex(secondNibble, 1)} equal v${this.numToHex(thirdNibble, 1)} skip`;
     } else if (firstNibble === 0x6) {
