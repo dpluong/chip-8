@@ -1,15 +1,18 @@
 const { expect } = require('chai');
 const Assembler = require('../src/asm');
 
-it('Assembler', () => {
-  DESCRBE('Assembly to Opcodes', () => {
+describe('Assembler', () => {
+  describe('Assembly to Opcodes', () => {
     it('translates clear() to 0x00E0', () => {
       const assembler = new Assembler('clear()');
-      const result = assembler.generate();
-      expect(result).be.equal(0x00E0);
+      const result = assembler.translate();
+      expect(result).be.equal('00e0');
     });
 
-    it('Opcode 0x00EE', () => {
+    it('translates return() to 0x00EE', () => {
+      const assembler = new Assembler('return()');
+      const result = assembler.translate();
+      expect(result).be.equal('00ee');
     });
 
     it('Opcode 0x1NNN', () => {
