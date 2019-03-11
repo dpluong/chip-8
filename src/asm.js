@@ -67,7 +67,7 @@ class Assembler {
     isRegister(current) {
             var register = this.splitString[current];
             var re1 = /[0-9]/;
-            var re2 = /[a-f]/;
+            var re2 = /[A-F]+/;
             var char = register.charAt(register.length - 1);
             if ((re1.test(char) === true || re2.test(char) === true || char === 'i') &&
                 register.length === 2 && register.charAt(0) === 'v')
