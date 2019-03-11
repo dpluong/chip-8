@@ -51,12 +51,14 @@ class Assembler {
   isKeyWord(current) {
     const keyWord = this.splitString[current];
     if (keyWord === 'skip' || keyWord === 'to'
-                || keyWord === 'call' || keyWord === 'jump'
-                || keyWord === 'shiftRight' || keyWord === 'shiftLeft'
-                || keyWord === 'memad' || keyWord === 'key'
-                || keyWord === 'delay' || keyWord === 'sound'
-                || keyWord === 'draw' || keyWord === 'rand'
-                || keyWord === 'clear' || keyWord === 'return') { return true; }
+      || keyWord === 'call' || keyWord === 'jump'
+      || keyWord === 'shiftRight' || keyWord === 'shiftLeft'
+      || keyWord === 'memad' || keyWord === 'key'
+      || keyWord === 'delay' || keyWord === 'sound'
+      || keyWord === 'draw' || keyWord === 'rand'
+      || keyWord === 'clear' || keyWord === 'return') {
+      return true;
+    }
     return false;
   }
 
@@ -70,7 +72,9 @@ class Assembler {
     const re2 = /[a-f]/;
     const char = register.charAt(register.length - 1);
     if ((re1.test(char) === true || re2.test(char) === true || char === 'i')
-                && register.length === 2 && register.charAt(0) === 'v') { return true; }
+      && register.length === 2 && register.charAt(0) === 'v') {
+      return true;
+    }
     return false;
   }
 
@@ -91,7 +95,9 @@ class Assembler {
                 Clean spaces between tokens
                 */
       for (let i = this.splitString.length - 1; i >= 0; i -= 1) {
-        if (this.splitString[i] === '') { this.splitString.splice(i, 1); }
+        if (this.splitString[i] === '') {
+          this.splitString.splice(i, 1);
+        }
       }
 
       for (let i = 0; i < this.splitString.length; i += 1) {
@@ -149,7 +155,7 @@ class Assembler {
             type: 'assign',
             value: '=',
           });
-        // eslint-disable-next-line no-restricted-globals
+          // eslint-disable-next-line no-restricted-globals
         } else if (isNaN(token) === false) {
           this.tokenList.push({
             type: 'number',
@@ -192,11 +198,21 @@ class Assembler {
       return false;
     }
     const nextToken = this.tokenList[current + 1];
-    if ((nextToken.type) === 'newLine') { return nextToken.type; }
-    if (nextToken.type === 'punctuation' && nextToken.value === '(') { return nextToken.value; }
-    if (nextToken.type === 'operation') { return nextToken.type; }
-    if (nextToken.type === 'assign') { return nextToken.type; }
-    if (nextToken.value === 'to') { return nextToken.value; }
+    if ((nextToken.type) === 'newLine') {
+      return nextToken.type;
+    }
+    if (nextToken.type === 'punctuation' && nextToken.value === '(') {
+      return nextToken.value;
+    }
+    if (nextToken.type === 'operation') {
+      return nextToken.type;
+    }
+    if (nextToken.type === 'assign') {
+      return nextToken.type;
+    }
+    if (nextToken.value === 'to') {
+      return nextToken.value;
+    }
     throw new Error('Unexpected token');
   }
 
@@ -210,7 +226,9 @@ class Assembler {
       const tok = this.tokenList[current];
       const tokLeft = this.tokenList[current - 1];
       const tokRight = this.tokenList[current + 1];
-      if (tokRight.type !== 'register' && tokRight.type !== 'number') { throw new ReferenceError('Unrecognized language'); }
+      if (tokRight.type !== 'register' && tokRight.type !== 'number') {
+        throw new ReferenceError('Unrecognized language');
+      }
       const node = {
         type: 'Calculation',
         name: tok.value,
@@ -288,7 +306,7 @@ class Assembler {
       const from = this.tokenList[current - 1];
       const to = this.tokenList[current + 1];
       if (from.type !== 'register' || from.value !== '0'
-                || to.type !== 'register') {
+        || to.type !== 'register') {
         throw new ReferenceError('Unrecognized language');
       } else {
         const node = {
@@ -312,7 +330,9 @@ class Assembler {
   findToken(currentArg, value) {
     let current = currentArg;
     while (this.tokenList[current].type !== 'newLine') {
-      if (this.tokenList[current].value === value) { return true; }
+      if (this.tokenList[current].value === value) {
+        return true;
+      }
       current += 1;
     }
     return false;
@@ -327,14 +347,18 @@ class Assembler {
     try {
       if (tok.type === 'keyword') {
         if (tok.value === 'delay' || tok.value === 'key'
-                    || tok.value === 'skip' || tok.value === 'sound') {
+          || tok.value === 'skip' || tok.value === 'sound') {
           this.checkCurrent = current;
           return tok;
         }
         if (nextTok === '(') {
-          if (this.findToken(current, ')') === true) { return this.parseExpression(current); }
+          if (this.findToken(current, ')') === true) {
+            return this.parseExpression(current);
+          }
           throw new ReferenceError('Unrecognized language');
-        } else { throw new ReferenceError('Unrecognized language'); }
+        } else {
+          throw new ReferenceError('Unrecognized language');
+        }
       } else if (tok.type === 'number') {
         if (nextTok === 'operation') {
           return this.parseOperation(current);
@@ -380,14 +404,20 @@ class Assembler {
     let node = null;
     let leftNode;
     while (current < this.tokenList.length) {
-      if (this.tokenList[current].type === 'newLine') { this.ast.body.push(this.tokenList[current]); } else if (this.tokenList[current].type !== 'assign') {
+      if (this.tokenList[current].type === 'newLine') {
+        this.ast.body.push(this.tokenList[current]);
+      } else if (this.tokenList[current].type !== 'assign') {
         node = this.parseToken(current);
         current = this.checkCurrent;
         if (this.tokenList[current + 1] !== undefined) {
           if (this.tokenList[current + 1].type !== 'assign') {
             this.ast.body.push(node);
-          } else { leftNode = node; }
-        } else { this.ast.body.push(node); }
+          } else {
+            leftNode = node;
+          }
+        } else {
+          this.ast.body.push(node);
+        }
       } else {
         const rightNode = this.parseToken(current + 1);
         current = this.checkCurrent;
@@ -408,7 +438,9 @@ class Assembler {
   generate() {
     for (let i = 0; i < this.ast.body.length; i += 1) {
       const node = this.ast.body[i];
-      if (node.type === 'newLine') { this.codeString += '\n'; }
+      if (node.type === 'newLine') {
+        this.codeString += '\n';
+      }
       if (node.name === 'clear') {
         this.codeString += '00e0';
         this.codeBinary.push(0x00);
@@ -419,65 +451,185 @@ class Assembler {
         this.codeBinary.push(0xEE);
       } else if (node.name === 'jump') {
         if (node.parameters[0].type === 'number' && node.parameters[0].value.length === 3
-                    && node.parameters[1] === undefined) { this.codeString += `1${node.parameters[0].value}`; } else if ((node.parameters[0].type === 'number' || node.parameters[2].type === 'number')
-                    // eslint-disable-next-line max-len
-                    && (node.parameters[0].value.length === 3 || node.parameters[2].value.length === 3)
-                    && node.parameters[1].type === 'operation') {
+          && node.parameters[1] === undefined) {
+          this.codeString += `1${node.parameters[0].value}`;
+        } else if ((node.parameters[0].type === 'number' || node.parameters[2].type === 'number')
+          // eslint-disable-next-line max-len
+          && (node.parameters[0].value.length === 3 || node.parameters[2].value.length === 3)
+          && node.parameters[1].type === 'operation') {
           this.codeString += `b${node.parameters[0].value}`;
-        } else { this.codeString += 'Bad opcode'; }
+        } else {
+          this.codeString += 'Bad opcode';
+        }
       } else if (node.name === 'call') {
-        if (node.parameters[0].type === 'number' && node.parameters[0].value.length === 3) { this.codeString += `2${node.parameters[0].value}`; } else { this.codeString += 'Bad opcode'; }
+        if (node.parameters[0].type === 'number' && node.parameters[0].value.length === 3) {
+          this.codeString += `2${node.parameters[0].value}`;
+        } else {
+          this.codeString += 'Bad opcode';
+        }
       } else if (node.name === 'draw') {
         if (node.parameters[0].type === 'register' && node.parameters[1].type === 'register'
-                    && node.parameters[2].type === 'number') {
+          && node.parameters[2].type === 'number') {
           this.codeString += `d${node.parameters[0].value}${node.parameters[1].value
           }${node.parameters[2].value}`;
-        } else { this.codeString += 'Bad opcode'; }
+        } else {
+          this.codeString += 'Bad opcode';
+        }
       } else if (node.type === 'If') {
         if (node.condition === 'equal') {
-          if (node.right.type === 'number' && node.right.value.length === 2) { this.codeString += `3${node.left.value}${node.right.value}`; } else if (node.right.type === 'register') { this.codeString += `5${node.left.value}${node.right.value}0`; } else if (node.right.type === 'keyword') { this.codeString += `e${node.left.value}9e`; } else { this.codeString += 'Bad opcode'; }
+          if (node.right.type === 'number' && node.right.value.length === 2) {
+            this.codeString += `3${node.left.value}${node.right.value}`;
+          } else if (node.right.type === 'register') {
+            this.codeString += `5${node.left.value}${node.right.value}0`;
+          } else if (node.right.type === 'keyword') {
+            this.codeString += `e${node.left.value}9e`;
+          } else {
+            this.codeString += 'Bad opcode';
+          }
         } else if (node.condition === 'not') {
-          if (node.right.type === 'number' && node.right.value.length === 2) { this.codeString += `4${node.left.value}${node.right.value}`; } else if (node.right.type === 'keyword') { this.codeString += `e${node.left.value}a1`; } else if (node.left.type === 'register' && node.right.type === 'register') { this.codeString += `9${node.left.value}${node.right.value}0`; } else { this.codeString += 'Bad opcode'; }
+          if (node.right.type === 'number' && node.right.value.length === 2) {
+            this.codeString += `4${node.left.value}${node.right.value}`;
+          } else if (node.right.type === 'keyword') {
+            this.codeString += `e${node.left.value}a1`;
+          } else if (node.left.type === 'register' && node.right.type === 'register') {
+            this.codeString += `9${node.left.value}${node.right.value}0`;
+          } else {
+            this.codeString += 'Bad opcode';
+          }
         }
       } else if (node.type === 'assign') {
         if (node.left.type === 'register') {
-          if (node.right.type === 'number' && node.right.value.length === 2) { this.codeString += `6${node.left.value}${node.right.value}`; } else if (node.right.type === 'Calculation' && node.right.name === '+'
-                        && (node.right.left.type === 'number' || node.right.right.type === 'number')) {
-            if (node.right.left.type === 'number' && node.right.right.type === 'register') { this.codeString += `7${node.right.right.value}${node.right.left.value}`; } else if (node.right.left.type === 'register' && node.right.right.type === 'number') { this.codeString += `7${node.right.left.value}${node.right.right.value}`; } else { this.codeString += 'Bad opcode'; }
-          } else if (node.right.type === 'register') { this.codeString += `8${node.left.value}${node.right.value}0`; } else if (node.right.type === 'Calculation' && node.right.name === '|'
-                        && node.right.right.type === 'register' && node.right.left.type === 'register') {
-            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) { this.codeString += 'Bad opcode'; } else if (node.left.value !== node.right.right.value) { this.codeString += `8${node.left.value}${node.right.right.value}1`; } else if (node.left.value !== node.right.left.value) { this.codeString += `8${node.left.value}${node.right.left.value}1`; } else { this.codeString += `8${node.left.value}${node.left.value}1`; }
-          } else if (node.right.type === 'Calculation' && node.right.name === '&'
-                        && node.right.right.type === 'register' && node.right.left.type === 'register') {
-            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) { this.codeString += 'Bad opcode'; } else if (node.left.value !== node.right.right.value) { this.codeString += `8${node.left.value}${node.right.right.value}2`; } else if (node.left.value !== node.right.left.value) { this.codeString += `8${node.left.value}${node.right.left.value}2`; } else { this.codeString += `8${node.left.value}${node.left.value}2`; }
-          } else if (node.right.type === 'Calculation' && node.right.name === '^'
-                        && node.right.right.type === 'register' && node.right.left.type === 'register') {
-            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) { this.codeString += 'Bad opcode'; } else if (node.left.value !== node.right.right.value) { this.codeString += `8${node.left.value}${node.right.right.value}3`; } else if (node.left.value !== node.right.left.value) { this.codeString += `8${node.left.value}${node.right.left.value}3`; } else { this.codeString += `8${node.left.value}${node.left.value}3`; }
-          } else if (node.left.value !== 'i' && node.right.type === 'Calculation' && node.right.name === '+'
-                        && node.right.right.type === 'register' && node.right.left.type === 'register') {
-            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) { this.codeString += 'Bad opcode'; } else if (node.left.value !== node.right.right.value) { this.codeString += `8${node.left.value}${node.right.right.value}4`; } else if (node.left.value !== node.right.left.value) { this.codeString += `8${node.left.value}${node.right.left.value}4`; } else { this.codeString += `8${node.left.value}${node.left.value}4`; }
-          } else if (node.right.type === 'Calculation' && node.right.name === '-'
-                        && node.right.right.type === 'register' && node.right.left.type === 'register') {
-            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) { this.codeString += 'Bad opcode'; } else if (node.left.value !== node.right.right.value) { this.codeString += `8${node.left.value}${node.right.right.value}5`; } else if (node.left.value !== node.right.left.value) { this.codeString += `8${node.left.value}${node.right.left.value}7`; } else { this.codeString += `8${node.left.value}${node.left.value}4`; }
-          } else if (node.right.type === 'CallExpression' && node.right.name === 'shiftRight') {
-            if (node.right.parameters[0].type === 'register') { this.codeString += `8${node.left.value}${node.right.parameters[0].value}6`; } else { this.codeString += 'Bad opcode'; }
-          } else if (node.right.type === 'CallExpression' && node.right.name === 'shiftLeft') {
-            if (node.right.parameters[0].type === 'register') { this.codeString += `8${node.left.value}${node.right.parameters[0].value}e`; } else { this.codeString += 'Bad opcode'; }
-          } else if (node.left.value === 'i' && node.right.type === 'number') { this.codeString += `a${node.right.value}`; } else if (node.right.type === 'keyword' && node.right.value === 'delay') { this.codeString += `f${node.left.value}07`; } else if (node.right.type === 'keyword' && node.right.value === 'key') { this.codeString += `f${node.left.value}0a`; } else if (node.right.type === 'CallExpression' && node.right.name === 'rand') {
-            if (node.right.parameters[0].type === 'number') { this.codeString += `c${node.left.value}${node.right.parameters[0].value}`; } else { this.codeString += 'Bad opcode'; }
+          if (node.right.type === 'number' && node.right.value.length === 2) {
+            this.codeString += `6${node.left.value}${node.right.value}`;
           } else if (node.right.type === 'Calculation' && node.right.name === '+'
-                        && node.left.value === 'i') {
-            if (node.left.value !== node.right.left.value) { this.codeString += `f${node.right.left.value}1e`; } else if (node.left.value !== node.right.right.value) { this.codeString += `f${node.right.right.value}1e`; } else { this.codeString += 'Bad opcode'; }
+            && (node.right.left.type === 'number' || node.right.right.type === 'number')) {
+            if (node.right.left.type === 'number' && node.right.right.type === 'register') {
+              this.codeString += `7${node.right.right.value}${node.right.left.value}`;
+            } else if (node.right.left.type === 'register' && node.right.right.type === 'number') {
+              this.codeString += `7${node.right.left.value}${node.right.right.value}`;
+            } else {
+              this.codeString += 'Bad opcode';
+            }
+          } else if (node.right.type === 'register') {
+            this.codeString += `8${node.left.value}${node.right.value}0`;
+          } else if (node.right.type === 'Calculation' && node.right.name === '|'
+            && node.right.right.type === 'register' && node.right.left.type === 'register') {
+            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) {
+              this.codeString += 'Bad opcode';
+            } else if (node.left.value !== node.right.right.value) {
+              this.codeString += `8${node.left.value}${node.right.right.value}1`;
+            } else if (node.left.value !== node.right.left.value) {
+              this.codeString += `8${node.left.value}${node.right.left.value}1`;
+            } else {
+              this.codeString += `8${node.left.value}${node.left.value}1`;
+            }
+          } else if (node.right.type === 'Calculation' && node.right.name === '&'
+            && node.right.right.type === 'register' && node.right.left.type === 'register') {
+            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) {
+              this.codeString += 'Bad opcode';
+            } else if (node.left.value !== node.right.right.value) {
+              this.codeString += `8${node.left.value}${node.right.right.value}2`;
+            } else if (node.left.value !== node.right.left.value) {
+              this.codeString += `8${node.left.value}${node.right.left.value}2`;
+            } else {
+              this.codeString += `8${node.left.value}${node.left.value}2`;
+            }
+          } else if (node.right.type === 'Calculation' && node.right.name === '^'
+            && node.right.right.type === 'register' && node.right.left.type === 'register') {
+            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) {
+              this.codeString += 'Bad opcode';
+            } else if (node.left.value !== node.right.right.value) {
+              this.codeString += `8${node.left.value}${node.right.right.value}3`;
+            } else if (node.left.value !== node.right.left.value) {
+              this.codeString += `8${node.left.value}${node.right.left.value}3`;
+            } else {
+              this.codeString += `8${node.left.value}${node.left.value}3`;
+            }
+          } else if (node.left.value !== 'i' && node.right.type === 'Calculation' && node.right.name === '+'
+            && node.right.right.type === 'register' && node.right.left.type === 'register') {
+            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) {
+              this.codeString += 'Bad opcode';
+            } else if (node.left.value !== node.right.right.value) {
+              this.codeString += `8${node.left.value}${node.right.right.value}4`;
+            } else if (node.left.value !== node.right.left.value) {
+              this.codeString += `8${node.left.value}${node.right.left.value}4`;
+            } else {
+              this.codeString += `8${node.left.value}${node.left.value}4`;
+            }
+          } else if (node.right.type === 'Calculation' && node.right.name === '-'
+            && node.right.right.type === 'register' && node.right.left.type === 'register') {
+            if ((node.left.value !== node.right.left.value) && (node.left.value !== node.right.right.value)) {
+              this.codeString += 'Bad opcode';
+            } else if (node.left.value !== node.right.right.value) {
+              this.codeString += `8${node.left.value}${node.right.right.value}5`;
+            } else if (node.left.value !== node.right.left.value) {
+              this.codeString += `8${node.left.value}${node.right.left.value}7`;
+            } else {
+              this.codeString += `8${node.left.value}${node.left.value}4`;
+            }
+          } else if (node.right.type === 'CallExpression' && node.right.name === 'shiftRight') {
+            if (node.right.parameters[0].type === 'register') {
+              this.codeString += `8${node.left.value}${node.right.parameters[0].value}6`;
+            } else {
+              this.codeString += 'Bad opcode';
+            }
+          } else if (node.right.type === 'CallExpression' && node.right.name === 'shiftLeft') {
+            if (node.right.parameters[0].type === 'register') {
+              this.codeString += `8${node.left.value}${node.right.parameters[0].value}e`;
+            } else {
+              this.codeString += 'Bad opcode';
+            }
+          } else if (node.left.value === 'i' && node.right.type === 'number') {
+            this.codeString += `a${node.right.value}`;
+          } else if (node.right.type === 'keyword' && node.right.value === 'delay') {
+            this.codeString += `f${node.left.value}07`;
+          } else if (node.right.type === 'keyword' && node.right.value === 'key') {
+            this.codeString += `f${node.left.value}0a`;
+          } else if (node.right.type === 'CallExpression' && node.right.name === 'rand') {
+            if (node.right.parameters[0].type === 'number') {
+              this.codeString += `c${node.left.value}${node.right.parameters[0].value}`;
+            } else {
+              this.codeString += 'Bad opcode';
+            }
+          } else if (node.right.type === 'Calculation' && node.right.name === '+'
+            && node.left.value === 'i') {
+            if (node.left.value !== node.right.left.value) {
+              this.codeString += `f${node.right.left.value}1e`;
+            } else if (node.left.value !== node.right.right.value) {
+              this.codeString += `f${node.right.right.value}1e`;
+            } else {
+              this.codeString += 'Bad opcode';
+            }
           } else if (node.right.type === 'CallExpression' && node.right.name === 'memad'
-                        && node.left.value === 'i') {
-            if (node.right.parameters[0].type === 'register') { this.codeString += `f${node.right.parameters[0].value}29`; } else { this.codeString += 'Bad opcode'; }
+            && node.left.value === 'i') {
+            if (node.right.parameters[0].type === 'register') {
+              this.codeString += `f${node.right.parameters[0].value}29`;
+            } else {
+              this.codeString += 'Bad opcode';
+            }
           }
         } else if (node.left.type === 'keyword') {
-          if (node.left.value === 'delay' && node.right.type === 'register') { this.codeString += `f${node.right.value}15`; } else if (node.left.value === 'sound' && node.right.type === 'register') { this.codeString += `f${node.right.value}18`; } else { this.codeString += 'Bad opcode'; }
+          if (node.left.value === 'delay' && node.right.type === 'register') {
+            this.codeString += `f${node.right.value}15`;
+          } else if (node.left.value === 'sound' && node.right.type === 'register') {
+            this.codeString += `f${node.right.value}18`;
+          } else {
+            this.codeString += 'Bad opcode';
+          }
         } else if (node.left.type === 'CallExpression' && node.left.name === 'memad') {
-          if (node.left.parameters[0].value === 'i' && node.right.type === 'register') { this.codeString += `f${node.right.value}33`; } else if (node.left.parameters[0].value === 'i' && node.right.type === 'Loop') { this.codeString += `f${node.right.to.value}55`; } else { this.codeString += 'Bad opcode'; }
+          if (node.left.parameters[0].value === 'i' && node.right.type === 'register') {
+            this.codeString += `f${node.right.value}33`;
+          } else if (node.left.parameters[0].value === 'i' && node.right.type === 'Loop') {
+            this.codeString += `f${node.right.to.value}55`;
+          } else {
+            this.codeString += 'Bad opcode';
+          }
         } else if (node.right.type === 'CallExpression' && node.right.name === 'memad') {
-          if (node.right.parameters[0].value === 'i' && node.left.type === 'Loop') { this.codeString += `f${node.left.to.value}65`; } else { this.codeString += 'Bad opcode'; }
+          if (node.right.parameters[0].value === 'i' && node.left.type === 'Loop') {
+            this.codeString += `f${node.left.to.value}65`;
+          } else {
+            this.codeString += 'Bad opcode';
+          }
         }
       }
     }
