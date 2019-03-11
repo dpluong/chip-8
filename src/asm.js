@@ -1,3 +1,5 @@
+
+
 class Assembler {
     /*
     Intialize a chip 8 assembler
@@ -399,11 +401,11 @@ class Assembler {
             if (node.type === 'newLine')
                 this.codeString += "\n";
             if (node.name === 'clear') {
-                this.codeString += "00E0";
+                this.codeString += "00e0";
                 this.codeBinary.push(0x00);
                 this.codeBinary.push(0xE0);
             } else if (node.name === 'return') {
-                this.codeString += "00EE";
+                this.codeString += "00ee";
                 this.codeBinary.push(0x00);
                 this.codeBinary.push(0xEE);
             } else if (node.name === 'jump') {
@@ -413,7 +415,7 @@ class Assembler {
                 else if ((node.parameters[0].type === 'number' || node.parameters[2].type === 'number') &&
                     (node.parameters[0].value.length === 3 || node.parameters[2].value.length === 3) &&
                     node.parameters[1].type === 'operation') {
-                    this.codeString += "B" + node.parameters[0].value;
+                    this.codeString += "b" + node.parameters[0].value;
                 } else
                     this.codeString += "Bad opcode";
             } else if (node.name === 'call') {
@@ -424,7 +426,7 @@ class Assembler {
             } else if (node.name === 'draw') {
                 if (node.parameters[0].type === 'register' && node.parameters[1].type === 'register' &&
                     node.parameters[2].type === 'number')
-                    this.codeString += "D" + node.parameters[0].value + node.parameters[1].value +
+                    this.codeString += "d" + node.parameters[0].value + node.parameters[1].value +
                     node.parameters[2].value;
                 else
                     this.codeString += "Bad opcode";
@@ -435,14 +437,14 @@ class Assembler {
                     else if (node.right.type === 'register')
                         this.codeString += "5" + node.left.value + node.right.value + "0";
                     else if (node.right.type === 'keyword')
-                        this.codeString += "E" + node.left.value + "9E";
+                        this.codeString += "e" + node.left.value + "9e";
                     else
                         this.codeString += "Bad opcode";
                 } else if (node.condition === 'not') {
                     if (node.right.type === 'number' && node.right.value.length === 2)
                         this.codeString += "4" + node.left.value + node.right.value;
                     else if (node.right.type === 'keyword')
-                        this.codeString += "E" + node.left.value + "A1";
+                        this.codeString += "e" + node.left.value + "a1";
                     else if (node.left.type === 'register' && node.right.type === 'register')
                         this.codeString += "9" + node.left.value + node.right.value + "0";
                     else
@@ -519,52 +521,52 @@ class Assembler {
                             this.codeString += "Bad opcode";
                     } else if (node.right.type === 'CallExpression' && node.right.name === 'shiftLeft') {
                         if (node.right.parameters[0].type === 'register')
-                            this.codeString += "8" + node.left.value + node.right.parameters[0].value + "E";
+                            this.codeString += "8" + node.left.value + node.right.parameters[0].value + "e";
                         else
                             this.codeString += "Bad opcode";
                     } else if (node.left.value === 'i' && node.right.type === 'number')
-                        this.codeString += "A" + node.right.value;
+                        this.codeString += "a" + node.right.value;
                     else if (node.right.type === 'keyword' && node.right.value === 'delay')
-                        this.codeString += "F" + node.left.value + "07";
+                        this.codeString += "f" + node.left.value + "07";
                     else if (node.right.type === 'keyword' && node.right.value === 'key')
-                        this.codeString += "F" + node.left.value + "0A";
+                        this.codeString += "f" + node.left.value + "0a";
                     else if (node.right.type === 'CallExpression' && node.right.name === 'rand') {
                         if (node.right.parameters[0].type === 'number')
-                            this.codeString += "C" + node.left.value + node.right.parameters[0].value;
+                            this.codeString += "c" + node.left.value + node.right.parameters[0].value;
                         else
                             this.codeString += "Bad opcode";
                     } else if (node.right.type === 'Calculation' && node.right.name === '+' &&
                         node.left.value === 'i') {
                         if (node.left.value !== node.right.left.value)
-                            this.codeString += "F" + node.right.left.value + "1E";
+                            this.codeString += "f" + node.right.left.value + "1e";
                         else if (node.left.value !== node.right.right.value)
-                            this.codeString += "F" + node.right.right.value + "1E";
+                            this.codeString += "f" + node.right.right.value + "1e";
                         else
                             this.codeString += "Bad opcode";
                     } else if (node.right.type === 'CallExpression' && node.right.name === 'memad' &&
                         node.left.value === 'i') {
                         if (node.right.parameters[0].type === 'register')
-                            this.codeString += "F" + node.right.parameters[0].value + "29";
+                            this.codeString += "f" + node.right.parameters[0].value + "29";
                         else
                             this.codeString += "Bad opcode";
                     }
                 } else if (node.left.type === 'keyword') {
                     if (node.left.value === 'delay' && node.right.type === 'register')
-                        this.codeString += "F" + node.right.value + "15";
+                        this.codeString += "f" + node.right.value + "15";
                     else if (node.left.value === 'sound' && node.right.type === 'register')
-                        this.codeString += "F" + node.right.value + "18";
+                        this.codeString += "f" + node.right.value + "18";
                     else
                         this.codeString += "Bad opcode";
                 } else if (node.left.type === 'CallExpression' && node.left.name === 'memad') {
                     if (node.left.parameters[0].value === 'i' && node.right.type === 'register')
-                        this.codeString += "F" + node.right.value + "33";
+                        this.codeString += "f" + node.right.value + "33";
                     else if (node.left.parameters[0].value === 'i' && node.right.type === 'Loop')
-                        this.codeString += "F" + node.right.to.value + "55";
+                        this.codeString += "f" + node.right.to.value + "55";
                     else
                         this.codeString += "Bad opcode";
                 } else if (node.right.type === 'CallExpression' && node.right.name === 'memad') {
                     if (node.right.parameters[0].value === 'i' && node.left.type === 'Loop')
-                        this.codeString += "F" + node.left.to.value + "65";
+                        this.codeString += "f" + node.left.to.value + "65";
                     else
                         this.codeString += "Bad opcode";
                 }
