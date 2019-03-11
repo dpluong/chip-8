@@ -573,6 +573,14 @@ class Assembler {
             }
         }
     }
+    /*
+    Translate assembly language to opcode
+    */
+    translate() {
+        this.tokenize();
+        this.parseProgram();
+        this.generate();
+    }
 }
 
 

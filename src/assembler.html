@@ -17,9 +17,7 @@ function myFunction() {
   var code = document.getElementById("myTextarea").value;
 
   var assembler = new Assembler(code);
-  assembler.tokenize();
-  assembler.parseProgram();
-  assembler.generate();
+  assembler.translate();
   document.write(assembler.codeString);
 
 }
