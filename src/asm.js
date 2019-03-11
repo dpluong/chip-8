@@ -644,3 +644,7 @@ class Assembler {
     this.generate();
   }
 }
+
+if (typeof exports !== 'undefined') {
+  module.exports = Assembler;
+}

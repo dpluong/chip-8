@@ -82,5 +82,11 @@
   <script src="chip8cpu.js"></script>
   <script src="frontend.js"></script>
   <script src="visualizer.js"></script>
-  <script src="index.js"></script>
+  <script>
+    const frontend = new Frontend();
+    frontend.renderDisplay(new Uint8Array(64 * 32));
+    const backend = new Chip8Cpu(frontend);
+    const visualizer = new Visualizer(backend);
+    frontend.statwaitForCodeInput(code => backend.loadProgram(code));
+  </script>
 </body>

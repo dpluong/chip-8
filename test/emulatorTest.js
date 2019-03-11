@@ -130,26 +130,6 @@ describe('Emulator', () => {
     });
   });
 
-  describe('Opcode 0x5XY0', () => {
-    it('skips the next instruction if the two registers are equal', () => {
-      emulator.memory[0x200] = 0x53;
-      emulator.memory[0x201] = 0x70;
-      emulator.registers[0x3] = 0x61;
-      emulator.registers[0x7] = 0x61;
-      emulator.runNextInstruction();
-      expect(emulator.programCounter).to.equal(0x204);
-    });
-
-    it('does not skips the next instruction if the two registers are not equal', () => {
-      emulator.memory[0x200] = 0x53;
-      emulator.memory[0x201] = 0x70;
-      emulator.registers[0x3] = 0x61;
-      emulator.registers[0x7] = 0x66;
-      emulator.runNextInstruction();
-      expect(emulator.programCounter).to.equal(0x202);
-    });
-  });
-
   describe('Opcode 0x6XNN', () => {
     it('sets the register in X with the value in NN', () => {
       emulator.memory[0x200] = 0x6A;
