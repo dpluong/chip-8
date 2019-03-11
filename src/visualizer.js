@@ -4,75 +4,78 @@ class Visualizer {
   /**
    * Initalizes a new Visualizer
    * @param {Chip8Cpu} chip8Cpu The CPU to visualize
+   * @param {boolean} [isNonBrowser=false] If instance is not running browser (for testing)
    */
-  constructor(chip8Cpu) {
+  constructor(chip8Cpu, isNonBrowser = false) {
     this.chip8Cpu = chip8Cpu;
     this.visualizerActive = false;
-    this.toggleVisualizerDOM = document.querySelector('button#visualizerToggle');
-    this.toggleEmulatorRunningDOM = document.querySelector('button#toggleEmulatorRunning');
-    this.previousInstructionDOM = document.querySelector('button#goBackwards');
-    this.nextInstructionDOM = document.querySelector('button#goForwards');
-    this.visualizerContainerDOM = document.querySelector('div#visualizerContainer');
-    this.registerTableBodyDOM = document.querySelector('tbody#visualizerRegisterTableBody');
-    this.memorySelectDOM = document.querySelector('select#memorySelect');
-    this.registerValuesDOM = [];
-    this.saveStates = [];
-    this.timerSimulationLeft = 10;
-
-    this.toggleVisualizerDOM.addEventListener('click', () => {
-      if (this.visualizerActive) {
-        this.disableVisualizer();
-      } else {
-        this.enableVisualizer();
-      }
-    });
-
-    let oldClockSpeed = this.chip8Cpu.clockSpeed;
-    this.toggleEmulatorRunningDOM.addEventListener('click', () => {
-      if (this.chip8Cpu.clockSpeed > 0) {
-        oldClockSpeed = this.chip8Cpu.clockSpeed;
-        this.chip8Cpu.clockSpeed = 0;
-        this.toggleEmulatorRunningDOM.textContent = 'Play';
-        this.memorySelectDOM.style.display = '';
-        this.nextInstructionDOM.disabled = false;
-        this.previousInstructionDOM.disabled = this.saveStates.length === 0;
-        this.timerSimulationLeft = 10;
+    if (!isNonBrowser) {
+      this.toggleVisualizerDOM = document.querySelector('button#visualizerToggle');
+      this.toggleEmulatorRunningDOM = document.querySelector('button#toggleEmulatorRunning');
+      this.previousInstructionDOM = document.querySelector('button#goBackwards');
+      this.nextInstructionDOM = document.querySelector('button#goForwards');
+      this.visualizerContainerDOM = document.querySelector('div#visualizerContainer');
+      this.registerTableBodyDOM = document.querySelector('tbody#visualizerRegisterTableBody');
+      this.memorySelectDOM = document.querySelector('select#memorySelect');
+      this.registerValuesDOM = [];
+      this.saveStates = [];
+      this.timerSimulationLeft = 10;
+  
+      this.toggleVisualizerDOM.addEventListener('click', () => {
+        if (this.visualizerActive) {
+          this.disableVisualizer();
+        } else {
+          this.enableVisualizer();
+        }
+      });
+  
+      let oldClockSpeed = this.chip8Cpu.clockSpeed;
+      this.toggleEmulatorRunningDOM.addEventListener('click', () => {
+        if (this.chip8Cpu.clockSpeed > 0) {
+          oldClockSpeed = this.chip8Cpu.clockSpeed;
+          this.chip8Cpu.clockSpeed = 0;
+          this.toggleEmulatorRunningDOM.textContent = 'Play';
+          this.memorySelectDOM.style.display = '';
+          this.nextInstructionDOM.disabled = false;
+          this.previousInstructionDOM.disabled = this.saveStates.length === 0;
+          this.timerSimulationLeft = 10;
+          this.updateMemoryList();
+        } else {
+          this.chip8Cpu.clockSpeed = oldClockSpeed;
+          this.toggleEmulatorRunningDOM.textContent = 'Pause';
+          this.memorySelectDOM.style.display = 'none';
+          this.nextInstructionDOM.disabled = true;
+          this.previousInstructionDOM.disabled = true;
+          this.timerSimulationLeft = 10;
+          this.chip8Cpu.runNextInstruction(true);
+        }
+      });
+      this.nextInstructionDOM.addEventListener('click', () => {
+        this.chip8Cpu.runNextInstruction(false);
+        this.timerSimulationLeft -= 1;
+        if (this.timerSimulationLeft === 0) {
+          if (this.chip8Cpu.delay > 0) {
+            this.chip8Cpu.delay -= 1;
+          }
+          if (this.chip8Cpu.sound > 0) {
+            this.chip8Cpu.sound -= 1;
+          }
+          this.timerSimulationLeft = 10;
+        }
         this.updateMemoryList();
-      } else {
-        this.chip8Cpu.clockSpeed = oldClockSpeed;
-        this.toggleEmulatorRunningDOM.textContent = 'Pause';
-        this.memorySelectDOM.style.display = 'none';
-        this.nextInstructionDOM.disabled = true;
-        this.previousInstructionDOM.disabled = true;
-        this.timerSimulationLeft = 10;
-        this.chip8Cpu.runNextInstruction(true);
-      }
-    });
-    this.nextInstructionDOM.addEventListener('click', () => {
-      this.chip8Cpu.runNextInstruction(false);
-      this.timerSimulationLeft -= 1;
-      if (this.timerSimulationLeft === 0) {
-        if (this.chip8Cpu.delay > 0) {
-          this.chip8Cpu.delay -= 1;
+      });
+      this.previousInstructionDOM.addEventListener('click', () => {
+        this.chip8Cpu.loadSaveState(this.saveStates.pop());
+        if (this.saveStates.length === 0) {
+          this.previousInstructionDOM.disabled = true;
         }
-        if (this.chip8Cpu.sound > 0) {
-          this.chip8Cpu.sound -= 1;
+        this.timerSimulationLeft += 1;
+        if (this.timerSimulationLeft > 10) {
+          this.timerSimulationLeft = 10;
         }
-        this.timerSimulationLeft = 10;
-      }
-      this.updateMemoryList();
-    });
-    this.previousInstructionDOM.addEventListener('click', () => {
-      this.chip8Cpu.loadSaveState(this.saveStates.pop());
-      if (this.saveStates.length === 0) {
-        this.previousInstructionDOM.disabled = true;
-      }
-      this.timerSimulationLeft += 1;
-      if (this.timerSimulationLeft > 10) {
-        this.timerSimulationLeft = 10;
-      }
-      this.updateMemoryList();
-    });
+        this.updateMemoryList();
+      });
+    }
   }
 
   numToHex(num, minLength) {
