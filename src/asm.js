@@ -228,21 +228,26 @@ class Assembler {
   /*
     Parse function
     */
-  parseExpression(current) {
-    let tok = this.tokenList[++current];
+  parseExpression(currentArg) {
+    let current = currentArg;
+    current += 1;
+    let tok = this.tokenList[current];
     const node = {
       type: 'CallExpression',
       name: this.tokenList[current - 1].value,
       parameters: [],
     };
-    tok = this.tokenList[++current];
+    current += 1;
+    tok = this.tokenList[current];
     if (tok.value !== ')') {
       while (!(tok.value === ')')) {
         if (tok.value === ',') {
-          tok = this.tokenList[++current];
+          current += 1;
+          tok = this.tokenList[current];
         }
         node.parameters.push(this.tokenList[current]);
-        tok = this.tokenList[++current];
+        current += 1;
+        tok = this.tokenList[current];
       }
     }
     this.checkCurrent = current;
@@ -252,10 +257,13 @@ class Assembler {
   /*
     Parse condition statement
     */
-  parseIf(current) {
+  parseIf(currentArg) {
+    let current = currentArg;
     let node;
     while (this.tokenList[current].value !== 'skip') {
-      if (this.tokenList[current].type !== 'condition') { current += 1; } else {
+      if (this.tokenList[current].type !== 'condition') {
+        current += 1;
+      } else {
         node = {
           type: 'If',
           condition: this.tokenList[current].value,
@@ -272,9 +280,11 @@ class Assembler {
   /*
     Parse key word 'to'
     */
-  parseTo(current) {
+  parseTo(currentArg) {
+    let current = currentArg;
     try {
-      const tok = this.tokenList[++current];
+      current += 1;
+      const tok = this.tokenList[current];
       const from = this.tokenList[current - 1];
       const to = this.tokenList[current + 1];
       if (from.type !== 'register' || from.value !== '0'
@@ -299,10 +309,11 @@ class Assembler {
   /*
     Find a token on a line
     */
-  findToken(current, value) {
+  findToken(currentArg, value) {
+    let current = currentArg;
     while (this.tokenList[current].type !== 'newLine') {
       if (this.tokenList[current].value === value) { return true; }
-      ++current;
+      current += 1;
     }
     return false;
   }
