@@ -1,4 +1,4 @@
-const { expect } = require('chai');
+var { expect } = require('chai');
 const Assembler = require('../src/asm');
 
 describe('Assembler', () => {
@@ -57,19 +57,22 @@ describe('Assembler', () => {
       expect(result).be.equal('7466');
     });
 
-    it('Opcode 0x8XY0', () => {
+    it('translates "vx = vy" to 0x8XY0', () => {
+      const assembler = new Assembler('vc = va');
+      const result = assembler.translate();
+      expect(result).be.equal('8ca0');
     });
 
-    it('Opcode 0x8XY1', () => {
+    it('translates "vx = vy | vx" to 0x8XY1', () => {
+      const assembler = new Assembler('v3 = v4 | v3');
+      const result = assembler.translate();
+      expect(result).be.equal('8341');
     });
 
-    it('Opcode 0x8XY2', () => {
-    });
-    
-    it('Opcode 0x8XY3', () => {
-    });
-
-    it('Opcode 0x8XY4', () => {
+    it('translates "vx = vy & vx" to 0x8XY2', () => {
+      const assembler = new Assembler('vb = v7 & vb');
+      const result = assembler.translate();
+      expect(result).be.equal('8b72');
     });
 
     it('translates "vx = vy ^ vx" to 0x8XY3', () => {
@@ -90,58 +93,118 @@ describe('Assembler', () => {
       expect(result).be.equal('87f5');
     });
 
-    it('Opcode 0x8XY6', () => {
+    it('translates "vx = shiftRight(vy)" to 0x8XY6', () => {
+      const assembler = new Assembler('v9 = shiftRight(vd)');
+      const result = assembler.translate();
+      expect(result).be.equal('89d6');
     });
 
-    it('Opcode 0x8XY7', () => {
+    it('translates "vx = vy - vx" to 0x8XY7', () => {
+      const assembler = new Assembler('v7 = v1 - v7');
+      const result = assembler.translate();
+      expect(result).be.equal('8717');
     });
 
-    it('Opcode 0x8XYE', () => {
+    it('translates "vx = shiftLeft(vy)" to 0x8XYE', () => {
+      const assembler = new Assembler('vc = shiftLeft(v5)');
+      const result = assembler.translate();
+      expect(result).be.equal('8c5e');
     });
 
-    it('Opcode 0xANNN', () => {
+    it('translates "if vx not vy skip" to 0x9XY0', () => {
+    const assembler = new Assembler('if v2 not ve skip');
+    const result = assembler.translate();
+    expect(result).be.equal('92e0');
+    });
+    
+    it('translates "vi = nnn" to 0xANNN', () => {
+      const assembler = new Assembler('vi = 2ec');
+      const result = assembler.translate();
+      expect(result).be.equal('A2ec');
     });
 
-    it('Opcode 0xBNNN', () => {
+    it('translates "jump(nnn + v0)" to 0xBNNN', () => {
+      const assembler = new Assembler('jump(1f5 + v0)');
+      const result = assembler.translate();
+      expect(result).be.equal('b1f5');
     });
 
-    it('Opcode 0xCXNN', () => {
+    it('translates "vx = rand(nn)" to 0xCXNN', () => {
+      const assembler = new Assembler('vb = rand(23)');
+      const result = assembler.translate();
+      expect(result).be.equal('cb23');
     });
 
-    it('Opcode 0xDXYN', () => {
+    it('translates "draw(vx, vy, n)" to 0xDXYN', () => {
+      const assembler = new Assembler('draw(v0, v8, 2)');
+      const result = assembler.translate();
+      expect(result).be.equal('d082');
     });
 
-    it('Opcode 0xEX9E', () => {
+    it('translates "if vx equal key skip" to 0xEX9E', () => {
+      const assembler = new Assembler('if va equal key skip');
+      const result = assembler.translate();
+      expect(result).be.equal('ea9e');
     });
 
-    it('Opcode 0xEXA1', () => {
+    it('translates "if vx not key skip" to 0xEXA1', () => {
+      const assembler = new Assembler('if v3 not key skip');
+      const result = assembler.translate();
+      expect(result).be.equal('e3a1');
     });
 
-    it('Opcode 0xFX07', () => {
+    it('translates "vx = delay" to 0xFX07', () => {
+      const assembler = new Assembler('v9 = delay');
+      const result = assembler.translate();
+      expect(result).be.equal('f907');
     });
 
-    it('Opcode 0xFX0A', () => {
+    it('translates "vx = key" to 0xFX0A', () => {
+      const assembler = new Assembler('ve = key');
+      const result = assembler.translate();
+      expect(result).be.equal('fe0a');
     });
 
-    it('Opcode 0xFX15', () => {
+    it('translates "delay = vx" to 0xFX15', () => {
+      const assembler = new Assembler('delay = v1');
+      const result = assembler.translate();
+      expect(result).be.equal('f115');
     });
 
-    it('Opcode 0xFX18', () => {
+    it('translates "sound = vx" to 0xFX18', () => {
+      const assembler = new Assembler('sound = v2');
+      const result = assembler.translate();
+      expect(result).be.equal('f218');
     });
 
-    it('Opcode 0xFX1E', () => {
+    it('translates "vi = vx + vi" to 0xFX1E', () => {
+      const assembler = new Assembler('vi = v3 + vi');
+      const result = assembler.translate();
+      expect(result).be.equal('f31e');
     });
 
-    it('Opcode 0xFX29', () => {
+    it('translates "vi = memad(va)" to 0xFX29', () => {
+      const assembler = new Assembler('vi = memad(v2)');
+      const result = assembler.translate();
+      expect(result).be.equal('f229');
     });
 
-    it('Opcode 0xFX33', () => {
+    it('translates "memad(vi) = vx" to 0xFX33', () => {
+      const assembler = new Assembler('memad(vi) = v4');
+      const result = assembler.translate();
+      expect(result).be.equal('f433');
     });
 
-    it('Opcode 0xFX55', () => {
+    it('translates "memad(vi) = v0 to vx" to 0xFX55', () => {
+      const assembler = new Assembler('memad(vi) = v0 to v5');
+      const result = assembler.translate();
+      expect(result).be.equal('f555');
     });
-
-    it('Opcode 0xFX65', () => {
+    
+    it('translates "v0 to vx = memad(vi)" to 0xFX65', () => {
+      const assembler = new Assembler('v0 to ve = memad(vi)');
+      const result = assembler.translate();
+      expect(result).be.equal('fe65');
     });
   });
 
