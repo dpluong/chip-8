@@ -40,7 +40,7 @@ describe('Assembler', () => {
     });
 
     it('translates "if vx equal vy skip" to 0x5XY0', () => {
-      const assembler = new Assembler('if vb not 30 skip');
+      const assembler = new Assembler('if vb equal v3 skip');
       const result = assembler.translate();
       expect(result).be.equal('5b30');
     });
@@ -52,7 +52,7 @@ describe('Assembler', () => {
     });
 
     it('translates "vx = nn + vx" to 0x7XNN', () => {
-      const assembler = new Assembler('v4 = 66 + vx');
+      const assembler = new Assembler('v4 = 66 + v4');
       const result = assembler.translate();
       expect(result).be.equal('7466');
     });
@@ -120,7 +120,7 @@ describe('Assembler', () => {
     it('translates "vi = nnn" to 0xANNN', () => {
       const assembler = new Assembler('vi = 2ec');
       const result = assembler.translate();
-      expect(result).be.equal('A2ec');
+      expect(result).be.equal('a2ec');
     });
 
     it('translates "jump(nnn + v0)" to 0xBNNN', () => {
@@ -183,7 +183,7 @@ describe('Assembler', () => {
       expect(result).be.equal('f31e');
     });
 
-    it('translates "vi = memad(va)" to 0xFX29', () => {
+    it('translates "vi = memad(vx)" to 0xFX29', () => {
       const assembler = new Assembler('vi = memad(v2)');
       const result = assembler.translate();
       expect(result).be.equal('f229');
