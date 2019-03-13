@@ -63,6 +63,15 @@ class Assembler {
   }
 
   /*
+    Check if token is a valid hexadecimal string
+    */
+  isHex(current) {
+    const num = this.splitString[current];
+    const regNum = /^[0-9a-fA-F]+$/;
+    return regNum.test(num);
+  }
+
+  /* 
     Check if a token is a register
     Take an index of token as parameter
     */
@@ -159,7 +168,7 @@ class Assembler {
             value: '=',
           });
           // eslint-disable-next-line no-restricted-globals
-        } else if (isNaN(token) === false) {
+        } else if (this.isHex(i)) {
           this.tokenList.push({
             type: 'number',
             value: token,
@@ -192,7 +201,7 @@ class Assembler {
       throw e;
     }
   }
-
+  
   /*
     Check the next token
     */
@@ -216,7 +225,7 @@ class Assembler {
     if (nextToken.value === 'to') {
       return nextToken.value;
     }
-    throw new Error('Unexpected token');
+    return;
   }
 
   /*
@@ -390,7 +399,7 @@ class Assembler {
       } else if (tok.type === 'if') {
         return this.parseIf(current);
       } else {
-        throw new ReferenceError('Unrecognized language');
+        return;
       }
     } catch (e) {
       this.HandleError(e);
@@ -652,3 +661,4 @@ class Assembler {
 if (typeof exports !== 'undefined') {
   module.exports = Assembler;
 }
+
