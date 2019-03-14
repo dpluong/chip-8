@@ -158,13 +158,13 @@ class Visualizer {
     } else if (firstNibble === 0x0) {
       return null;
     } else if (firstNibble === 0x1) {
-      return `jump(${lastThreeNibbles})`;
+      return `jump(${this.numToHex(lastThreeNibbles, 3)})`;
     } else if (firstNibble === 0x2) {
-      return `call(${lastThreeNibbles})`;
+      return `call(${this.numToHex(lastThreeNibbles, 3)})`;
     } else if (firstNibble === 0x3) {
-      return `if v${this.numToHex(secondNibble, 1)} equal ${lastTwoNibbles} skip`;
+      return `if v${this.numToHex(secondNibble, 1)} equal ${this.numToHex(lastTwoNibbles, 2)} skip`;
     } else if (firstNibble === 0x4) {
-      return `if v${this.numToHex(secondNibble, 1)} not ${lastTwoNibbles} skip`;
+      return `if v${this.numToHex(secondNibble, 1)} not ${this.numToHex(lastTwoNibbles, 2)} skip`;
     } else if (firstNibble === 0x5 && lastNibble === 0x0) {
       return `if v${this.numToHex(secondNibble, 1)} equal v${this.numToHex(thirdNibble, 1)} skip`;
     } else if (firstNibble === 0x6) {

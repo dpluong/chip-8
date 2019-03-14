@@ -3,6 +3,8 @@
 <body>
 
 <h2>Chip 8 Assembler</h2>
+<p>Type in your assembly code, one instruction per line.</p>
+<p>Hit "Translate" to convert the assembly into bytecode. After that, clicking on Download will download the application.</p>
 <textarea id="myTextarea" rows="30" cols="100"></textarea>
 
 
@@ -18,7 +20,22 @@ function myFunction() {
 
   var assembler = new Assembler(code);
   assembler.translate();
-  document.write(assembler.codeString);
+  document.body.innerText = assembler.codeString;
+
+  const opcodes = assembler.codeString.split('\n');
+  const dataArray = new Int8Array(assembler.codeString.length / 2);
+  for (let i = 0; i < opcodes.length; i += 1) {
+    dataArray[i * 2] = parseInt(opcodes[i].substr(0, 2), 16);
+    dataArray[i * 2 + 1] = parseInt(opcodes[i].substr(2, 2), 16);
+  }
+const blob = new Blob([dataArray], { type: 'application/octet-stream' });
+
+  const downloadLink = document.createElement('a');
+  downloadLink.textContent = 'Download Program';
+  downloadLink.href = URL.createObjectURL(blob);
+  downloadLink.download = 'chip8Program';
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(downloadLink);
 
 }
 </script>
