@@ -11,6 +11,10 @@ The purpose of this project is to help understand how to create applications in 
 The final release of the product is expected on April 8, 2019, with intermediate releases required as described in "Software Methodology & Timeframe".
 
 # What's New?
+Change log (Mar 13, 2019)
+- Added what actually happened for Release 3
+- Added schedule for Release 4
+
 Change log (Feb 27, 2019)
 - Added what actually happened for Release 2
 - Added schedule for Release 3
@@ -246,21 +250,6 @@ FINISH BY Week 2 (Mar 11, 2019):
 Release 3 Due Date (Mar 13, 2019):
 -	Higher level language and assembler production-ready and sent to the instructor
 
-## Detailed Release 4 Plan & Schedule
-
-The following items were to be completed for release 3:
-
-- CHIP8 Tool (CHIP8 Assembly Language)
-- A language of a higher level than the raw machine code
-- A compiler that converts this language to CHIP8 machine code
-- Users will be able to write human-readable code and compile it into CHIP8 machine code, ready for ues on any emulator
-- Code Viewer for Visualizer
-- Allows user to fully understand and debug CHIP 8 programs
-- Can disassemble opcodes into a human readable form
-- Users will be able to see the full code of the program they are running
-
-The visualizer was also pushed to this release as a result of weather in the previous release
-
 All specifications listed above in release 3 were completed including:
 
 - Visualizer fully complete with memory, registers, and instruction being executed shown:
@@ -273,6 +262,7 @@ All specifications listed above in release 3 were completed including:
     - Assembler language with visualizer code viewer
 	- Tests for the assembler complete
 
+## Detailed Release 4 Plan & Schedule
 
 Everyone will be working on the 2 games for release 4. As having no roles was the most effective strategy for our team, for Release 4 there will continue to be no defined roles. 2 or 3 people will work on each game. 
 
