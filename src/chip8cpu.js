@@ -363,6 +363,10 @@ class Chip8Cpu {
         if (this.sound > 0) {
           this.sound -= 1;
         }
+        if (this.sound === 1) {
+          let voice = new Audio("beep-02.wav"); 
+          voice.play();
+        }
         window.requestAnimationFrame(() => {
           const instructionsThisFrame = Math.floor(this.clockSpeed / 60);
           for (let i = 0; i < instructionsThisFrame; i += 1) {
