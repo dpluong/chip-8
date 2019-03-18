@@ -20,7 +20,7 @@ class Visualizer {
       this.registerValuesDOM = [];
       this.saveStates = [];
       this.timerSimulationLeft = 10;
-  
+
       this.toggleVisualizerDOM.addEventListener('click', () => {
         if (this.visualizerActive) {
           this.disableVisualizer();
@@ -28,7 +28,7 @@ class Visualizer {
           this.enableVisualizer();
         }
       });
-  
+
       let oldClockSpeed = this.chip8Cpu.clockSpeed;
       this.toggleEmulatorRunningDOM.addEventListener('click', () => {
         if (this.chip8Cpu.clockSpeed > 0) {
@@ -93,6 +93,7 @@ class Visualizer {
     this.visualizerContainerDOM.style.display = '';
     this.previousInstructionDOM.disabled = true;
 
+    this.registerValuesDOM = [];
     this.registerTableBodyDOM.innerHTML = '';
     this.chip8Cpu.registers.forEach((regVal, index) => {
       this.addRowToRegisterTable(this.numToHex(index, 2), regVal);
@@ -143,96 +144,12 @@ class Visualizer {
     }
   }
 
-  parseOpcodeIntoAssembly(firstByte, lastByte) {
-    const opcode = (firstByte << 8) | lastByte;
-
-    const firstNibble = (opcode & 0xF000) >> 12;
-    const secondNibble = (opcode & 0x0F00) >> 8;
-    const thirdNibble = (opcode & 0x00F0) >> 4;
-    const lastNibble = opcode & 0x000F;
-    const lastThreeNibbles = opcode & 0x0FFF;
-    const lastTwoNibbles = opcode & 0x00FF;
-    if (opcode === 0x00E0) {
-      return 'clear()';
-    } else if (opcode === 0x00EE) {
-      return 'return()';
-    } else if (firstNibble === 0x0) {
-      return null;
-    } else if (firstNibble === 0x1) {
-      return `jump(${this.numToHex(lastThreeNibbles, 3)})`;
-    } else if (firstNibble === 0x2) {
-      return `call(${this.numToHex(lastThreeNibbles, 3)})`;
-    } else if (firstNibble === 0x3) {
-      return `if v${this.numToHex(secondNibble, 1)} equal ${this.numToHex(lastTwoNibbles, 2)} skip`;
-    } else if (firstNibble === 0x4) {
-      return `if v${this.numToHex(secondNibble, 1)} not ${this.numToHex(lastTwoNibbles, 2)} skip`;
-    } else if (firstNibble === 0x5 && lastNibble === 0x0) {
-      return `if v${this.numToHex(secondNibble, 1)} equal v${this.numToHex(thirdNibble, 1)} skip`;
-    } else if (firstNibble === 0x6) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(lastTwoNibbles, 2)}`;
-    } else if (firstNibble === 0x7) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(lastTwoNibbles, 2)} + v${this.numToHex(secondNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x0) {
-      return `v${this.numToHex(secondNibble, 1)} = v${this.numToHex(thirdNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x1) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(thirdNibble, 1)} | v${this.numToHex(secondNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x2) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(thirdNibble, 1)} & v${this.numToHex(secondNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x3) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(thirdNibble, 1)} ^ v${this.numToHex(secondNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x4) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(thirdNibble, 1)} + v${this.numToHex(secondNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x5) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(secondNibble, 1)} - v${this.numToHex(secondNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x6) {
-      return `v${this.numToHex(secondNibble, 1)} = shiftRight${this.numToHex(thirdNibble, 1)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0x7) {
-      return `v${this.numToHex(secondNibble, 1)} = ${this.numToHex(thirdNibble, 1)} - v${this.numToHex(secondNibble, 2)}`;
-    } else if (firstNibble === 0x8 && lastNibble === 0xE) {
-      return `v${this.numToHex(secondNibble, 1)} = shiftLeft${this.numToHex(thirdNibble, 1)}`;
-    } else if (firstNibble === 0x9) {
-      return `if v${this.numToHex(secondNibble, 1)} not v${this.numToHex(thirdNibble, 1)} skip`;
-    } else if (firstNibble === 0xA) {
-      return `vi = ${this.numToHex(lastThreeNibbles, 3)}`;
-    } else if (firstNibble === 0xB) {
-      return `jump(${this.numToHex(lastThreeNibbles, 3)} + v0)`;
-    } else if (firstNibble === 0xC) {
-      return `v${this.numToHex(secondNibble, 1)} = rand(${this.numToHex(lastTwoNibbles, 2)})`;
-    } else if (firstNibble === 0xD) {
-      return `draw(v${this.numToHex(secondNibble, 1)}, v${this.numToHex(thirdNibble, 1)}, ${this.numToHex(lastNibble, 1)})`;
-    } else if (firstNibble === 0xE && lastTwoNibbles === 0x9E) {
-      return `if v${this.numToHex(secondNibble, 1)} equal key skip`;
-    } else if (firstNibble === 0xE && lastTwoNibbles === 0xA1) {
-      return `if v${this.numToHex(secondNibble, 1)} not key skip`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x07) {
-      return `v${this.numToHex(secondNibble, 1)} = delay`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x0A) {
-      return `v${this.numToHex(secondNibble, 1)} = key`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x15) {
-      return `delay = v${this.numToHex(secondNibble, 1)}`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x18) {
-      return `sound = v${this.numToHex(secondNibble, 1)}`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x1E) {
-      return `vi = v${this.numToHex(secondNibble, 1)} + vi`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
-      return `vi = memad(${this.numToHex(secondNibble, 1)})`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x33) {
-      return `memad(vi) = v${this.numToHex(secondNibble, 1)}`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x55) {
-      return `memad(vi) = v0 to v${this.numToHex(secondNibble, 1)}`;
-    } else if (firstNibble === 0xF && lastTwoNibbles === 0x65) {
-      return `v0 to v${this.numToHex(secondNibble, 1)} = memad(vi)`;
-    } else {
-      return null;
-    }
-  }
-
   updateMemoryList() {
     this.memorySelectDOM.innerHTML = '';
     this.memorySelectDOM.style.display = 'block';
     for (let i = 0; i < this.chip8Cpu.memory.length; i += 1) {
       const item = document.createElement('option');
-      const parsedAssembly = this.parseOpcodeIntoAssembly(this.chip8Cpu.memory[i], this.chip8Cpu.memory[i + 1]);
+      const parsedAssembly = Disassembler.parseOpcodeIntoAssembly(this.chip8Cpu.memory[i], this.chip8Cpu.memory[i + 1]);
       if (parsedAssembly && i % 2 === 0 && i >= 0x200) {
         item.textContent = `${this.numToHex(i, 3)}: ${parsedAssembly}`;
         if (i === this.chip8Cpu.programCounter) {
