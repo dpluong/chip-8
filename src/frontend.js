@@ -3,6 +3,7 @@ class Frontend {
     this.currentDisplay = [];
     this.codeInputDOM = document.querySelector('input#codeInput');
     this.displayDOM = document.querySelector('canvas#display');
+    this.audio = new Audio('beep-02.wav');
 
     this.keyStates = new Uint8Array(16);
 
@@ -54,6 +55,19 @@ class Frontend {
       };
       fileReader.readAsArrayBuffer(this.codeInputDOM.files[0]);
     });
+  }
+
+  /**
+   * Emits a beep for a specified number of milliseconds
+   * If the beep is currently being played it will restart with the new timer
+   * @param {number} length The length to play the tone in milliseconds
+   */
+  emitBeep(length) {
+    this.audio.currentTime = 0;
+    this.audio.play();
+    setTimeout(() => {
+      this.audio.pause();
+    }, length);
   }
 
   /**

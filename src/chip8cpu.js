@@ -329,6 +329,7 @@ class Chip8Cpu {
           this.delay = this.registers[secondNibble];
         } else if (firstNibble === 0xF && lastTwoNibbles === 0x18) {
           this.sound = this.registers[secondNibble];
+          this.frontend.emitBeep((1000 / 60) * this.sound);
         } else if (firstNibble === 0xF && lastTwoNibbles === 0x1E) {
           this.iRegister += this.registers[secondNibble];
         } else if (firstNibble === 0xF && lastTwoNibbles === 0x29) {
@@ -362,10 +363,6 @@ class Chip8Cpu {
         }
         if (this.sound > 0) {
           this.sound -= 1;
-        }
-        if (this.sound === 1) {
-          let voice = new Audio("beep-02.wav"); 
-          voice.play();
         }
         window.requestAnimationFrame(() => {
           const instructionsThisFrame = Math.floor(this.clockSpeed / 60);

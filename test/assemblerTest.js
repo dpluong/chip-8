@@ -1,4 +1,4 @@
-var { expect } = require('chai');
+let { expect } = require('chai');
 const Assembler = require('../src/asm');
 
 describe('Assembler', () => {
@@ -112,11 +112,11 @@ describe('Assembler', () => {
     });
 
     it('translates "if vx not vy skip" to 0x9XY0', () => {
-    const assembler = new Assembler('if v2 not ve skip');
-    const result = assembler.translate();
-    expect(result).be.equal('92e0');
+      const assembler = new Assembler('if v2 not ve skip');
+      const result = assembler.translate();
+      expect(result).be.equal('92e0');
     });
-    
+
     it('translates "vi = nnn" to 0xANNN', () => {
       const assembler = new Assembler('vi = 2ec');
       const result = assembler.translate();
@@ -200,7 +200,7 @@ describe('Assembler', () => {
       const result = assembler.translate();
       expect(result).be.equal('f555');
     });
-    
+
     it('translates "v0 to vx = memad(vi)" to 0xFX65', () => {
       const assembler = new Assembler('v0 to ve = memad(vi)');
       const result = assembler.translate();
