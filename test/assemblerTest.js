@@ -1,4 +1,4 @@
-let { expect } = require('chai');
+const { expect } = require('chai');
 const Assembler = require('../src/asm');
 
 describe('Assembler', () => {

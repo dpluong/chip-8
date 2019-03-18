@@ -129,6 +129,7 @@ class Visualizer {
     this.visualizerActive = false;
     this.toggleVisualizerDOM.textContent = 'Enable Visualizer';
     this.visualizerContainerDOM.style.display = 'none';
+    this.chip8Cpu.onUpdateState = () => {};
   }
 
   updateVisualizerTables() {
