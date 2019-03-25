@@ -7,6 +7,179 @@ class Frontend {
 
     this.keyStates = new Uint8Array(16);
 
+    this.keyCodes = new Uint8Array([88, 49, 50, 51, 81, 87, 69, 65, 83, 68, 90, 67, 52, 82, 70, 86]); //inserting that keyCodearray into this array
+
+
+    document.addEventListener('keydown', (event) => {
+
+        if (event.keyCode == 88) {
+
+        this.keyStates[0] = 0x1;
+        }
+
+        else if (event.keyCode == 49) {
+
+            this.keyStates[1] = 0x1;
+        }
+
+        else if (event.keyCode == 50) {
+
+            this.keyStates[2] = 0x1;
+        }
+
+        else if (event.keyCode == 51) {
+
+            this.keyStates[3] = 0x1;
+        }
+
+        else if (event.keyCode == 81) {
+
+            this.keyStates[4] = 0x1;
+        }
+
+        else if (event.keyCode == 87) {
+
+            this.keyStates[5] = 0x1;
+        }
+
+        else if (event.keyCode == 69) {
+
+            this.keyStates[6] = 0x1;
+        }
+
+        else if (event.keyCode == 65) {
+
+            this.keyStates[7] = 0x1;
+        }
+
+        else if (event.keyCode == 83) {
+
+            this.keyStates[8] = 0x1;
+        }
+
+        else if (event.keyCode == 68) {
+
+            this.keyStates[9] = 0x1;
+        }
+
+        else if (event.keyCode == 90) {
+
+            this.keyStates[10] = 0x1;
+        }
+
+        else if (event.keyCode == 67) {
+
+            this.keyStates[11] = 0x1;
+        }
+
+        else if (event.keyCode == 52) {
+
+            this.keyStates[12] = 0x1;
+        }
+
+        else if (event.keyCode == 82) {
+
+            this.keyStates[13] = 0x1;
+        }
+
+        else if (event.keyCode == 70) {
+
+            this.keyStates[14] = 0x1;
+        }
+
+        else if (event.keyCode == 86) {
+
+            this.keyStates[15] = 0x1;
+        }
+
+    })
+
+    document.addEventListener('keyup', (event) => {
+
+        if (event.keyCode == 88) {
+
+            this.keyStates[0] = 0x0;
+        }
+
+        else if (event.keyCode == 49) {
+
+            this.keyStates[1] = 0x0;
+        }
+
+        else if (event.keyCode == 50) {
+
+            this.keyStates[2] = 0x0;
+        }
+
+        else if (event.keyCode == 51) {
+
+            this.keyStates[3] = 0x0;
+        }
+
+        else if (event.keyCode == 81) {
+
+            this.keyStates[4] = 0x0;
+        }
+
+        else if (event.keyCode == 87) {
+
+            this.keyStates[5] = 0x0;
+        }
+
+        else if (event.keyCode == 69) {
+
+            this.keyStates[6] = 0x0;
+        }
+
+        else if (event.keyCode == 65) {
+
+            this.keyStates[7] = 0x0;
+        }
+
+        else if (event.keyCode == 83) {
+
+            this.keyStates[8] = 0x0;
+        }
+
+        else if (event.keyCode == 68) {
+
+            this.keyStates[9] = 0x0;
+        }
+
+        else if (event.keyCode == 90) {
+
+            this.keyStates[10] = 0x0;
+        }
+
+        else if (event.keyCode == 67) {
+
+            this.keyStates[11] = 0x0;
+        }
+
+        else if (event.keyCode == 52) {
+
+            this.keyStates[12] = 0x0;
+        }
+
+        else if (event.keyCode == 82) {
+
+            this.keyStates[13] = 0x0;
+        }
+
+        else if (event.keyCode == 70) {
+
+            this.keyStates[14] = 0x0;
+        }
+
+        else if (event.keyCode == 86) {
+
+            this.keyStates[15] = 0x0;
+        }
+
+
+    })
+
+
     Object.keys(this.keyStates).forEach((_key, i) => {
       const keyButton = document.querySelector(`button#key-${i.toString(16)}`);
       keyButton.addEventListener('mousedown', () => {
