@@ -36,23 +36,23 @@ class Disassembler {
     } else if (firstNibble === 0x6) {
       return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(lastTwoNibbles, 2)}`;
     } else if (firstNibble === 0x7) {
-      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(lastTwoNibbles, 2)} + v${Disassembler.numToHex(secondNibble, 2)}`;
+      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(lastTwoNibbles, 2)} + v${Disassembler.numToHex(secondNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x0) {
       return `v${Disassembler.numToHex(secondNibble, 1)} = v${Disassembler.numToHex(thirdNibble, 2)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x1) {
-      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} | v${Disassembler.numToHex(secondNibble, 2)}`;
+      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} | v${Disassembler.numToHex(secondNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x2) {
-      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} & v${Disassembler.numToHex(secondNibble, 2)}`;
+      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} & v${Disassembler.numToHex(secondNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x3) {
-      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} ^ v${Disassembler.numToHex(secondNibble, 2)}`;
+      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} ^ v${Disassembler.numToHex(secondNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x4) {
-      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} + v${Disassembler.numToHex(secondNibble, 2)}`;
+      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} + v${Disassembler.numToHex(secondNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x5) {
-      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(secondNibble, 1)} - v${Disassembler.numToHex(secondNibble, 2)}`;
+      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(secondNibble, 1)} - v${Disassembler.numToHex(secondNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x6) {
       return `v${Disassembler.numToHex(secondNibble, 1)} = shiftRight${Disassembler.numToHex(thirdNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0x7) {
-      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} - v${Disassembler.numToHex(secondNibble, 2)}`;
+      return `v${Disassembler.numToHex(secondNibble, 1)} = ${Disassembler.numToHex(thirdNibble, 1)} - v${Disassembler.numToHex(secondNibble, 1)}`;
     } else if (firstNibble === 0x8 && lastNibble === 0xE) {
       return `v${Disassembler.numToHex(secondNibble, 1)} = shiftLeft${Disassembler.numToHex(thirdNibble, 1)}`;
     } else if (firstNibble === 0x9) {
