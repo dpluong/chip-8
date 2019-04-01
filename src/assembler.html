@@ -1,46 +1,68 @@
-<!DOCTYPE html>
-<html>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
 <body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand">
+    <a class="navbar-brand" href="./index.html">CHIP 8</a>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="./index.html">Emulator</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="./assembler.html">Assembler</a>
+      </li>
+    </ul>
+  </nav>
+  <h2>Chip 8 Assembler</h2>
+  <p>Type in your assembly code, one instruction per line.</p>
+  <p>Hit "Translate" to download the compiled program.</p>
+  <div style="margin-bottom: 10px">
+    <button id="downloadButton" type="button" disabled>Download</button>
+    <p id="errorString">Start typing in some code...</p>
+  </div>
+  <textarea id="assemblyCode" rows="20" cols="100"></textarea>
 
-<h2>Chip 8 Assembler</h2>
-<p>Type in your assembly code, one instruction per line.</p>
-<p>Hit "Translate" to convert the assembly into bytecode. After that, clicking on Download will download the application.</p>
-<textarea id="myTextarea" rows="30" cols="100"></textarea>
 
 
-<button type="button" onclick="myFunction()">
-Translate</button>
+  <script src="asm.js"></script>
+  <script>
+    let downloadLink = null;
+    const textBox = document.querySelector('#assemblyCode');
+    const downloadButton = document.querySelector('#downloadButton');
+    textBox.addEventListener('input', () => compileCode());
+    downloadButton.addEventListener('click', () => downloadLink && !downloadButton.disabled ? downloadLink.click() : {});
+    
+    function compileCode() {
+      const textBox = document.querySelector('#assemblyCode');
+      const downloadButton = document.querySelector('#downloadButton');
+      const errorString = document.querySelector('#errorString');
 
-
-
-<script src="asm.js"></script>
-<script>
-function myFunction() {
-  var code = document.getElementById("myTextarea").value;
-
-  var assembler = new Assembler(code);
-  assembler.translate();
-  document.body.innerText = assembler.codeString;
-
-  const opcodes = assembler.codeString.split('\n');
-  const dataArray = new Int8Array(assembler.codeString.length / 2);
-  for (let i = 0; i < opcodes.length; i += 1) {
-    dataArray[i * 2] = parseInt(opcodes[i].substr(0, 2), 16);
-    dataArray[i * 2 + 1] = parseInt(opcodes[i].substr(2, 2), 16);
-  }
-const blob = new Blob([dataArray], { type: 'application/octet-stream' });
-
-  const downloadLink = document.createElement('a');
-  downloadLink.textContent = 'Download Program';
-  downloadLink.href = URL.createObjectURL(blob);
-  downloadLink.download = 'chip8Program';
-  document.body.appendChild(document.createElement('br'));
-  document.body.appendChild(downloadLink);
-
-}
-</script>
+      try {
+        const assembler = new Assembler(textBox.value);
+        assembler.translate();
+  
+        const opcodes = assembler.codeString.split('\n');
+        const dataArray = new Int8Array(assembler.codeString.length / 2);
+        for (let i = 0; i < opcodes.length; i += 1) {
+          dataArray[i * 2] = parseInt(opcodes[i].substr(0, 2), 16);
+          dataArray[i * 2 + 1] = parseInt(opcodes[i].substr(2, 2), 16);
+        }
+        const blob = new Blob([dataArray], {
+          type: 'application/octet-stream'
+        });
+  
+        downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = 'chip8Program';
+        downloadButton.disabled = false;
+        errorString.textContent = '';
+      } catch (e) {
+        downloadLink = null;
+        downloadButton.disabled = true;
+        errorString.textContent = e.message;
+      }
+    }
+  </script>
 
 </body>
-</html>
-
-

@@ -92,10 +92,7 @@ class Assembler {
     */
   // eslint-disable-next-line class-methods-use-this
   HandleError(e) {
-    if (typeof document === 'undefined') {
-      throw e;
-    }
-    document.body.textContent = `An error occurred trying to run the program! ${e.message}`;
+    throw e;
   }
 
   /*
