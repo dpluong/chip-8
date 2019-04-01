@@ -396,6 +396,7 @@ class Assembler {
       } else if (tok.type === 'if') {
         return this.parseIf(current);
       } else {
+        this.checkCurrent = current;
         return;
       }
     } catch (e) {
