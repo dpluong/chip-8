@@ -206,6 +206,12 @@ describe('Assembler', () => {
       const result = assembler.translate();
       expect(result).be.equal('fe65');
     });
+
+    it('translates "sprite(nnnn)" to 0xnnnn', () => {
+      const assembler = new Assembler('sprite(12ac)');
+      const result = assembler.translate();
+      expect(result).be.equal('12ac');
+    });
   });
 
   it('can parse multiple lines', () => {
