@@ -56,7 +56,8 @@ class Assembler {
       || keyWord === 'memad' || keyWord === 'key'
       || keyWord === 'delay' || keyWord === 'sound'
       || keyWord === 'draw' || keyWord === 'rand'
-      || keyWord === 'clear' || keyWord === 'return') {
+      || keyWord === 'clear' || keyWord === 'return'
+      || keyWord === 'sprite') {
       return true;
     }
     return false;
@@ -455,6 +456,13 @@ class Assembler {
         this.codeString += '00e0';
         this.codeBinary.push(0x00);
         this.codeBinary.push(0xE0);
+      } else if (node.name === 'sprite') {
+        if (node.parameters[0].type === 'number' && node.parameters[0].value.length === 4
+          && node.parameters[1] === undefined) {
+          this.codeString += `${node.parameters[0].value}`;
+        } else {
+        this.codeString += 'Bad opcode';
+        }
       } else if (node.name === 'return') {
         this.codeString += '00ee';
         this.codeBinary.push(0x00);
