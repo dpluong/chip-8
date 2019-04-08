@@ -3,6 +3,7 @@ class Frontend {
     this.currentDisplay = [];
     this.codeInputDOM = document.querySelector('input#codeInput');
     this.codeInputButtonDOM = document.querySelector('button#codeInputButton');
+    this.keyMapButtonDOM = document.querySelector('button#keyoardMappings');
     this.displayDOM = document.querySelector('canvas#display');
     this.audio = new Audio('beep-02.wav');
 
@@ -39,6 +40,18 @@ class Frontend {
     });
 
     this.codeInputButtonDOM.addEventListener('click', () => this.codeInputDOM.click());
+
+    this.keyMapButtonDOM.addEventListener('click', () => {
+      const keyboardHints = [...document.querySelectorAll('span.keyboardHint')];
+      this.keyMapButtonDOM.textContent = this.keyMapButtonDOM.textContent.includes('Show') ? 'Hide Keyboard Mappings' : 'Show Keyboard Mappings';
+      keyboardHints.forEach((span) => {
+        if (span.style.display === 'block') {
+          span.style.display = 'none';
+        } else {
+          span.style.display = 'block';
+        }
+      });
+    });
   }
 
   /**

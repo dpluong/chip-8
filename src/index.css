@@ -18,3 +18,7 @@
 * {
   transition: width 500ms ease;
 }
+
+.keyboardHint {
+  display: none;
+}
