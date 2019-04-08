@@ -1,6 +1,6 @@
 # CMPT 276 Spring 2019 Group 8 CHIP8 Project
 
-Group Members: Yiming Cai, Richard Fu, Gurnoor Grewal, PETER Luong, Anuvrat Sharma
+Group Members: Yiming Cai, Richard Fu, Gurnoor Grewal, Peter Luong, Anuvrat Sharma
 
 This project document describes the conditions and planning of the product produced by the CMPT 276 Surrey Spring 2019 Group 8 Team.
 
@@ -280,3 +280,28 @@ FINISH BY Due Date (April 8, 2019)
 - fix remaining bugs in any components of the project (games, assembler, etc.)
 - keyboard input on emulator for playing games
 - nicer looking UI for the HTML page (if time permits) 
+
+## Final Release Features
+
+ - A full CHIP8 emulator, capable of running any application :
+   **(Created under [Mattmik technical reference](http://mattmik.com/files/chip8/mastering/chip8.html)**
+    - A user-friendly frontend with button input for switching between emulator and tool, loading a program, enabling the visualizer,
+      link to technical reference, and keyboard mappings
+    - 32x64 px screen with ability to run any CHIP8 program and interact with it
+    - On screen keyboard (used by clicking) and keyboard input 
+    
+- A Visualizer fully complete with memory, registers, and instruction being executed shown:
+    - Visualizer allows the program to be paused, be stepped-forward one instruction at a time, or be stepped backwards one instruction at a time.
+    - Disassembler for visualizer 
+
+- Assembler fully complete (Chip8 tool):
+    - Delivered the specification for the assembler language
+    - The Parser : Input stream, token stream, and AST
+    - Assembler language with visualizer code viewer
+    - Tests for the assembler included
+    - Ability to download the bytecode program file
+
+- Two complete CHIP8 games:
+
+  - An action shooter game called "Shooter" similar to "Space Invaders" created with our Assembler with rules to play in readme file
+  - A puzzle game called "RulerBrain" similar to "Mastermind" created with Octo with rules to play in readme file
