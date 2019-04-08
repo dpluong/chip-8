@@ -271,7 +271,7 @@ For the 4th release, there are about 3.5 weeks.
 This is the planned schedule initally:
 
 FINISH BY Week 1 (March 20, 2019)
-- a simple puzzle/educational game for Chip8 using our assembler language
+- a simple puzzle/educational game for Chip8
 
 FINISH BY Week 2 (March 27, 2019):
 - an action shooter game for Chip8 (similar to space invaders) using the Octo assembler 
@@ -303,5 +303,5 @@ FINISH BY Due Date (April 8, 2019)
 
 - Two complete CHIP8 games:
 
-  - An action shooter game called "Shooter" similar to "Space Invaders" created with our Assembler with rules to play in readme file
+  - An action shooter game called "Shooter" similar to "Space Invaders" with rules to play in readme file
   - A puzzle game called "RulerBrain" similar to "Mastermind" created with Octo with rules to play in readme file
