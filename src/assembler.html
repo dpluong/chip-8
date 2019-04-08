@@ -19,7 +19,7 @@
   <p>Hit "Translate" to download the compiled program.</p>
   <div style="margin-bottom: 10px">
     <button id="downloadButton" type="button" disabled>Download</button>
-    <p id="errorString">Start typing in some code...</p>
+    <p id="errorString">Type in some code...</p>
   </div>
   <textarea id="assemblyCode" rows="20" cols="100"></textarea>
 
@@ -39,6 +39,19 @@
       const errorString = document.querySelector('#errorString');
 
       try {
+        if (textBox.value.length === 0) {
+          throw new Error('Type in some code...');
+        }
+        const codeLines = textBox.value.split('\n');
+        for (let i = 0; i < codeLines.length; i +=1) {
+          try {
+            const assemblerLine = new Assembler(codeLines[i]);
+            assemblerLine.translate();
+          } catch (e) {
+            console.error(e);
+            throw new Error(`Line ${i + 1} is not a valid assembly instruction`);
+          }
+        }
         const assembler = new Assembler(textBox.value);
         assembler.translate();
   
