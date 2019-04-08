@@ -9,7 +9,13 @@ class Chip8Cpu {
   constructor(frontend) {
     /** The frontend instance */
     this.frontend = frontend;
+    /** Callback when emulator state is updated */
+    this.onUpdateState = () => {};
 
+    this.resetEmulator();
+  }
+
+  resetEmulator() {
     /** The memory of the CHIP 8 emulator. Allocated for 4K of memory */
     this.memory = new Uint8Array(4096);
 
@@ -39,9 +45,6 @@ class Chip8Cpu {
 
     /** If not null, indicates the register where the next key press should go into */
     this.nextKeypressRegister = null;
-
-    /** Callback when emulator state is updated */
-    this.onUpdateState = () => {};
 
     const chip8FontData = [
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -74,11 +77,15 @@ class Chip8Cpu {
    * @param {UInt8Array} program The program to run
    */
   loadProgram(program) {
-    for (let i = 0; i < program.length; i += 1) {
-      this.memory[0x200 + i] = program[i];
-    }
-    this.programCounter = 0x200;
-    this.runNextInstruction(true);
+    this.clockSpeed = 0;
+    setTimeout(() => {
+      this.resetEmulator();
+      for (let i = 0; i < program.length; i += 1) {
+        this.memory[0x200 + i] = program[i];
+      }
+      this.programCounter = 0x200;
+      this.runNextInstruction(true);
+    }, 250);
   }
 
   getSaveState() {

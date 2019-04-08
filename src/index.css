@@ -14,3 +14,7 @@
 #emulator {
   min-width: 256px;
 }
+
+* {
+  transition: width 500ms ease;
+}

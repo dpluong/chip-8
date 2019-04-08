@@ -15,6 +15,7 @@ class Visualizer {
       this.previousInstructionDOM = document.querySelector('button#goBackwards');
       this.nextInstructionDOM = document.querySelector('button#goForwards');
       this.visualizerContainerDOM = document.querySelector('div#visualizerContainer');
+      this.visualizerColDOM = document.querySelector('div#visualizer');
       this.registerTableBodyDOM = document.querySelector('tbody#visualizerRegisterTableBody');
       this.memorySelectDOM = document.querySelector('select#memorySelect');
       this.registerValuesDOM = [];
@@ -91,6 +92,8 @@ class Visualizer {
     this.saveStates = [];
     this.toggleVisualizerDOM.textContent = 'Disable Visualizer';
     this.visualizerContainerDOM.style.display = '';
+    this.visualizerColDOM.classList.add('col-xl');
+    this.visualizerColDOM.classList.remove('col-xl-1');
     this.previousInstructionDOM.disabled = true;
 
     this.registerValuesDOM = [];
@@ -130,6 +133,8 @@ class Visualizer {
     this.visualizerActive = false;
     this.toggleVisualizerDOM.textContent = 'Enable Visualizer';
     this.visualizerContainerDOM.style.display = 'none';
+    this.visualizerColDOM.classList.remove('col-xl');
+    this.visualizerColDOM.classList.add('col-xl-1');
     this.chip8Cpu.onUpdateState = () => {};
   }
 
