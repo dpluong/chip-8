@@ -1,0 +1,239 @@
+# v1: left bullet X coordinate 
+# v2: left bullet Y coordinate
+# v3: brick X coordinate
+# v4: brick Y coordinate
+# v5: right bullet X coordinate
+# v6: right bullet Y coordinate
+# v7: not used
+# v8, v9: variable 
+# vA: left tank X coordinate
+# vB: left tank Y coordinate
+# vC: right tank X coordinate
+# vD: right tank Y coordinate
+# vE: variable
+# vF: flag
+
+##########GAME###########
+
+# reserve memory for sprite
+: tank 
+0x10 0x10 0x6C 0x38 0x6C 0x10 0x10
+: bullet
+0x10 
+: brick 
+0x10 0x10 0x10
+
+# main program
+: main
+v3 := 0x18
+
+# draw wall of bricks
+: draw-brick
+v4 := 0x00
+: draw-brick-row
+i := brick
+sprite v3 v4 3
+v4 += 0x04
+if v4 != 0x60 then
+jump draw-brick-row
+v3 += 0x02
+if v3 != 0x24 then 
+jump draw-brick
+
+# draw tank
+: draw-tank
+vA := 0xFF
+vB := 0x10
+vC := 0x3A
+vD := 0x10
+i := tank
+
+: tank-move
+sprite vA vB 7
+sprite vC vD 7
+
+: start
+i := tank
+# these lines for slowing down the game speed
+sprite vA vB 7
+sprite vA vB 7
+sprite vA vB 7
+sprite vA vB 7
+sprite vA vB 7
+sprite vC vD 7
+
+# key control for left tank
+: tankleft-key
+# move left
+v0 := 1
+if v0 key then
+vB += 0xFF
+# move right
+v0 := 7
+if v0 key then
+vB += 1
+# move up
+v0 := 5
+if v0 key then
+vA += 1
+# prevent the tank from touching the brick
+if vA == 0x16 then
+vA += 0xFF
+# move down
+v0 := 4
+if v0 key then
+vA += 0xFF
+# prevent the tank from moving down out of the screen
+if vA == 0xFE then
+vA += 1
+
+# key control for right tank
+: tankright-key
+# move right
+v0 := 0xC
+if v0 key then
+vD += 0xFF
+# move left
+v0 := 0xE
+if v0 key then 
+VD += 1
+# move up
+v0 := 6
+if v0 key then
+vC += 0xFF
+# prevent the tank from touching the brick
+if vC == 0x24 then
+vC += 1
+# move down
+v0 := 0xD
+if v0 key then
+vC += 1
+# prevent the tank from moving down out of the screen
+if vC == 0x3B then
+vC += 0xFF
+
+# left tank shoots
+v0 := 8
+if v0 key then 
+jump shoot-left
+
+# right tank shoots
+v0 := 9
+if v0 key then 
+jump shoot-right
+
+# if not shoot then wait for other keys press
+jump tank-move
+
+# set the location of left bullet and draw
+: shoot-left
+sprite vA vB 7
+sprite vC vD 7
+v1 := vA
+v1 += 1
+v2 := vB
+v2 += 3
+i := bullet
+sprite v1 v2 1
+: leftbullet-move
+sprite v1 v2 1
+v1 += 1
+# if bullet reach then end of the screen then start over again
+if v1 == 0x3D then 
+jump start
+# these lines for slowing down the speed of the bullet
+sprite v1 v2 1
+sprite v1 v2 1
+sprite v1 v2 1
+sprite v1 v2 1 
+sprite v1 v2 1
+sprite v1 v2 1
+sprite v1 v2 1
+# check if the bullet hit the brick 
+if vF != 0x01 then 
+jump leftbullet-move
+v0 := 0x07
+v0 -= v1
+# if it hits the brick then jump to check-hit
+if vF == 0x00 then
+jump check-hit-left
+# else continue shooting 
+jump leftbullet-move
+
+# set the location of right bullet and draw 
+: shoot-right
+sprite vA vB 7
+sprite vC vD 7
+v5 := vC
+v5 += 0xFF
+v6 := vD
+v6 += 3
+i := bullet
+sprite v5 v6 1
+: rightbullet-move
+sprite v5 v6 1
+v5 += 0xFF
+# if bullet reach then end of the screen then start over again
+if v5 == 0xFC then
+jump start
+# these lines for slowing down the speed of the bullet
+sprite v5 v6 1
+sprite v5 v6 1
+sprite v5 v6 1
+sprite v5 v6 1 
+sprite v5 v6 1
+sprite v5 v6 1
+sprite v5 v6 1
+# check if the bullet hit the brick
+if vF != 0x01 then
+jump rightbullet-move
+v0 := 0x01
+v0 -= v5
+# if it hits the brick then jump to check-hit
+if vF == 0x00 then
+jump check-hit-right
+# else continue shooting 
+jump rightbullet-move
+
+# check if left tank is hit
+: check-hit-left
+v0 := 0x23
+v0 -= v1
+# if tank was hit then game ends
+if vF == 0x00 then
+jump game-over
+# if brick was hit then compute brick location
+v0 := v2
+v8 := 0xFC
+v0 &= v8
+i := brick 
+# erase brick
+sprite v1 v0 3
+sprite v1 v2 1
+# come back to where the game started
+jump start
+
+# check if right tank is hit
+: check-hit-right
+vE := v5
+v0 := 0x40
+v5 =- v0
+v0 := 0x29
+v0 -= v5
+# if tank was hit then game ends
+if vF == 0x00 then
+jump game-over
+# if brick was hit then compute brick location
+v0 := v6
+v9 := 0xFC
+v0 &= v9
+i := brick
+# erase brick
+sprite vE v0 3
+sprite vE v6 1
+# come back to where the game started
+jump start 
+
+# return if one of the tanks was hit
+: game-over
+return

@@ -4,8 +4,8 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="index.css">
-<body>
-  <nav class="navbar navbar-dark bg-dark navbar-expand">
+<body class="bg-dark text-white">
+  <nav class="navbar navbar-dark bg-info navbar-expand">
     <a class="navbar-brand" href="./index.html">CHIP 8</a>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
@@ -19,43 +19,49 @@
   <div class="container-fluid" style="margin-top: 10px">
     <div class="row">
       <div id="emulator" class="col-xl">
-        <canvas id="display" width="512" height="256"></canvas>
-        <table>
-          <tr>
-            <td><button id="key-1" class="button">1</button></td>
-            <td><button id="key-2"class="button">2</button></td>
-            <td><button id="key-3"class="button">3</button></td>
-            <td><button id="key-C"class="button">C</button></td>
-          </tr>
-          <tr>
-            <td><button id="key-4" class="button">4</button></td>
-            <td><button id="key-5" class="button">5</button></td>
-            <td><button id="key-6" class="button">6</button></td>
-            <td><button id="key-D" class="button">D</button></td>
-          </tr>
-          <tr>
-            <td><button id="key-7" class="button">7</button></td>
-            <td><button id="key-8" class="button">8</button></td>
-            <td><button id="key-9" class="button">9</button></td>
-            <td><button id="key-E" class="button">E</button></td>
-          </tr>
-          <tr>
-            <td><button id="key-A" class="button">A</button></td>
-            <td><button id="key-0" class="button">0</button></td>
-            <td><button id="key-B" class="button">B</button></td>
-            <td><button id="key-F" class="button">F</button></td>
-          </tr>
-        </table>
-        <label>
-          Load a new program:
-          <input type="file" id="codeInput"></input>
-        </label>
-        <p>To change programs or reset the emulator, refresh the page.</p>
-        <p>Note that the emulator meets the technical reference located at <a href="http://mattmik.com/files/chip8/mastering/chip8.html">http://mattmik.com/files/chip8/mastering/chip8.html</a></p>
-        <p>Programs created under other technical references including <a href="http://devernay.free.fr/hacks/chip8/C8TECH10.HTM">http://devernay.free.fr/hacks/chip8/C8TECH10.HTM</a> may be incompatible!</p>
+        <div class="card bg-secondary mx-auto" style="width: 560px">
+          <div class="card-header">
+            Emulator
+            <button type="button" class="btn btn-primary btn-sm float-right" id="visualizerToggle">Enable Visualizer</button>
+            <button type="button" class="btn btn-primary btn-sm float-right" id="codeInputButton" style="margin-right: 20px">Load Program</button>
+          </div>
+          <div class="card-body">
+            <div class="mx-auto" style="width:512px">
+              <canvas id="display" width="512" height="256"></canvas>
+            </div>
+            <table class="mx-auto" style="width: 360px">
+              <tr>
+                <td><button id="key-1" class="button">1<span class="keyboardHint"> (1)</span></button></td>
+                <td><button id="key-2" class="button">2<span class="keyboardHint"> (2)</span></button></td>
+                <td><button id="key-3" class="button">3<span class="keyboardHint"> (3)</span></button></td>
+                <td><button id="key-C" class="button">C<span class="keyboardHint"> (4)</span></button></td>
+              </tr>
+              <tr>
+                <td><button id="key-4" class="button">4<span class="keyboardHint"> (Q)</span></button></td>
+                <td><button id="key-5" class="button">5<span class="keyboardHint"> (W)</span></button></td>
+                <td><button id="key-6" class="button">6<span class="keyboardHint"> (E)</span></button></td>
+                <td><button id="key-D" class="button">D<span class="keyboardHint"> (R)</span></button></td>
+              </tr>
+              <tr>
+                <td><button id="key-7" class="button">7<span class="keyboardHint"> (A)</span></button></td>
+                <td><button id="key-8" class="button">8<span class="keyboardHint"> (S)</span></button></td>
+                <td><button id="key-9" class="button">9<span class="keyboardHint"> (D)</span></button></td>
+                <td><button id="key-E" class="button">E<span class="keyboardHint"> (F)</span></button></td>
+              </tr>
+              <tr>
+                <td><button id="key-A" class="button">A<span class="keyboardHint"> (Z)</span></button></td>
+                <td><button id="key-0" class="button">0<span class="keyboardHint"> (X)</span></button></td>
+                <td><button id="key-B" class="button">B<span class="keyboardHint"> (C)</span></button></td>
+                <td><button id="key-F" class="button">F<span class="keyboardHint"> (V)</span></button></td>
+              </tr>
+            </table>
+            <a href="http://mattmik.com/files/chip8/mastering/chip8.html" class="btn btn-primary mx-auto">CHIP 8 Reference</a>
+            <button class="btn btn-primary float-right" id="keyoardMappings">Show Keyboard Mappings</a>
+          </div>
+        </div>
+        <input type="file" id="codeInput" style="opacity:0"></input>
       </div>
-      <div id="visualizer" class="col-xl">
-          <button id="visualizerToggle">Enable Visualizer</button>
+      <div id="visualizer" class="col-xl-1">
           <div id="visualizerContainer" style="display:none">
             <div class="row">
               <div class="col-xl">
@@ -68,18 +74,11 @@
                   
                   </tbody>
                 </table>
-                <table>
-                  <thead>
-                    <th>Item</th>
-                    <th>Current Value</th>
-                  </thead>
-                  <tbody id="otherVariableTableBody">
-                  
-                  </tbody>
-                </table>
-                <button id="toggleEmulatorRunning">Pause</button>
-                <button id="goBackwards" disabled><<</button>
-                <button id="goForwards" disabled>>></button>
+                <div class="btn-group">
+                  <button id="toggleEmulatorRunning" class="btn btn-primary">Pause</button>
+                  <button id="goBackwards" class="btn btn-primary" disabled><<</button>
+                  <button id="goForwards" class="btn btn-primary" disabled>>></button>
+                </div>
               </div>
               <div class="col-xl">
                 <p>Please pause emulator to show memory</p>

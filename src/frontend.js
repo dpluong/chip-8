@@ -2,6 +2,8 @@ class Frontend {
   constructor() {
     this.currentDisplay = [];
     this.codeInputDOM = document.querySelector('input#codeInput');
+    this.codeInputButtonDOM = document.querySelector('button#codeInputButton');
+    this.keyMapButtonDOM = document.querySelector('button#keyoardMappings');
     this.displayDOM = document.querySelector('canvas#display');
     this.audio = new Audio('beep-02.wav');
 
@@ -36,6 +38,20 @@ class Frontend {
         this.keyStates[i] = 0x0;
       });
     });
+
+    this.codeInputButtonDOM.addEventListener('click', () => this.codeInputDOM.click());
+
+    this.keyMapButtonDOM.addEventListener('click', () => {
+      const keyboardHints = [...document.querySelectorAll('span.keyboardHint')];
+      this.keyMapButtonDOM.textContent = this.keyMapButtonDOM.textContent.includes('Show') ? 'Hide Keyboard Mappings' : 'Show Keyboard Mappings';
+      keyboardHints.forEach((span) => {
+        if (span.style.display === 'block') {
+          span.style.display = 'none';
+        } else {
+          span.style.display = 'block';
+        }
+      });
+    });
   }
 
   /**
@@ -68,7 +84,6 @@ class Frontend {
   statwaitForCodeInput(callback) {
     this.codeInputDOM.addEventListener('change', () => {
       if (!this.codeInputDOM.files.length) return; // If no file then silently ignore
-      this.codeInputDOM.disabled = true;
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
         callback(new Uint8Array(fileReader.result)); // send in Int8Array as CHIP-8 is 8-bit program
